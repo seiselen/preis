@@ -1,3 +1,5 @@
+package PrEisUtils;
+
 public class Cons {
   private static String errPfix = "ERROR: ";
   private static String actPfix = "ACTION: ";

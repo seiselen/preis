@@ -1,3 +1,4 @@
+package PrEisUtils;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.data.IntDict;
@@ -30,8 +31,8 @@ public class PImageUtils {
   
   //> @TODO: Do I need the `appendExtIfNeeded`calls?
   void bakeTexture(String fName, String inDirpath, String outDirpath){
-    String fullNameI = FormatUtils.appendExtIfNeeded(FileSysUtils.pathConcat(inDirpath,fName),ExtType.PNG);
-    String fullNameO = FormatUtils.appendExtIfNeeded(FileSysUtils.pathConcat(outDirpath,fName),ExtType.PNG);
+    String fullNameI = FileSysUtils.appendExtIfNeeded(FileSysUtils.pathConcat(inDirpath,fName),ExtType.PNG);
+    String fullNameO = FileSysUtils.appendExtIfNeeded(FileSysUtils.pathConcat(outDirpath,fName),ExtType.PNG);
     Cons.log(fullNameO);
     buffImage = p.loadImage(fullNameI);
     buffImage.save(fullNameO);
@@ -44,8 +45,8 @@ public class PImageUtils {
   //> @TODO: Again...Do I need the `appendExtIfNeeded`calls?
 ReturnCode imageColorValueCompare(String path1, String name1, String path2, String name2){
 
-  String fullName1 = FormatUtils.appendExtIfNeeded(FileSysUtils.pathConcat(path1, name1),ExtType.PNG);
-  String fullName2 = FormatUtils.appendExtIfNeeded(FileSysUtils.pathConcat(path2, name2),ExtType.PNG);
+  String fullName1 = FileSysUtils.appendExtIfNeeded(FileSysUtils.pathConcat(path1, name1),ExtType.PNG);
+  String fullName2 = FileSysUtils.appendExtIfNeeded(FileSysUtils.pathConcat(path2, name2),ExtType.PNG);
   PImage img1      = p.loadImage(fullName1);
   PImage img2      = p.loadImage(fullName2);
 
@@ -185,11 +186,11 @@ String tableHeader(){return "Event  | Pixel Coords | (R-1,G-1,B-1,A-1) | (R-2,G-
   private static String tableEvtRow(int evt, int row, int col, int rc1, int rc2){
     return StringUtils.concatStrings(
       "(",
-      FormatUtils.digit4Str(evt),
+      PApplet.nf(evt,4),
       ") | (",
-      FormatUtils.digit4Str(row),
+      PApplet.nf(row,4),
       ",",
-      FormatUtils.digit4Str(col),
+      PApplet.nf(col,4),
       ")  | ",
       FormatUtils.colorRGBAToString(FormatUtils.colorRGBAFromPColor(rc1)),
       " | ",

@@ -1,9 +1,11 @@
+package PrEisUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
+import java.util.Arrays;
+import java.util.List;
 
 import processing.data.StringList;
 
@@ -29,11 +31,15 @@ public class FileSysUtils {
 
   //> this looks like a clone more-or-less of `pathConcat` or whatever it called it
   public static String fullPathFileName(String p, String n){
-    return pathConcat(p,FormatUtils.appendExtIfNeeded(n,ExtType.PNG));
+    return pathConcat(p,appendExtIfNeeded(n,ExtType.PNG));
   }
   
-  public static String handleLeafDirSlashInPath(String p){
+  public static String appendSlashIfNeeded(String p){
     return (QueryUtils.lastCharOf(p)=='/')?p:p+'/';
+  }
+
+  public static String appendExtIfNeeded(String s, ExtType e){
+    return s.endsWith(e.val()) ? s : s.concat(e.val());
   }
 
 
@@ -54,7 +60,7 @@ public class FileSysUtils {
     return _listDirFiles(dirPath, false);
   }
 
-  public static String[] _listDirFiles(String dirPath, boolean onlyNames){
+  private static String[] _listDirFiles(String dirPath, boolean onlyNames){
     File dirAsFile = new File(dirPath);
   
     if (!dirAsFile.isDirectory()){return null;}
@@ -125,6 +131,15 @@ public static boolean fNameExtIs(String fn, ExtType et){
   }
 
 
+  
+  public static String pathToLinux(String winPath){
+    return winPath.toString().replace("\\","/");
+  }
 
+  public static String[] pathsToLinux(String[] winPaths){
+    List<String> pths = Arrays.asList(winPaths);
+    pths.forEach((p)->p=pathToLinux(p));
+    return FormatUtils.arrFromList(pths);
+  }
 
 }

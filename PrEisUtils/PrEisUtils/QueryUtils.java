@@ -1,3 +1,4 @@
+package PrEisUtils;
 public class QueryUtils {
   
   /** For String Args: Is it null, empty, or blank? */

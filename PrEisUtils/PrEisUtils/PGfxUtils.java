@@ -1,3 +1,4 @@
+package PrEisUtils;
 import processing.core.PApplet;
 
 public class PGfxUtils {
@@ -19,17 +20,5 @@ public class PGfxUtils {
 
   /*> Renders Horizontal Line. */
   public void lineh(float x1, float x2, float y){p.line(x1,y,x2,y);}
-
-  /*> Poor Man's Text Shadow. */
-  public void textWithShadow(String txt, int colBase, int colShad, int baseX, int baseY){
-    p.fill(colShad);
-    p.text(txt,baseX-1,baseY);
-    p.text(txt,baseX+1,baseY);
-    p.text(txt,baseX,baseY-1);
-    p.text(txt,baseX,baseY+1);
-    p.fill(colBase);
-    p.text(txt,baseX,baseY);
-  }
-
 
 }
