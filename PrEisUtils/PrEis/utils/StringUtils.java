@@ -1,4 +1,4 @@
-package PrEisUtils;
+package PrEis.utils;
 
 public class StringUtils {
 

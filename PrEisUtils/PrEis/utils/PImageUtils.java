@@ -1,4 +1,4 @@
-package PrEisUtils;
+package PrEis.utils;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.data.IntDict;

@@ -1,8 +1,10 @@
-package PrEisUtils;
+package PrEis.utils;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import PrEis.utils.Cons.Act;
+import PrEis.utils.Cons.Err;
 import processing.core.PApplet;
 
 //> FOR NOW: SERVING ROLE OF BOTH FormatUtils AND ConversionUtils (a/a)
@@ -17,19 +19,56 @@ public class FormatUtils{
     return StringUtils.wrapWithParenChars(StringUtils.concatAsSCSV(StringUtils.padL(c,3)));
   }
   
+  public static String colorRGBAToString(int c){
+    return StringUtils.wrapWithParenChars(StringUtils.concatAsSCSV(StringUtils.padL(colorRGBAFromPColor(c),3)));
+  }
+
   public static int[] colorRGBAFromPColor(int c){
     return new int[]{(int)(c >> 16 & 0xFF),(int)(c >> 8 & 0xFF),(int)(c & 0xFF), (int)(c >> 24 & 0xFF)};
   }
 
+  public static String strValElseNone(String s){
+    return QueryUtils.nullish(s) ? "NONE" : s;
+  }
 
-  public static String strValElseNone(String s){return QueryUtils.nullish(s) ? "NONE" : s;}
-
-
-
-    public static String byteArrSubStrToHex (byte[] a, int i, int n){
+  public static String byteArrSubStrToHex (byte[] a, int i, int n){
     String ret = "";
     for(int s=i; s<i+n; s++){ret+= PApplet.hex(a[s]);}
     return ret;
+  }
+
+  public static int colorFromIntArr (int[] intArr){
+    switch(intArr.length){
+      case 2: return _colFromInt2(intArr);
+      case 3: return _colFromInt3(intArr);
+      case 4: return _colFromInt4(intArr);
+    }
+    Cons.err_act(Err.SWITCH_DROP_OUT, ""+intArr.length, Act.RETURN_DEF_VALUE, "color(255,0,255)");
+    return _colFromInts(255,0,255);
+  }
+  
+  public static int _colFromInt2 (int[] intArr){
+    String alp=PApplet.hex(intArr[1],2);
+    String gry=PApplet.hex(intArr[0],2);
+    return PApplet.unhex(alp+gry+gry+gry);
+  }
+  
+  public static int _colFromInt3 (int[] intArr){
+    String hexStr="FF";
+    for(int i : intArr){hexStr+=PApplet.hex(i,2);}
+    return PApplet.unhex(hexStr);
+  }
+  
+  public static int _colFromInt4 (int[] intArr){
+    String hexStr=PApplet.hex(intArr[3],2);
+    for(int i=0; i<3; i++){hexStr+=PApplet.hex(intArr[i],2);}
+    return PApplet.unhex(hexStr);
+  }
+
+  public static int _colFromInts (int ... intArr){
+    String hexStr=PApplet.hex(intArr[3],2);
+    for(int i=0; i<3; i++){hexStr+=PApplet.hex(intArr[i],2);}
+    return PApplet.unhex(hexStr);
   }
 
   public static String[] strArrListToArr (ArrayList<String> aList){

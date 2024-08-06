@@ -1,0 +1,32 @@
+package PrEis.gui;
+
+/** 
+ * Interfaces for UIObject Handlers.
+ * @TODO Put this within `UIObject` or its manager should I realize one?
+ */
+public class Interfaces {
+
+  /** 
+   * Used With ClickButtons. Contains action call of which to make when clicked.
+  */
+  public interface ActionCallback {
+    void action();
+  }
+
+  /** 
+   * Used With ToggleButtons. Contains getter call of target boolean state (via
+   * which it renders accordingly), as well as action call to toggle such state.
+  */
+  public interface ToggleCallback {
+    boolean getState();
+    void toggleState();
+  }
+
+  /** 
+   * Callback Used With Labels. Contains poller call of target string to render.
+   */
+  public interface UpdateCallback {
+    String getTxt();
+  }
+    
+}

@@ -1,4 +1,4 @@
-package PrEisUtils;
+package PrEis.utils;
 import processing.core.PVector;
 import processing.data.IntDict;
 import processing.data.StringList;
@@ -31,20 +31,24 @@ public class DataStructUtils {
     return new PVector();
   }
 
-  public static PVector createVector(float x, float y){
-    return new PVector(x,y);
+  public static PVector createVector(  int x,   int y)         {return new PVector(x,y);}
+  public static PVector createVector(float x, float y)         {return new PVector(x,y);}
+  public static PVector createVector(  int x,   int y,   int z){return new PVector(x,y);}
+  public static PVector createVector(float x, float y, float z){return new PVector(x,y,z);}
+
+  public static PVector createVector(int[] vs){
+    if(vs==null || vs.length<2){return conserrAndRetZVec();}
+    return (vs.length==2) ? createVector(vs[0],vs[1]) : createVector(vs[0],vs[1],vs[2]);     
   }
 
-  public static PVector createVector(float x, float y, float z){
-    return new PVector(x,y,z);
+  public static PVector createVector(float[] vs){
+    if(vs==null || vs.length<2){return conserrAndRetZVec();}
+    return (vs.length==2) ? createVector(vs[0],vs[1]) : createVector(vs[0],vs[1],vs[2]);
   }
 
-  public static PVector vec2WithArray(float[] a){
-    if(a==null || a.length<2){
-      Cons.err_act(Cons.Err.NULL_XOR_INVALID, Cons.Act.RETURN_ZERO_VEC);
-      return createVector();
-    }
-    return (a.length==2) ? createVector(a[0],a[1]) : createVector(a[0],a[1],a[2]);
+  private static PVector conserrAndRetZVec(){
+    Cons.err_act(Cons.Err.NULL_XOR_INVALID, Cons.Act.RETURN_ZERO_VEC);
+    return createVector();
   }
 
 }

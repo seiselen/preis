@@ -1,4 +1,4 @@
-package PrEisUtils;
+package PrEis.utils;
 import java.io.PrintWriter;
 
 import processing.core.PApplet;
