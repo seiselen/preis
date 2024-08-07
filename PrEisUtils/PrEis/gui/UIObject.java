@@ -12,11 +12,18 @@ import processing.core.PVector;
  */
 abstract class UIObject {
 
-  /** Enumeration of UIObject Types. {@link #CB} {@link #TB} {@link #LB} */
+  /** 
+   * Enumeration of UIObject Types.
+   * {@link #CB} {@link #FB} {@link #TB} {@link #LB} {@link #CO} {@link #DD} {@link #DI} 
+   */
   public enum Type {
-    /** ClickButton */  CB,
-    /** ToggleButton */ TB,
-    /** Label */        LB
+    /** ClickButton */   CB,
+    /** ConfirmButton */ FB,
+    /** ToggleButton */  TB,
+    /** Label */         LB,
+    /** Container */     CO,
+    /** Dropdown */      DD,
+    /** DropdownItem */  DI,
   };
 
   /** PApplet of the Sketch/Applet. */
@@ -41,9 +48,12 @@ abstract class UIObject {
   protected boolean disabled;
 
   /** Display text of this UIObject. */  
-  protected String txt; 
+  protected String label; 
 
-  /** Tooltip text of this UIObject. */
+  /** Value string of this UIObject (A/A). */  
+  protected String value; 
+
+  /** Tooltip text of this UIObject (A/A). */
   protected String title;
 
   /** UIObject Type of this UIObject. */
@@ -57,10 +67,10 @@ abstract class UIObject {
 
   public UIObject(PApplet iPar, PVector iPos, PVector iDim, UIObject.Type iTyp){
     p         = iPar;
-    objFont   = AppFont.TITWEB;
-    txt       = "";
+    objFont   = AppFont.TEXT;
+    label     = "";
     type      = iTyp;
-    style     = new UIStyle(iPar, iTyp);
+    style     = DefaultStyle.Get(iPar, iTyp);
     mouseOver = false;
     disabled  = false;
     setTransform(iPos,iDim);
@@ -96,14 +106,14 @@ abstract class UIObject {
   /** @TODO RESOLVE COMMENTED OUT CODE! */
   public void changeFont(){
     switch(objFont){
-      case TITWEB: /*pApplet.textFont(titWeb);*/ return;
-      case FONTAW: /*pApplet.textFont(fontAw);*/ return;
+      case TEXT: /*pApplet.textFont(titWeb);*/ return;
+      case GLYPH: /*pApplet.textFont(fontAw);*/ return;
       default: Cons.err_act(Err.SWITCH_DROP_OUT, Act.RETURN_NO_ACTION);
     }
   }
   
   public void onSetFont(){
-    if (objFont!=null && objFont==AppFont.FONTAW){setPredefStyle("GLYPH");}
+    if (objFont!=null && objFont==AppFont.GLYPH){setPredefStyle("GLYPH");}
   } 
   
   public UIObject setPredefStyle(String s){
@@ -129,9 +139,11 @@ abstract class UIObject {
     else{p.rect(pos.x,pos.y,dim.x,dim.y);}
   }
   
+  /** @TODO: Revisit this if/when I define UIObjects with a `Dims` struct -vs- current `PVectors`. */
   public void renderText(float x1, float y1){
-    if(style.text_wrap!=null){p.text(txt,x1,y1,style.text_wrap.wide(),style.text_wrap.tall());}
-    else{p.text(txt,x1,y1);}
+    //if(style.text_wrap!=null){p.text(label,x1,y1,style.text_wrap.wide(),style.text_wrap.tall());}
+    //else{p.text(label,x1,y1);}
+    p.text(label,x1,y1);
   }
 
   public void renderTextViaOri(){
@@ -141,11 +153,11 @@ abstract class UIObject {
     }
   }
 
-  private void rTL(){p.textAlign(PApplet.LEFT, PApplet.TOP); renderText(pos.x+style.txt_offset.x,pos.y+style.txt_offset.y);}
-  private void rTR(){p.textAlign(PApplet.RIGHT, PApplet.TOP); renderText(ePt.x-style.txt_offset.x,pos.y+style.txt_offset.y);} 
-  private void rCC(){p.textAlign(PApplet.CENTER, PApplet.CENTER); renderText(mPt.x+style.txt_offset.x,mPt.y+style.txt_offset.y);}
-  private void rTC(){p.textAlign(PApplet.CENTER, PApplet.TOP); renderText(mPt.x+style.txt_offset.x,pos.y+style.txt_offset.y);}
-  private void rCR(){p.textAlign(PApplet.RIGHT, PApplet.CENTER); renderText(pos.x-style.txt_offset.x,mPt.y+style.txt_offset.y);}
-  private void rCL(){p.textAlign(PApplet.LEFT, PApplet.CENTER); renderText(pos.x+style.txt_offset.x,mPt.y+style.txt_offset.y);}
+  private void rTL(){p.textAlign(PApplet.LEFT, PApplet.TOP); renderText(pos.x+style.txt_offset_x,pos.y+style.txt_offset_y);}
+  private void rTR(){p.textAlign(PApplet.RIGHT, PApplet.TOP); renderText(ePt.x-style.txt_offset_x,pos.y+style.txt_offset_y);} 
+  private void rCC(){p.textAlign(PApplet.CENTER, PApplet.CENTER); renderText(mPt.x+style.txt_offset_x,mPt.y+style.txt_offset_y);}
+  private void rTC(){p.textAlign(PApplet.CENTER, PApplet.TOP); renderText(mPt.x+style.txt_offset_x,pos.y+style.txt_offset_y);}
+  private void rCR(){p.textAlign(PApplet.RIGHT, PApplet.CENTER); renderText(pos.x-style.txt_offset_x,mPt.y+style.txt_offset_y);}
+  private void rCL(){p.textAlign(PApplet.LEFT, PApplet.CENTER); renderText(pos.x+style.txt_offset_x,mPt.y+style.txt_offset_y);}
 
 } //> Ends Class UIObject

@@ -50,13 +50,13 @@ public class Enums {
   };
 
   /**
-   * Enumeration of Font Types. {@link #TITWEB} {@link #FONTAW}
+   * Enumeration of Font Types. {@link #TEXT} {@link #GLYPH}
    * @TODO SHOULD rename these to {TEXT, GLYPH} for generalization purposes.
    */
   public enum AppFont {
-    /** Titillium-Web (as used generally) */    
-    TITWEB,
-    /** FontAwesome (as used for glyphs) */
-    FONTAW
+    /** Stantard = Titillium-Web */    
+    TEXT,
+    /** Standard = FontAwesome */
+    GLYPH
   };
 }

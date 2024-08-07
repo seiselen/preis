@@ -13,6 +13,14 @@ public class Interfaces {
     void action();
   }
 
+  /**
+   * Same as {@link ActionCallback} except realizes getter for a label. Intended
+   * for Dropdown Items but can also be used for ClickButtons.
+   */
+  public interface LabelledActionCallback extends ActionCallback {
+    public String getLabel();
+  }
+
   /** 
    * Used With ToggleButtons. Contains getter call of target boolean state (via
    * which it renders accordingly), as well as action call to toggle such state.

@@ -1,22 +1,18 @@
 package PrEis.gui;
 import PrEis.gui.Enums.TxtOri;
-import PrEis.utils.Dims;
 import PrEis.utils.FormatUtils;
 import processing.core.PApplet;
-import processing.core.PVector;
 import processing.data.JSONObject;
 import PrEis.utils.Cons;
-import PrEis.utils.DataStructUtils;
 import PrEis.utils.QueryUtils;
 
 public class UIStyle {
-
   int     swgt;
   int     txt_size;
   int     border_radius;
   TxtOri  txt_anchor;
-  PVector txt_offset;
-  Dims    text_wrap; //> it's still canon, yeah... I know
+  int     txt_offset_x;
+  int     txt_offset_y;
   int     strk_enabled;
   int     strk_disabled;
   int     fill;
@@ -36,27 +32,28 @@ public class UIStyle {
   int     fill_transp;
   int     strk_transp;
   int     fill_txt; //> used for labels, especially transparent
+  float   txt_off_pct;
 
-  JSONObject stylesheet, curSubsheet;
-
+  //> these are buffers; unused after constructor returns
+  JSONObject stylesheet;
+  JSONObject curSubsheet;
   PApplet p;
 
-  public UIStyle(PApplet parent){
+  /** This constructor is ONLY to be used with {@link DefaultStyles} factory. */
+  public UIStyle(){}
+
+  public void injectStylesheet(PApplet parent, UIObject.Type type){
     p = parent;
     stylesheet = p.loadJSONObject("/data/styles.json");
     loadCommonStyles();
-  } 
-
-  public UIStyle(PApplet parent, UIObject.Type type){
-    this(parent);
     if(QueryUtils.nullish(type)){return;}
-
     switch (type) {
       case CB: loadClickButtonStyles(); return;
       case TB: loadToggleButtonStyles(); return;
       case LB: loadLabelStyles(); return;
       default: Cons.warn_UIStyleConstructor(); return;
     }
+
   }
 
   private void loadCommonStyles(){
@@ -65,7 +62,8 @@ public class UIStyle {
     txt_size        = curSubsheet.getInt("txt_size");
     border_radius   = curSubsheet.getInt("border_radius");
     txt_anchor      = TxtOri.withString(curSubsheet.getString("txt_anchor"));
-    txt_offset      = DataStructUtils.createVector(curSubsheet.getJSONArray("txt_offset").toIntArray());
+    txt_offset_x    = curSubsheet.getInt("txt_offset_x");
+    txt_offset_y    = curSubsheet.getInt("txt_offset_y");    
     strk_enabled    = FormatUtils.colorFromIntArr(curSubsheet.getJSONArray("strk_enabled").toIntArray());
     strk_disabled   = FormatUtils.colorFromIntArr(curSubsheet.getJSONArray("strk_disabled").toIntArray());
   }
