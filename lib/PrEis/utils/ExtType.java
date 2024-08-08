@@ -1,4 +1,5 @@
 package PrEis.utils;
+
 public enum ExtType {
   TXT(".txt"),
   PNG(".png"),

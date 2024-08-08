@@ -1,6 +1,5 @@
 package PrEis.gui;
 
-
 import PrEis.gui.Interfaces.LabelledActionCallback;
 import PrEis.utils.DataStructUtils;
 import processing.core.PApplet;
