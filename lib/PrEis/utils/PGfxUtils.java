@@ -83,7 +83,7 @@ public class PGfxUtils {
    * @param posX  - text `X` position; s.t. shadows render offset hereto
    * @param posY  - text `Y` position; s.t. shadows render offset hereto
    */
-  public void textWithShadow(PApplet p, String txt, int colFG, int colBG, float posX, float posY){
+  public static void textWithShadow(PApplet p, String txt, int colFG, int colBG, float posX, float posY){
     p.fill(colBG);
     p.text(txt,posX-1,posY);
     p.text(txt,posX+1,posY);
@@ -101,7 +101,7 @@ public class PGfxUtils {
    * @param colBG - shadow (i.e. background) color; should contract with `colFG`
    * @param pos   - text position; s.t. shadows render offset hereto
    */
-  public void textWithShadow(PApplet p, String txt, int colFG, int colBG, PVector pos){
+  public static void textWithShadow(PApplet p, String txt, int colFG, int colBG, PVector pos){
     textWithShadow(p, txt, colFG, colBG, pos.x, pos.y);
   }
 

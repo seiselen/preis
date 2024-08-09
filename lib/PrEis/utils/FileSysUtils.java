@@ -29,7 +29,6 @@ public class FileSysUtils {
     return fn.substring(idx);
   }
 
-  //> this looks like a clone more-or-less of `pathConcat` or whatever it called it
   public static String fullPathFileName(String p, String n){
     return pathConcat(p,appendExtIfNeeded(n,ExtType.PNG));
   }

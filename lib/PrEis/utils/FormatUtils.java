@@ -47,25 +47,25 @@ public class FormatUtils{
     return _colFromInts(255,0,255);
   }
   
-  public static int _colFromInt2 (int[] intArr){
+  private static int _colFromInt2 (int[] intArr){
     String alp=PApplet.hex(intArr[1],2);
     String gry=PApplet.hex(intArr[0],2);
     return PApplet.unhex(alp+gry+gry+gry);
   }
   
-  public static int _colFromInt3 (int[] intArr){
+  private static int _colFromInt3 (int[] intArr){
     String hexStr="FF";
     for(int i : intArr){hexStr+=PApplet.hex(i,2);}
     return PApplet.unhex(hexStr);
   }
   
-  public static int _colFromInt4 (int[] intArr){
+  private static int _colFromInt4 (int[] intArr){
     String hexStr=PApplet.hex(intArr[3],2);
     for(int i=0; i<3; i++){hexStr+=PApplet.hex(intArr[i],2);}
     return PApplet.unhex(hexStr);
   }
 
-  public static int _colFromInts (int ... intArr){
+  private static int _colFromInts (int ... intArr){
     String hexStr=PApplet.hex(intArr[3],2);
     for(int i=0; i<3; i++){hexStr+=PApplet.hex(intArr[i],2);}
     return PApplet.unhex(hexStr);
