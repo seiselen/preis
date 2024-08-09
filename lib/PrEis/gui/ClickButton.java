@@ -1,6 +1,5 @@
 package PrEis.gui;
 
-import PrEis.gui.Enums.AppFont;
 import PrEis.gui.Interfaces.ActionCallback;
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -14,7 +13,7 @@ class ClickButton extends UIObject {
   private ActionCallback action;
   
   public ClickButton(PApplet iApp, PVector iPos, PVector iDim){
-    super(iApp, iPos, iDim, UIObject.Type.CB);
+    super(iApp, iPos, iDim, WidgetType.CB);
   }
   
   public ClickButton setLabel(String iLbl){

@@ -1,5 +1,4 @@
 package PrEis.gui;
-import PrEis.gui.Enums.TxtOri;
 import processing.core.PApplet;
 
 /** 
@@ -31,7 +30,7 @@ class DefaultStyle {
     return _CommonVals(p);
   }
 
-  static UIStyle Get(PApplet p, UIObject.Type style){
+  static UIStyle Get(PApplet p, WidgetType style){
     if(style==null){return Get(p);}
     switch (style){
       case CB: return _ClickButton(p);

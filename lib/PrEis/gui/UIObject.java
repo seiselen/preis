@@ -1,5 +1,4 @@
 package PrEis.gui;
-import PrEis.gui.Enums.AppFont;
 import PrEis.utils.Cons;
 import PrEis.utils.Cons.Act;
 import PrEis.utils.Cons.Err;
@@ -11,20 +10,6 @@ import processing.core.PVector;
  * @note PROTECTED as nothing should see this sans fellow `PrEis.gui` members.
  */
 abstract class UIObject {
-
-  /** 
-   * Enumeration of UIObject Types.
-   * {@link #CB} {@link #FB} {@link #TB} {@link #LB} {@link #CO} {@link #DD} {@link #DI} 
-   */
-  public enum Type {
-    /** ClickButton */   CB,
-    /** ConfirmButton */ FB,
-    /** ToggleButton */  TB,
-    /** Label */         LB,
-    /** Container */     CO,
-    /** Dropdown */      DD,
-    /** DropdownItem */  DI,
-  };
 
   /** PApplet of the Sketch/Applet. */
   protected PApplet p;
@@ -57,7 +42,7 @@ abstract class UIObject {
   protected String title;
 
   /** UIObject Type of this UIObject. */
-  protected UIObject.Type type; 
+  protected WidgetType type; 
 
   /** Style defining this UIObject. */
   protected UIStyle style;
@@ -65,7 +50,7 @@ abstract class UIObject {
   /** Current font used by this UIObject. */
   protected AppFont objFont;
 
-  public UIObject(PApplet iPar, PVector iPos, PVector iDim, UIObject.Type iTyp){
+  public UIObject(PApplet iPar, PVector iPos, PVector iDim, WidgetType iTyp){
     p         = iPar;
     objFont   = AppFont.TEXT;
     label     = "";

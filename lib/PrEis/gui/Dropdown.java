@@ -19,7 +19,7 @@ public class Dropdown extends UIObject {
   private DropdownItem[] children;
  
   public Dropdown(PApplet iApp, PVector iPos, PVector iDim){
-    super(iApp,iPos,iDim,UIObject.Type.DD);
+    super(iApp, iPos, iDim, WidgetType.DD);
     scrollOff=0;
     maxScrollOff=0;
     scrollFactor=16;

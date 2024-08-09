@@ -88,10 +88,6 @@ public class FormatUtils{
   }
 
 
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  |> 
-  +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
   @SuppressWarnings("unchecked")
   public static <T> T[] arr1FromObj(T obj){
     final T[] ret = (T[]) Array.newInstance(obj.getClass(), 1);
@@ -113,9 +109,11 @@ public class FormatUtils{
     return ret;
   }
 
-  //> KEEPING THESE IN CASE THE ABOVE GENERIC FUNCTIONS DON'T WORK
-  // LoadConfig[] arr1FromObj(LoadConfig c){return new LoadConfig[]{c};}
-  // String[] arr1FromObj(String s){return new String[]{s};}
-  // LoadConfig[] arrFromArrList(ArrayList<LoadConfig> aList){return aList.toArray(new LoadConfig[0]);}
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # KEEPING THESE IN CASE THE ABOVE GENERIC FUNCTIONS DON'T WORK
+  LoadConfig[] arr1FromObj(LoadConfig c){return new LoadConfig[]{c};}
+  String[] arr1FromObj(String s){return new String[]{s};}
+  LoadConfig[] arrFromArrList(ArrayList<LoadConfig> aList){return aList.toArray(new LoadConfig[0]);}
+  +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 }

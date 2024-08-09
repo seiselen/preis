@@ -1,7 +1,4 @@
 package PrEis.gui;
-
-import PrEis.gui.Enums.AppFont;
-import PrEis.gui.Enums.LabelType;
 import PrEis.gui.Interfaces.UpdateCallback;
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -17,7 +14,7 @@ public class Label extends UIObject {
   private LabelType lblType;
   
   public Label(PApplet iApp, PVector iPos, PVector iDim){
-    super(iApp, iPos, iDim, UIObject.Type.LB);
+    super(iApp, iPos, iDim, WidgetType.LB);
   }
   
   public Label setLabel(String iLbl){

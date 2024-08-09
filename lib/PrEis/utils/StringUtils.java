@@ -49,8 +49,9 @@ public class StringUtils {
     return '('+str+')';
   }
 
-
-
+  public static char lastCharOf(String str){
+    return (QueryUtils.nullOrEmpty(str)) ? '\0' : str.charAt(str.length()-1);
+  }
 
   public static String capFirstChar(String str) {
     if(str== null || str.isEmpty()){return str;}

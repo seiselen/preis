@@ -1,5 +1,4 @@
 package PrEis.gui;
-import PrEis.gui.Enums.TxtOri;
 import PrEis.utils.FormatUtils;
 import processing.core.PApplet;
 import processing.data.JSONObject;
@@ -42,7 +41,7 @@ public class UIStyle {
   /** This constructor is ONLY to be used with {@link DefaultStyles} factory. */
   public UIStyle(){}
 
-  public void injectStylesheet(PApplet parent, UIObject.Type type){
+  public void injectStylesheet(PApplet parent, WidgetType type){
     p = parent;
     stylesheet = p.loadJSONObject("/data/styles.json");
     loadCommonStyles();

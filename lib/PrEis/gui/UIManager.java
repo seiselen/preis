@@ -1,16 +1,14 @@
 package PrEis.gui;
-import java.util.ArrayList;
-import processing.core.PFont;
-import processing.core.PApplet;
-import processing.core.PVector;
-import PrEis.gui.Enums.AppFont;
-import PrEis.gui.Enums.LabelType;
 import PrEis.gui.Interfaces.ActionCallback;
 import PrEis.gui.Interfaces.ToggleCallback;
 import PrEis.gui.Interfaces.UpdateCallback;
 import PrEis.utils.Cons;
 import PrEis.utils.Cons.Act;
 import PrEis.utils.Cons.Err;
+import processing.core.PFont;
+import processing.core.PApplet;
+import processing.core.PVector;
+import java.util.ArrayList;
 
 public class UIManager {
 

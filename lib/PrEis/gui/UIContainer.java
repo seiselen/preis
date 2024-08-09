@@ -15,7 +15,7 @@ class UIContainer extends UIObject {
   private ArrayList<UIObject> objects;
   
   public UIContainer(PApplet iApp, PVector iPos, PVector iDim){
-    super(iApp,iPos,iDim,null);
+    super(iApp, iPos, iDim, WidgetType.CO);
     objects = new ArrayList<UIObject>();
     this.style.strk_enabled=p.color(0,255,0);
   }

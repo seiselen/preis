@@ -10,7 +10,7 @@ public class DropdownItem extends UIObject {
   private LabelledActionCallback cback;
   
   public DropdownItem(PApplet iApp, PVector iPos, PVector iDim){
-    super(iApp,iPos,iDim,UIObject.Type.DI);
+    super(iApp, iPos, iDim, WidgetType.DI);
     value = "";
   }
 

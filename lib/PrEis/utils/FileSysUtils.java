@@ -35,7 +35,7 @@ public class FileSysUtils {
   }
   
   public static String appendSlashIfNeeded(String p){
-    return (QueryUtils.lastCharOf(p)=='/')?p:p+'/';
+    return (StringUtils.lastCharOf(p)=='/')?p:p+'/';
   }
 
   public static String appendExtIfNeeded(String s, ExtType e){
@@ -49,7 +49,8 @@ public class FileSysUtils {
   }
 
   public static String nameFromPath(String ps){
-    return QueryUtils.getLastElement(ps.split("/"));
+    String[] arr = ps.split("/");
+    return arr[arr.length-1];
   }
 
   public static String[] listDirFileNames(String dirPath){

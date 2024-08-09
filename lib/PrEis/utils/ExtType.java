@@ -10,7 +10,11 @@ public enum ExtType {
 
   private String val;
 
-  ExtType(String v){this.val = v;}
+  ExtType(String v){
+    this.val = v;
+  }
 
-  public String val(){return this.val;}
+  public String val(){
+    return this.val;
+  }
 }
