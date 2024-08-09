@@ -120,12 +120,24 @@ abstract class UIObject {
     style.setPredefStyle(s);
     return this;
   }
-  
+
+  /** Abstract assigns `mouseOver`. See child types for resp. addl. handling. */  
   public void update(){
     mouseOver = isMouseOver();
   }  
   
+  /** Abstract for `mousePressed` events. See child types for resp. handling. */
   public void onMousePressed(){
+    /*> ABSTRACT STUB <*/
+  }
+
+  /** Abstract for `keyPressed` events. See child types for resp. handling. */
+  public void onKeyPressed(){
+    /*> ABSTRACT STUB <*/
+  }
+
+  /** Abstract for `mouseWheel` events. See child types for resp. handling. */
+  public void onMouseWheel(int v){
     /*> ABSTRACT STUB <*/
   }
 
