@@ -58,7 +58,17 @@ public class StringUtils {
     return str.substring(0, 1).toUpperCase() + str.substring(1);
   }
   
-  public static String valToSpaceSepCapdWords(String val){
+  /** 
+   * TLDR: Turns "batman_bin_suparman" into "Batman Bin Suparman". Specifically:
+   * returns Space-Separated First-Char Capitalized Words of input string; i.e.
+   * per the following algorithm...
+   * <ol>
+   * <li> Split into string array via delimiter of `_` char
+   * <li> first char of each array member is capitalized
+   * <li> array members joined with space (i.e. ` ` chars)
+   * </ol>
+   */
+  public static String valToSSVCapdWords(String val){
     String[] words = val.split("_");
     for(int i=0; i<words.length; i++){words[i]=capFirstChar(words[i]);}
     return String.join(" ", words);
