@@ -16,11 +16,11 @@ public class FormatUtils{
   }
   
   public static String colorRGBAToString(int[] c){
-    return StringUtils.wrapWithParenChars(StringUtils.concatAsSCSV(StringUtils.padL(c,3)));
+    return StringUtils.wrapWithParenChars(StringUtils.concatAsSCSV(StringUtils.padL(primArrToStrArr(c),3)));
   }
   
   public static String colorRGBAToString(int c){
-    return StringUtils.wrapWithParenChars(StringUtils.concatAsSCSV(StringUtils.padL(colorRGBAFromPColor(c),3)));
+    return StringUtils.wrapWithParenChars(StringUtils.concatAsSCSV(StringUtils.padL(primArrToStrArr(colorRGBAFromPColor(c)),3)));
   }
 
   public static int[] colorRGBAFromPColor(int c){
