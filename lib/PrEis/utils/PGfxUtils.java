@@ -5,6 +5,11 @@ import processing.core.PVector;
 public class PGfxUtils {
 
   /**
+   * Used for <code>textWithShadow</code> functions. Not actually stroke weight,
+   * but +=  */
+  public static int shadowWeight = 1;
+
+  /**
    * Syntax sugar for calling `noFill` then setting `stroke`.
    * @param p - `PApplet` of caller
    * @param r - RED   channel value
@@ -85,10 +90,10 @@ public class PGfxUtils {
    */
   public static void textWithShadow(PApplet p, String txt, int colFG, int colBG, float posX, float posY){
     p.fill(colBG);
-    p.text(txt,posX-1,posY);
-    p.text(txt,posX+1,posY);
-    p.text(txt,posX,posY-1);
-    p.text(txt,posX,posY+1);
+    p.text(txt,posX-shadowWeight,posY);
+    p.text(txt,posX+shadowWeight,posY);
+    p.text(txt,posX,posY-shadowWeight);
+    p.text(txt,posX,posY+shadowWeight);
     p.fill(colFG);
     p.text(txt,posX,posY);
   }

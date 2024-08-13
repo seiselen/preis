@@ -39,7 +39,7 @@ public class Cons {
 
   public static void warn_invalidEnumStrID(String enumID, String inStr, String dfStr){
     String msg = wrnPfix + "Enum '" + enumID + "' has NO member named '" + inStr + ".";
-    if(!QueryUtils.nullOrEmpty(dfStr)){msg += "Returning member '"+ dfStr + "' instead as default";}
+    if(!QueryUtils.nullish(dfStr)){msg += "Returning member '"+ dfStr + "' instead as default";}
     System.out.println(msg);
   }  
 

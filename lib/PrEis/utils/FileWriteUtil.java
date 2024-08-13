@@ -13,7 +13,7 @@ public class FileWriteUtil {
 
   /** This <strong>must</strong> be called to commence output to a text file. */
   public FileWriteUtil launchWrite(String filename){
-    if(QueryUtils.nullOrEmpty(filename)){
+    if(QueryUtils.nullish(filename)){
       Cons.err(Cons.Err.NULL_XOR_INVALID);
     }
     if(!filename.endsWith(ExtType.TXT.val())){

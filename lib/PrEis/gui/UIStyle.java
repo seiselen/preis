@@ -45,7 +45,7 @@ public class UIStyle {
     p = parent;
     stylesheet = p.loadJSONObject("/data/styles.json");
     loadCommonStyles();
-    if(QueryUtils.nullish(type)){return;}
+    if(type==null){return;}
     switch (type) {
       case CB: loadClickButtonStyles(); return;
       case TB: loadToggleButtonStyles(); return;

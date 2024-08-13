@@ -50,7 +50,7 @@ public class StringUtils {
   }
 
   public static char lastCharOf(String str){
-    return (QueryUtils.nullOrEmpty(str)) ? '\0' : str.charAt(str.length()-1);
+    return (QueryUtils.nullish(str)) ? '\0' : str.charAt(str.length()-1);
   }
 
   public static String capFirstChar(String str) {
@@ -69,12 +69,18 @@ public class StringUtils {
    * </ol>
    */
   public static String valToSSVCapdWords(String val){
+    if(QueryUtils.nullish(val)){return null;}
+
+    if(val.charAt(0)=='_' || lastCharOf(val)=='_'){
+      return capFirstChar(val.replaceAll("[_]", ""));
+    }
     String[] words = val.split("_");
     for(int i=0; i<words.length; i++){words[i]=capFirstChar(words[i]);}
     return String.join(" ", words);
   }
 
   public static String concatStrings(String ... strs){
+    if(strs.length==0){return null;} //> just in case
     String ret = "";
     for(String s:strs){ret+=s;}
     return ret;
@@ -91,6 +97,7 @@ public class StringUtils {
   }
   
   private static String _concatAsCSV(String[] strs, boolean inclSpaces){
+    if(strs.length==0){return null;} //> just in case
     String ret = "";
     int len = strs.length;
     for(int i=0; i<len; i++){

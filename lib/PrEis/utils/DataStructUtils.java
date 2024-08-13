@@ -26,22 +26,32 @@ public class DataStructUtils {
     }
   }
 
-  
   public static PVector createVector(){
     return new PVector();
   }
 
-  public static PVector createVector(  int x,   int y)         {return new PVector(x,y);}
-  public static PVector createVector(float x, float y)         {return new PVector(x,y);}
-  public static PVector createVector(  int x,   int y,   int z){return new PVector(x,y);}
-  public static PVector createVector(float x, float y, float z){return new PVector(x,y,z);}
+  public static PVector createVector(int x, int y){
+    return new PVector(x,y);
+  }
 
-  public static PVector createVector(int[] vs){
+  public static PVector createVector(float x, float y){
+    return new PVector(x,y);
+  }
+
+  public static PVector createVector(int x, int y, int z){
+    return new PVector(x,y,z);
+  }
+
+  public static PVector createVector(float x, float y, float z){
+    return new PVector(x,y,z);
+  }
+
+  public static PVector createVector(int ... vs){
     if(vs==null || vs.length<2){return conserrAndRetZVec();}
     return (vs.length==2) ? createVector(vs[0],vs[1]) : createVector(vs[0],vs[1],vs[2]);     
   }
 
-  public static PVector createVector(float[] vs){
+  public static PVector createVector(float ... vs){
     if(vs==null || vs.length<2){return conserrAndRetZVec();}
     return (vs.length==2) ? createVector(vs[0],vs[1]) : createVector(vs[0],vs[1],vs[2]);
   }

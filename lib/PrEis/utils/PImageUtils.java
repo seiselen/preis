@@ -176,6 +176,9 @@ void diffDirFilenames(String path1, String path2){
 }
 
 
+public static String pixAndColToString(int pRow, int pCol, int rawColor){
+  return "Pixel: ("+pRow+","+pCol+"), Color: "+FormatUtils.colorRGBAToString(FormatUtils.colorRGBAFromPColor(rawColor));
+}
 
 String separator72_equalChar(){return "========================================================================";}
 String separator72_dashChar(){return "------------------------------------------------------------------------";}

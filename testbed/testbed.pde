@@ -1,4 +1,9 @@
 import PrEis.test.TestStringUtils;
+import PrEis.test.TestDataStructUtils;
+import PrEis.test.TestQueryUtils;
+import PrEis.test.TestPGfxUtils;
+import PrEis.test.TestEnums;
+import PrEis.test.TestFormatUtils;
 
 /*>>> 'BEFORE-I-FORGET' NOTE >>>
   The one thing that will need exclusive `pde-side' support for (i.e. of which 
@@ -18,7 +23,20 @@ import PrEis.test.TestStringUtils;
 */
 
 void setup(){
-  TestStringUtils.runTests();
+  size(640,320);
+  //TestStringUtils.runTests();
+  //TestDataStructUtils.runTests();
+  //TestQueryUtils.runTests();
+  //TestEnums.runTests();
+  TestFormatUtils.runTests(this);
+  
+  
   
   exit();
+}
+
+
+void draw(){
+  background(255);
+  TestPGfxUtils.testRender(this);
 }

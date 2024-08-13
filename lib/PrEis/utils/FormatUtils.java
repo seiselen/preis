@@ -7,15 +7,19 @@ import PrEis.utils.Cons.Act;
 import PrEis.utils.Cons.Err;
 import processing.core.PApplet;
 
-//> FOR NOW: SERVING ROLE OF BOTH FormatUtils AND ConversionUtils (a/a)
+
+/**
+ * FOR NOW: SERVING ROLE OF BOTH FormatUtils AND ConversionUtils (a/a)
+ * @todo the 'A' part of 'colorRGBAToString' is a misnomer; as neither overload
+ * returns the alpha channel if zero?; nor handles calls which just want RGB.
+ * Might want to realize it and retain old code for 'colorRGBToString' function.
+ * @todo realize `colorRGB` functions alongside existing `colorRGBA`
+ */
+
 public class FormatUtils{
 
-
-  public static String pixAndColToString(int pRow, int pCol, int rawColor){
-    return "Pixel: ("+pRow+","+pCol+"), Color: "+colorRGBAToString(colorRGBAFromPColor(rawColor));
-  }
-  
   public static String colorRGBAToString(int[] c){
+    if(c.length==3){c = new int[]{c[0],c[1],c[2],255};} //> add alpha channel (a/a)
     return StringUtils.wrapWithParenChars(StringUtils.concatAsSCSV(StringUtils.padL(primArrToStrArr(c),3)));
   }
   
@@ -71,6 +75,7 @@ public class FormatUtils{
     return PApplet.unhex(hexStr);
   }
 
+
   public static String[] strArrListToArr (ArrayList<String> aList){
     return aList.toArray(new String[0]);
   }
@@ -103,11 +108,12 @@ public class FormatUtils{
   }
 
   @SuppressWarnings("unchecked")
-  public static <T> T[] arrFromList(List<T> list){
-    final T[] ret = (T[]) Array.newInstance(list.getClass(), 1);
-    for (int i=0; i<list.size(); i++) {ret[i] = list.get(i);}
+  public static <T> T[] arrFromList(List<T> aList){
+    final T[] ret = (T[]) Array.newInstance(aList.getClass(), 1);
+    for (int i=0; i<aList.size(); i++) {ret[i] = aList.get(i);}
     return ret;
   }
+
 
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # KEEPING THESE IN CASE THE ABOVE GENERIC FUNCTIONS DON'T WORK
