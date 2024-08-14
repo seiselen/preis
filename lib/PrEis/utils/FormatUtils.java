@@ -35,6 +35,13 @@ public class FormatUtils{
     return QueryUtils.nullish(s) ? "NONE" : s;
   }
 
+  /**
+   * @implNote This is used for the util (currently within `EiSpriteViewer` app)
+   * that extracts sprite offsets from their `.png` headers. Verbatim therefrom
+   * and known to work therein - so no immediate need to test. If I do move the
+   * sprite offset extraction code to some 'EisDoomUtils' module at some time in
+   * the future: do testing then.
+   */
   public static String byteArrSubStrToHex (byte[] a, int i, int n){
     String ret = "";
     for(int s=i; s<i+n; s++){ret+= PApplet.hex(a[s]);}
@@ -76,7 +83,7 @@ public class FormatUtils{
   }
 
 
-  public static String[] strArrListToArr (ArrayList<String> aList){
+  public static String[] strArrListToStrArr (ArrayList<String> aList){
     return aList.toArray(new String[0]);
   }
 
@@ -100,18 +107,12 @@ public class FormatUtils{
     return ret;
   }
 
+  /** 
+   * @todo see if I can procedurally grab class as per {@link #arr1FromObj}.
+   */
   @SuppressWarnings("unchecked")
-  public static <T> T[] arrFromArrList(ArrayList<T> aList){
-    final T[] ret = (T[]) Array.newInstance(aList.getClass(), 1);
-    for (int i=0; i<aList.size(); i++) {ret[i] = aList.get(i);}
-    return ret;
-  }
-
-  @SuppressWarnings("unchecked")
-  public static <T> T[] arrFromList(List<T> aList){
-    final T[] ret = (T[]) Array.newInstance(aList.getClass(), 1);
-    for (int i=0; i<aList.size(); i++) {ret[i] = aList.get(i);}
-    return ret;
+  public static <T> T[] arrFromList(Class<T> c, List<T> list) {
+    return list.toArray((T[])Array.newInstance(c, list.size()));
   }
 
 

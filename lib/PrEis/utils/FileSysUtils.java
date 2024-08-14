@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -140,7 +139,7 @@ public static boolean fNameExtIs(String fn, ExtType et){
   public static String[] pathsToLinux(String[] winPaths){
     List<String> pths = Arrays.asList(winPaths);
     pths.forEach((p)->p=pathToLinux(p));
-    return FormatUtils.arrFromList(pths);
+    return FormatUtils.arrFromList(String.class, pths);
   }
 
 }

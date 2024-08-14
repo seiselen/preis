@@ -19,21 +19,38 @@ public class GridManager {
     showGrid = DEF_SHOW_GRID;
     strk_wgt = 1;
     strk_col = p.color(32,128);
-    setCellSize(DEF_CELL_SIZE);
+    set_cellSize(DEF_CELL_SIZE);
   }
   
-  public void setCellSize(int nSize){
-    cellSize  = PApplet.constrain(nSize, 4, p.width);
+  public GridManager set_cellSize(int n_cellSize){
+    cellSize  = PApplet.constrain(n_cellSize, 4, p.width);
     cellsWide = p.width/cellSize;
     cellsTall = p.height/cellSize;
+    return this;
+  }
+
+  public GridManager set_strk_wgt(int n_strk_wgt){
+    strk_wgt = n_strk_wgt;
+    return this;
   }
   
-  public void setShowGrid(){
+  /** 
+   * @implNote NO data validation, as Processing's `color` type is an int and I 
+   * don't have the time right now to realize a clamping/constrain realization.
+   */
+  public GridManager set_strk_col(int n_strk_col){
+    strk_col = n_strk_col;
+    return this;
+  }
+
+  public GridManager setShowGrid(){
     showGrid = !showGrid;
+    return this;
   }
   
-  public void setShowGrid(boolean v){
+  public GridManager setShowGrid(boolean v){
     showGrid = v;
+    return this;    
   }
   
   public boolean getShowGrid(){
@@ -44,7 +61,7 @@ public class GridManager {
     System.out.println("Showing Grid? ["+(showGrid ? "yes" : "no")+"]");
   }
 
-  public void drawGrid(){
+  public void render(){
     if(!showGrid){return;}
     p.stroke(strk_col);
     p.strokeWeight(strk_wgt);

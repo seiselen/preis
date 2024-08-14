@@ -3,7 +3,6 @@ import PrEis.utils.FormatUtils;
 import processing.core.PApplet;
 import processing.data.JSONObject;
 import PrEis.utils.Cons;
-import PrEis.utils.QueryUtils;
 
 public class UIStyle {
   int     swgt;

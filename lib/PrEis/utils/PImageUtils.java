@@ -4,6 +4,10 @@ import processing.core.PImage;
 import processing.data.IntDict;
 import processing.data.StringList;
 
+/** 
+ * @implNote NOT tested and won't be until/unless I realize the texture bake and
+ * image compare utils.
+ */
 public class PImageUtils {
 
   private static boolean LOG_BAKE_DONE  = true;

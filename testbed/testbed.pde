@@ -4,6 +4,7 @@ import PrEis.test.TestQueryUtils;
 import PrEis.test.TestPGfxUtils;
 import PrEis.test.TestEnums;
 import PrEis.test.TestFormatUtils;
+import PrEis.test.TestGridManager;
 
 /*>>> 'BEFORE-I-FORGET' NOTE >>>
   The one thing that will need exclusive `pde-side' support for (i.e. of which 
@@ -22,21 +23,30 @@ import PrEis.test.TestFormatUtils;
   with for testing. And duh this all needs to be implemented/realized of course.
 */
 
+boolean TEST_DOES_RENDER = true;
+
+TestGridManager tGridManager;
+
 void setup(){
   size(640,320);
   //TestStringUtils.runTests();
   //TestDataStructUtils.runTests();
   //TestQueryUtils.runTests();
   //TestEnums.runTests();
-  TestFormatUtils.runTests(this);
+  //TestFormatUtils.runTests(this);
   
-  
-  
-  exit();
+  tGridManager = new TestGridManager(this);
+ 
+  if(!TEST_DOES_RENDER){exit();}
 }
 
 
 void draw(){
   background(255);
-  TestPGfxUtils.testRender(this);
+  //TestPGfxUtils.testRender(this);
+  tGridManager.testRender();
+}
+
+void keyPressed(){
+  tGridManager.onKeyPressed();
 }

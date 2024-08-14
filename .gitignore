@@ -1,3 +1,4 @@
 .vscode
 
 /testbed/*.pde
+/testbed/data
