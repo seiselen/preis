@@ -5,7 +5,11 @@ public enum ExtType {
   PNG(".png"),
   WAD(".wad"),
   PK3(".pk3"),
-  DEH(".deh")
+  DEH(".deh"),
+  WAV(".wav"),
+  OGG(".ogg"),
+  MP3(".mp3"),
+  JSON(".json"),
   ;
 
   private String val;

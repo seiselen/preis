@@ -5,6 +5,7 @@ import PrEis.test.TestPGfxUtils;
 import PrEis.test.TestEnums;
 import PrEis.test.TestFormatUtils;
 import PrEis.test.TestGridManager;
+import PrEis.test.TestFileSysUtils;
 
 /*>>> 'BEFORE-I-FORGET' NOTE >>>
   The one thing that will need exclusive `pde-side' support for (i.e. of which 
@@ -23,30 +24,39 @@ import PrEis.test.TestGridManager;
   with for testing. And duh this all needs to be implemented/realized of course.
 */
 
-boolean TEST_DOES_RENDER = true;
+boolean TEST_DOES_RENDER = false;
 
 TestGridManager tGridManager;
 
 void setup(){
-  size(640,320);
-  //TestStringUtils.runTests();
-  //TestDataStructUtils.runTests();
-  //TestQueryUtils.runTests();
-  //TestEnums.runTests();
-  //TestFormatUtils.runTests(this);
-  
-  tGridManager = new TestGridManager(this);
- 
-  if(!TEST_DOES_RENDER){exit();}
+  if(!TEST_DOES_RENDER){
+    //TestStringUtils.runTests();
+    //TestDataStructUtils.runTests();
+    //TestQueryUtils.runTests();
+    //TestEnums.runTests();
+    //TestFormatUtils.runTests(this);
+    TestFileSysUtils.runTests(this);  
+    exit();
+  }
+  else{
+    size(640,320);
+    tGridManager = new TestGridManager(this);
+  }
 }
 
 
 void draw(){
   background(255);
-  //TestPGfxUtils.testRender(this);
-  tGridManager.testRender();
+  
+  if(TEST_DOES_RENDER){
+    //TestPGfxUtils.testRender(this);
+    tGridManager.testRender();
+  }
 }
 
 void keyPressed(){
-  tGridManager.onKeyPressed();
+  if(TEST_DOES_RENDER){
+    tGridManager.onKeyPressed();
+  }  
+
 }

@@ -209,7 +209,7 @@ String tableHeader(){return "Event  | Pixel Coords | (R-1,G-1,B-1,A-1) | (R-2,G-
 
   @SuppressWarnings("unused") //> keeping in case I need it
   private static String diffTextHeader(String fp1, String fn1, String fp2, String fn2){
-    return diffTextHeader(FileSysUtils.fullPathFileName(fp1,fn1), FileSysUtils.fullPathFileName(fp2,fn2));
+    return diffTextHeader(FileSysUtils.fullPathFileName(fp1,fn1,ExtType.PNG), FileSysUtils.fullPathFileName(fp2,fn2,ExtType.PNG));
   }
 
   private static String diffTextHeader(String f1, String f2){

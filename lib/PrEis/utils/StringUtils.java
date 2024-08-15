@@ -3,6 +3,18 @@ package PrEis.utils;
 public class StringUtils {
 
   private enum PadDir {L,R};
+
+
+  /** 
+   * @implNote Originally defined within FileSysUtils as 'filenameWithFullPath'.
+   * Keeping as it's got a cool REGEX that does cool partitioning; i.e. it might
+   * be of utility for something down the way.
+   * @todo properly eval and test this thing, then add docu therefrom
+   */
+  public static String splitByCommonChars (String fPath){
+    String[] arr = fPath.split("[,\\.\\s\\/]");
+    return arr[arr.length-2];
+  }
   
   public static String charTimesN (char c, int n){
     String ret="";

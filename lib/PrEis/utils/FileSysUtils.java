@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-
 import processing.data.StringList;
 
 public class FileSysUtils {
@@ -24,33 +21,25 @@ public class FileSysUtils {
     return ret;
   }  
 
+  /**
+   * @todo realize option whereby bool opcode specifies to trim extension (a/a)
+   */
   public static String fnameFromFpath(String fn){
+    if(!fn.contains("/")){return fn;} //> no slash means we assume it's already a fn
     int idx = fn.lastIndexOf('/')+1;
     return fn.substring(idx);
   }
 
-  public static String fullPathFileName(String p, String n){
-    return pathConcat(p,appendExtIfNeeded(n,ExtType.PNG));
+
+  public static String fullPathFileName(String p, String n, ExtType t){
+    return pathConcat(p,appendExtIfNeeded(n,t));
   }
   
-  public static String appendSlashIfNeeded(String p){
-    return (StringUtils.lastCharOf(p)=='/')?p:p+'/';
-  }
 
   public static String appendExtIfNeeded(String s, ExtType e){
     return s.endsWith(e.val()) ? s : s.concat(e.val());
   }
 
-
-  public static String filenameWithFullPath (String fPath){
-    String[] arr = fPath.split("[,\\.\\s\\/]");
-    return arr[arr.length-2];
-  }
-
-  public static String nameFromPath(String ps){
-    String[] arr = ps.split("/");
-    return arr[arr.length-1];
-  }
 
   public static String[] listDirFileNames(String dirPath){
     return _listDirFiles(dirPath, true);
@@ -72,7 +61,7 @@ public class FileSysUtils {
       
     for(File f : dirFiles){
       curPath = f.getAbsolutePath().replace("\\", "/");
-      dirList.append(onlyNames ? nameFromPath(curPath) : curPath);
+      dirList.append(onlyNames ? fnameFromFpath(curPath) : curPath);
     }
     
     return dirList.toArray();
@@ -132,14 +121,14 @@ public static boolean fNameExtIs(String fn, ExtType et){
 
 
   
-  public static String pathToLinux(String winPath){
+  public static String winPthToLinuxPth(String winPath){
     return winPath.toString().replace("\\","/");
   }
 
-  public static String[] pathsToLinux(String[] winPaths){
-    List<String> pths = Arrays.asList(winPaths);
-    pths.forEach((p)->p=pathToLinux(p));
-    return FormatUtils.arrFromList(String.class, pths);
+  public static String[] winPthsToLinuxPths(String[] winPaths){
+    String[] ret = new String[winPaths.length];
+    for(int i=0; i<winPaths.length; i++){ret[i]=winPthToLinuxPth(winPaths[i]);}
+    return ret;
   }
 
 }
