@@ -1,11 +1,16 @@
 package PrEis.test;
-
 import PrEis.utils.ExtType;
 import PrEis.utils.FileSysUtils;
 import processing.core.PApplet;
 
 public class TestFileSysUtils {
-  public static void runTests(PApplet p){
+  /**
+   * @param p PApplet of Processing app sketch where this is called
+   * @param xFName name of JSON with dir examples
+   * @param xArrKey key of `String[]` in JSON of examples
+   * @implNote JSON file of examples MUST be in <code>/data/*</code> dir
+   */
+  public static void runTests(PApplet p, String[] realDirTests){
     System.out.println("<=[ Testing 'pathConcat' ]=====================>");
     test_pathConcat();
     System.out.println("<=[ Testing 'fnameFromFpath' ]=================>");
@@ -20,10 +25,8 @@ public class TestFileSysUtils {
     test_appendExtIfNeeded();
     System.out.println("<=[ Testing 'fullPathFileName' ]===============>");
     test_fullPathFileName();
-    System.out.println("<=[ Testing 'fileNamesOfDir' ]=================>");
-    test_fileNamesOfDir(p);
-    System.out.println("<=[ Testing 'filePathsOfDir' ]=================>");
-    test_filePathsOfDir(p);
+    System.out.println("<=[ Testing All 'Filenames Of Dir' ]===========>");
+    test_fileNamesAndPathsOfDir(p,realDirTests);
   }
 
   private static void test_pathConcat(){
@@ -52,6 +55,10 @@ public class TestFileSysUtils {
       TestFunc.doEval(FileSysUtils.fnameFromFpath(dir1+xfnx), xfnx),
       TestFunc.doEval(FileSysUtils.fnameFromFpath(dir2+xfnx), xfnx),
       TestFunc.doEval(FileSysUtils.fnameFromFpath(dir3+xfnx), xfnx),
+      TestFunc.doEval(FileSysUtils.fnameFromFpath(     xfnx, false), xfnm),
+      TestFunc.doEval(FileSysUtils.fnameFromFpath(dir1+xfnx, false), xfnm),
+      TestFunc.doEval(FileSysUtils.fnameFromFpath(dir2+xfnx, false), xfnm),
+      TestFunc.doEval(FileSysUtils.fnameFromFpath(dir3+xfnx, false), xfnm),
     });
   }
 
@@ -146,17 +153,39 @@ public class TestFileSysUtils {
     });
   }
   
-  //> public static String[] fileNamesOfDir (String dir)
   //> public static String[] fileNamesOfDir (String dir, ExtType ... exts)
-  //> public static String[] listDirFileNames (String dirPath)
-  public static void test_fileNamesOfDir(PApplet p){
-    
-  }
-  
-  //> public static String[] filePathsOfDir (String dir)
   //> public static String[] filePathsOfDir (String dir, ExtType ... exts)
-  //> public static String[] listDirFilePaths (String dirPath)  
-  public static void test_filePathsOfDir(PApplet p){
-    
+  public static void test_fileNamesAndPathsOfDir(PApplet p, String[] exs){
+    if(exs==null || exs.length==0){
+      System.err.println("ERROR: Input dir `String[]` nullish! (null xor length==0)"); 
+    }
+    try {
+      TestFunc.testResultsToConsole(new boolean[]{        
+        TestFunc.doEval(FileSysUtils.listDirFileNames(exs[0]), FileSysUtils.fileNamesOfDir(exs[0])),
+        TestFunc.doEval(FileSysUtils.listDirFileNames(exs[1]), FileSysUtils.fileNamesOfDir(exs[1])),
+        TestFunc.doEval(FileSysUtils.listDirFileNames(exs[2]), FileSysUtils.fileNamesOfDir(exs[2])),
+        TestFunc.doEval(FileSysUtils.listDirFileNames(exs[3]), FileSysUtils.fileNamesOfDir(exs[3])),
+        TestFunc.doEval(FileSysUtils.listDirFileNames(exs[4]), FileSysUtils.fileNamesOfDir(exs[4])),
+        TestFunc.doEval(FileSysUtils.listDirFileNames(exs[5]), FileSysUtils.fileNamesOfDir(exs[5])),
+
+        TestFunc.doEval(FileSysUtils.listDirFilePaths(exs[0]), FileSysUtils.filePathsOfDir(exs[0])),
+        TestFunc.doEval(FileSysUtils.listDirFilePaths(exs[1]), FileSysUtils.filePathsOfDir(exs[1])),
+        TestFunc.doEval(FileSysUtils.listDirFilePaths(exs[2]), FileSysUtils.filePathsOfDir(exs[2])),
+        TestFunc.doEval(FileSysUtils.listDirFilePaths(exs[3]), FileSysUtils.filePathsOfDir(exs[3])),
+        TestFunc.doEval(FileSysUtils.listDirFilePaths(exs[4]), FileSysUtils.filePathsOfDir(exs[4])),
+        TestFunc.doEval(FileSysUtils.listDirFilePaths(exs[5]), FileSysUtils.filePathsOfDir(exs[5])),
+
+        TestFunc.doEval(FileSysUtils.fileNamesOfDir(exs[3], ExtType.WAD, ExtType.DEH), new String[]{"180mpv.wad", "180mpv_alt_map30.wad", "180mpv_deh.deh"}),
+        TestFunc.doEval(FileSysUtils.fileNamesOfDir(exs[3], ExtType.TXT), new String[]{"180mpv.txt", "180mpv_b.txt", "180mpv_info.txt"}),
+        TestFunc.doEval(FileSysUtils.fileNamesOfDir(exs[3], ExtType.JSON), new String[]{"loadinfo.json"}),
+        TestFunc.doEval(FileSysUtils.fileNamesOfDir(exs[4], ExtType.WAD, ExtType.DEH), new String[]{"PL2.deh","PL2.wad"}),
+        TestFunc.doEval(FileSysUtils.fileNamesOfDir(exs[4], ExtType.TXT), new String[]{"PL2.txt", "PL2INFO.txt"}),
+        TestFunc.doEval(FileSysUtils.fileNamesOfDir(exs[5], ExtType.JSON, ExtType.ZIP), new String[]{"loadinfo.json", "stuff.zip"}),
+      });
+    } 
+    catch (Exception e) {
+      e.printStackTrace();
+      System.err.println("ERROR: Something went wrong with file[dir] retrieval!");
+    }
   }
 }

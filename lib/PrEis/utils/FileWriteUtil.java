@@ -11,15 +11,14 @@ public class FileWriteUtil {
     p = parent;
   }
 
-  /** This <strong>must</strong> be called to commence output to a text file. */
+  /** 
+   * This <strong>must</strong> be called to commence output to a text file.
+   * @param filename Input filename; s.t. if nullish: {@link #launchWrite()} is
+   * called; and if suffix is not <code>.txt</code>: such will be appended.
+   */
   public FileWriteUtil launchWrite(String filename){
-    if(QueryUtils.nullish(filename)){
-      Cons.err(Cons.Err.NULL_XOR_INVALID);
-    }
-    if(!filename.endsWith(ExtType.TXT.val())){
-      Cons.err_act(Cons.Err.MISSING_SUFFIX, Cons.Act.ADDING_REQ_SUFX, ExtType.TXT.val());
-      filename+=ExtType.TXT.val();
-    }
+    if(QueryUtils.nullish(filename)){return launchWrite();}
+    if(!filename.endsWith(ExtType.TXT.val())){filename+=ExtType.TXT.val();}
     w = p.createWriter(filename);
     return this;
   }
@@ -27,6 +26,16 @@ public class FileWriteUtil {
   /** This <strong>must</strong> be called to commence output to a text file. */
   public FileWriteUtil launchWrite(){
     w = p.createWriter(getDefaultFilename());
+    return this;
+  }
+
+  /**
+   * @implNote FOR TESTING PURPOSES ONLY! It mocks {@link #launchWrite()} s.t I
+   * can specify a subroot dir of `/data` to create the file. Ergo this is NOT
+   * intended to be called for any other reason sans testing as aforementioned.
+   */
+  public FileWriteUtil launchWriteTestAnnon(String pfix){
+    w = p.createWriter(pfix+getDefaultFilename());
     return this;
   }
 
@@ -54,5 +63,8 @@ public class FileWriteUtil {
     }
     return this;
   }
-  
+
+  public static void writeOneCall(PApplet p, String fname, String ... strs){
+    new FileWriteUtil(p).launchWrite(fname).writeToFile(strs).finishWrite();
+  }
 }

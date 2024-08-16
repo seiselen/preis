@@ -17,14 +17,15 @@ public class TestEnums {
   public static void test_ExtType(){
     TestFunc.strArrToConsole(new String[]{
       (ExtType.DEH.val().equals(".deh")?P:F),
+      (ExtType.JSON.val().equals(".json")?P:F),
+      (ExtType.MP3.val().equals(".mp3")?P:F),
+      (ExtType.OGG.val().equals(".ogg")?P:F),
       (ExtType.PK3.val().equals(".pk3")?P:F),
       (ExtType.PNG.val().equals(".png")?P:F),
       (ExtType.TXT.val().equals(".txt")?P:F),
       (ExtType.WAD.val().equals(".wad")?P:F),
       (ExtType.WAV.val().equals(".wav")?P:F),
-      (ExtType.OGG.val().equals(".ogg")?P:F),
-      (ExtType.MP3.val().equals(".mp3")?P:F),
-      (ExtType.JSON.val().equals(".json")?P:F),
+      (ExtType.ZIP.val().equals(".zip")?P:F),      
     });
 
   }

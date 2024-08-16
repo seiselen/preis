@@ -1,15 +1,16 @@
 package PrEis.utils;
 
 public enum ExtType {
-  TXT(".txt"),
-  PNG(".png"),
-  WAD(".wad"),
-  PK3(".pk3"),
   DEH(".deh"),
-  WAV(".wav"),
-  OGG(".ogg"),
-  MP3(".mp3"),
   JSON(".json"),
+  MP3(".mp3"),
+  OGG(".ogg"),
+  PNG(".png"),
+  PK3(".pk3"),
+  TXT(".txt"),
+  WAD(".wad"),
+  WAV(".wav"),
+  ZIP(".zip")
   ;
 
   private String val;
