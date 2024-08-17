@@ -14,7 +14,7 @@ public class PImageUtils {
   private static boolean LOG_BAKE_TOTAL = true;
   private static boolean LOG_PX_MATCHES = true;
 
-
+  /** Possible results of image-2-image comparison. */
   enum ReturnCode {TEXS_PIXS_MATCH, TEXS_PIXS_MISMATCH, TEXS_DIMS_MISMATCH}
 
   private PApplet p;

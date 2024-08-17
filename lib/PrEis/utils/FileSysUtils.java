@@ -17,6 +17,7 @@ import processing.data.StringList;
  */
 public class FileSysUtils {
 
+  /** Opcode for if/how to format a full filepath. */
   private enum PathInfo {AS_FPATH, AS_FNAME};
 
   private final static int DEF_FIND_LEV = 1;
@@ -71,22 +72,40 @@ public class FileSysUtils {
     return ret;
   }
 
-  public static String[] listDirFileNames(String dirPath){return _listDirFiles(dirPath, PathInfo.AS_FNAME);}
-  public static String[] listDirFilePaths(String dirPath){return _listDirFiles(dirPath, PathInfo.AS_FPATH);}
+  public static String[] listDirFileNames(String dirPath){
+    return _listDirFiles(dirPath, PathInfo.AS_FNAME);
+  }
+
+  public static String[] listDirFilePaths(String dirPath){
+    return _listDirFiles(dirPath, PathInfo.AS_FPATH);
+  }
 
   private static String[] _listDirFiles(String dirPath, PathInfo reqInfo){
     File dirAsFile = new File(dirPath);
     if (!dirAsFile.isDirectory()){return null;}
     File[] dirFiles = dirAsFile.listFiles();
     StringList dirList = new StringList();
-    for(File f : dirFiles){dirList.append(reqInfo==PathInfo.AS_FNAME ? f.getName() : winPthToLinuxPth(f.getAbsolutePath()));}
+    for(File f : dirFiles){
+      dirList.append(reqInfo==PathInfo.AS_FNAME ? f.getName() : winPthToLinuxPth(f.getAbsolutePath()));
+    }
     return dirList.toArray();
   }
 
-  public static String[] filePathsOfDir(String dir){return _filePathStrs(_filePathsOfDir(dir), PathInfo.AS_FPATH);}
-  public static String[] fileNamesOfDir(String dir){return _filePathStrs(_filePathsOfDir(dir), PathInfo.AS_FNAME);}
-  public static String[] filePathsOfDir(String dir, ExtType ... exts){return _filePathStrs(_filePathsOfDir(dir, exts), PathInfo.AS_FPATH);}
-  public static String[] fileNamesOfDir(String dir, ExtType ... exts){return _filePathStrs(_filePathsOfDir(dir, exts), PathInfo.AS_FNAME);}
+  public static String[] filePathsOfDir(String dir){
+    return _filePathStrs(_filePathsOfDir(dir), PathInfo.AS_FPATH);
+  }
+
+  public static String[] fileNamesOfDir(String dir){
+    return _filePathStrs(_filePathsOfDir(dir), PathInfo.AS_FNAME);
+  }
+
+  public static String[] filePathsOfDir(String dir, ExtType ... exts){
+    return _filePathStrs(_filePathsOfDir(dir, exts), PathInfo.AS_FPATH);
+  }
+
+  public static String[] fileNamesOfDir(String dir, ExtType ... exts){
+    return _filePathStrs(_filePathsOfDir(dir, exts), PathInfo.AS_FNAME);
+  }
 
   private static Path[] _filePathsOfDir(String dir){
     try {return Files.list(Paths.get(dir)).toArray(Path[]::new);}
@@ -94,7 +113,10 @@ public class FileSysUtils {
   }
 
   private static Path[] _filePathsOfDir(String dir, ExtType ... exts){
-    try {return Files.find(Paths.get(dir),DEF_FIND_LEV,(p,a)->(fNameExtAnyOf(p.getFileName().toString(),exts))).toArray(Path[]::new);}
+    try {
+      return Files.find(Paths.get(dir),DEF_FIND_LEV,(p,a)->(fNameExtAnyOf(p.getFileName().toString(),exts)))
+      .toArray(Path[]::new);
+    }
     catch(IOException ie) {ie.printStackTrace(); return null;}
   }
 
@@ -102,7 +124,11 @@ public class FileSysUtils {
     if(QueryUtils.arrayNullOrEmpty(paths)){return null;}
     int n = paths.length;
     String[] ret = new String[n];
-    for(int i=0; i<n; i++){ret[i] = (reqInfo==PathInfo.AS_FPATH) ? winPthToLinuxPth(paths[i].toString()) : paths[i].getFileName().toString();}
+    for(int i=0; i<n; i++){
+      ret[i] = (reqInfo==PathInfo.AS_FPATH) 
+        ? winPthToLinuxPth(paths[i].toString())
+        : paths[i].getFileName().toString();
+    }
     return ret;
   }
 

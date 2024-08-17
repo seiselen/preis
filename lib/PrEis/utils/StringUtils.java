@@ -2,6 +2,7 @@ package PrEis.utils;
 
 public class StringUtils {
 
+  /** Padding Direction */
   private enum PadDir {L,R};
 
 
