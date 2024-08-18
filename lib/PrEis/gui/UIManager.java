@@ -46,6 +46,11 @@ public class UIManager {
     for (UIObject obj : objects){obj.update();}
   }
 
+  /** Calls `onKeyPressed` ∀ objects bound hereto. */
+  public void onKeyPressed(){
+    for (UIObject obj : objects){obj.onKeyPressed();}
+  }
+
   /** Calls `onMousePressed` ∀ objects bound hereto. */
   public void onMousePressed(){
     for (UIObject obj : objects){obj.onMousePressed();}
@@ -54,11 +59,6 @@ public class UIManager {
   /** Calls `onMouseWheel` ∀ objects bound hereto. */
   public void onMouseWheel(int v){
     for (UIObject obj : objects){obj.onMouseWheel(v);}
-  }
-
-  /** Calls `onKeyPressed` ∀ objects bound hereto. */
-  public void onKeyPressed(){
-    for (UIObject obj : objects){obj.onKeyPressed();}
   }
 
   /** Calls `render` ∀ objects bound hereto. */

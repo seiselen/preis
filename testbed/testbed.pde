@@ -7,10 +7,13 @@ import PrEis.test.TestFormatUtils;
 import PrEis.test.TestGridManager;
 import PrEis.test.TestFileSysUtils;
 import PrEis.test.TestFileWriteUtil;
+import PrEis.test.TestGUIObjects;
 
+int bg_col;
 boolean TEST_DOES_RENDER = false;
 
-TestGridManager tGridManager;
+TestGridManager tgrid;
+TestGUIObjects  tGUI;
 
 void setup(){
   if(!TEST_DOES_RENDER){
@@ -19,23 +22,33 @@ void setup(){
   }
   else{
     size(640,320);
-    tGridManager = new TestGridManager(this);
+    bg_col = color(255;)
+    tgrid = new TestGridManager(this);
+    tGUI  = new TestGUIObjects(this);
   }
 }
 
 
 void draw(){
-  background(255);
-  
-  if(TEST_DOES_RENDER){
-    //TestPGfxUtils.testRender(this);
-    tGridManager.testRender();
-  }
+  if(!TEST_DOES_RENDER){return;}
+  background(bg_col);
+  //TestPGfxUtils.testRender(this);
+  tgrid.testRender();
+  tGUI.testRender();
 }
 
 void keyPressed(){
-  if(TEST_DOES_RENDER){
-    tGridManager.onKeyPressed();
-  }  
+  if(!TEST_DOES_RENDER){return;}
+  tgrid.onKeyPressed();
+  tGUI.onKeyPressed();
+}
 
+void mousePressed(){
+  if(!TEST_DOES_RENDER){return;}
+  tGUI.onMousePressed();
+}
+
+void mouseWheel(MouseEvent event) {
+  if(!TEST_DOES_RENDER){return;}
+  tGUI.onMouseWheel(event.getCount());
 }
