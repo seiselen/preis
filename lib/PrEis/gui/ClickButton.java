@@ -1,6 +1,5 @@
 package PrEis.gui;
 
-import PrEis.gui.Interfaces.ActionCallback;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -10,7 +9,7 @@ import processing.core.PVector;
  */
 class ClickButton extends UIObject {
   
-  private ActionCallback action;
+  private IActionCallback action;
   
   public ClickButton(PApplet iApp, PVector iPos, PVector iDim){
     super(iApp, iPos, iDim, WidgetType.CB);
@@ -31,7 +30,7 @@ class ClickButton extends UIObject {
     return this;
   }  
   
-  public ClickButton bindCallback(ActionCallback act){
+  public ClickButton bindCallback(IActionCallback act){
     action = act;
     return this;
   }

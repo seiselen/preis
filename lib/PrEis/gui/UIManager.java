@@ -1,7 +1,4 @@
 package PrEis.gui;
-import PrEis.gui.Interfaces.ActionCallback;
-import PrEis.gui.Interfaces.ToggleCallback;
-import PrEis.gui.Interfaces.UpdateCallback;
 import PrEis.utils.Cons;
 import PrEis.utils.Cons.Act;
 import PrEis.utils.Cons.Err;
@@ -69,59 +66,59 @@ public class UIManager {
     for (UIObject obj : objects){obj.render();}
   }
 
-  public ClickButton createClickButton(String txt, AppFont fnt, ActionCallback cbk, PVector pos, PVector dim){
+  public ClickButton createClickButton(String txt, AppFont fnt, IActionCallback cbk, PVector pos, PVector dim){
     return (ClickButton)bindUiObject(new ClickButton(p,pos,dim).setLabel(txt).bindCallback(cbk).setFont(fnt));
   }
 
-  public ClickButton createClickButton(String txt, ActionCallback cbk, PVector pos, PVector dim){
+  public ClickButton createClickButton(String txt, IActionCallback cbk, PVector pos, PVector dim){
     return (ClickButton)bindUiObject(new ClickButton(p,pos,dim).setLabel(txt).bindCallback(cbk));
   }
 
-  public ToggleButton createToggleButton(String txt, AppFont fnt, ToggleCallback cbk, PVector pos, PVector dim){
+  public ToggleButton createToggleButton(String txt, AppFont fnt, IToggleCallback cbk, PVector pos, PVector dim){
     return (ToggleButton)bindUiObject(new ToggleButton(p,pos,dim).setLabel(txt).bindCallback(cbk).setFont(fnt));
   }
 
-  public ToggleButton createToggleButton(String txt, ToggleCallback cbk, PVector pos, PVector dim){
+  public ToggleButton createToggleButton(String txt, IToggleCallback cbk, PVector pos, PVector dim){
     return (ToggleButton)bindUiObject(new ToggleButton(p,pos,dim).setLabel(txt).bindCallback(cbk));
   }
 
-  public ToggleButton createToggleButton(ToggleCallback cbk, AppFont fnt, PVector pos, PVector dim){
+  public ToggleButton createToggleButton(IToggleCallback cbk, AppFont fnt, PVector pos, PVector dim){
     return (ToggleButton)bindUiObject(new ToggleButton(p,pos,dim).bindCallback(cbk).setFont(fnt));
   }
 
-  public ToggleButton createToggleButton(ToggleCallback cbk, PVector pos, PVector dim){
+  public ToggleButton createToggleButton(IToggleCallback cbk, PVector pos, PVector dim){
     return (ToggleButton)bindUiObject(new ToggleButton(p,pos,dim).bindCallback(cbk));
   }
 
-  public Label createLabel (String txt, UpdateCallback cbk, PVector pos, PVector dim, LabelType typ, AppFont fnt){
+  public Label createLabel (String txt, IUpdateCallback cbk, PVector pos, PVector dim, LabelType typ, AppFont fnt){
     return (Label)bindUiObject(new Label(p,pos,dim).setLabel(txt).bindCallback(cbk).setType(typ).setFont(fnt));
   }
 
-  public Label createLabel (String txt, UpdateCallback cbk, PVector pos, PVector dim, LabelType typ){
+  public Label createLabel (String txt, IUpdateCallback cbk, PVector pos, PVector dim, LabelType typ){
     return (Label)bindUiObject(new Label(p,pos,dim).setLabel(txt).bindCallback(cbk).setType(typ));
   }
     
-  public Label createLabel (String txt, UpdateCallback cbk, PVector pos, PVector dim, AppFont fnt){
+  public Label createLabel (String txt, IUpdateCallback cbk, PVector pos, PVector dim, AppFont fnt){
     return (Label)bindUiObject(new Label(p,pos,dim).setLabel(txt).bindCallback(cbk).setFont(fnt));
   }
   
-  public Label createLabel (String txt, UpdateCallback cbk, PVector pos, PVector dim){
+  public Label createLabel (String txt, IUpdateCallback cbk, PVector pos, PVector dim){
     return (Label)bindUiObject(new Label(p,pos,dim).setLabel(txt).bindCallback(cbk));
   }
   
-  public Label createLabel (UpdateCallback cbk, PVector pos, PVector dim, LabelType typ, AppFont fnt){
+  public Label createLabel (IUpdateCallback cbk, PVector pos, PVector dim, LabelType typ, AppFont fnt){
     return (Label)bindUiObject(new Label(p,pos,dim).bindCallback(cbk).setType(typ).setFont(fnt));
   }
   
-  public  Label createLabel (UpdateCallback cbk, PVector pos, PVector dim, LabelType typ){
+  public  Label createLabel (IUpdateCallback cbk, PVector pos, PVector dim, LabelType typ){
     return (Label)bindUiObject(new Label(p,pos,dim).bindCallback(cbk).setType(typ));
   }
   
-  public Label createLabel (UpdateCallback cbk, PVector pos, PVector dim, AppFont fnt){
+  public Label createLabel (IUpdateCallback cbk, PVector pos, PVector dim, AppFont fnt){
     return (Label)bindUiObject(new Label(p,pos,dim).bindCallback(cbk).setFont(fnt));
   }
   
-  public Label createLabel (UpdateCallback cbk, PVector pos, PVector dim){
+  public Label createLabel (IUpdateCallback cbk, PVector pos, PVector dim){
     return (Label)bindUiObject(new Label(p,pos,dim).bindCallback(cbk));
   }
   

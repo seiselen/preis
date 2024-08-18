@@ -1,6 +1,5 @@
 package PrEis.gui;
 
-import PrEis.gui.Interfaces.LabelledActionCallback;
 import PrEis.utils.DataStructUtils;
 import PrEis.utils.Pgfx;
 import processing.core.PApplet;
@@ -51,7 +50,7 @@ public class Dropdown extends UIObject {
     return this;
   }
 
-  public Dropdown appendChildren(LabelledActionCallback[] actions){
+  public Dropdown appendChildren(ILabelledActionCallback[] actions){
     children = new DropdownItem[actions.length];
     PVector baseOff = getChildBaseOffset();
     maxScrollOff = (children.length*ddownItemTall)-bbox.maxY();

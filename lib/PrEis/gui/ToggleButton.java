@@ -1,5 +1,4 @@
 package PrEis.gui;
-import PrEis.gui.Interfaces.ToggleCallback;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -9,7 +8,7 @@ import processing.core.PVector;
  */
 public class ToggleButton extends UIObject {
   
-  private ToggleCallback toggleCallback;
+  private IToggleCallback toggleCallback;
   
   public ToggleButton(PApplet iApp, PVector iPos, PVector iDim){
     super(iApp, iPos, iDim, WidgetType.TB);
@@ -31,7 +30,7 @@ public class ToggleButton extends UIObject {
     return this;
   }
   
-  public ToggleButton bindCallback(ToggleCallback cbk){
+  public ToggleButton bindCallback(IToggleCallback cbk){
     toggleCallback=cbk;
     return this;
   }

@@ -1,6 +1,5 @@
 package PrEis.gui;
 
-import PrEis.gui.Interfaces.LabelledActionCallback;
 import PrEis.utils.DataStructUtils;
 import PrEis.utils.Pgfx;
 import processing.core.PApplet;
@@ -8,7 +7,7 @@ import processing.core.PVector;
 
 public class DropdownItem extends UIObject {
  
-  private LabelledActionCallback cback;
+  private ILabelledActionCallback cback;
   
   public DropdownItem(PApplet iApp, PVector iPos, PVector iDim){
     super(iApp, iPos, iDim, WidgetType.DI);
@@ -27,7 +26,7 @@ public class DropdownItem extends UIObject {
     return this;
   }
   
-  public DropdownItem appendAction(LabelledActionCallback cb){
+  public DropdownItem appendAction(ILabelledActionCallback cb){
     cback = cb;
     return this;
   }

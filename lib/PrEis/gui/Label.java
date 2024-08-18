@@ -1,5 +1,4 @@
 package PrEis.gui;
-import PrEis.gui.Interfaces.UpdateCallback;
 import PrEis.utils.Pgfx;
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -10,7 +9,7 @@ import processing.core.PVector;
  */
 public class Label extends UIObject {
   
-  private UpdateCallback updateCallback;
+  private IUpdateCallback updateCallback;
   
   private LabelType lblType;
   
@@ -34,7 +33,7 @@ public class Label extends UIObject {
     return this;
   }
   
-  public Label bindCallback(UpdateCallback cbk){
+  public Label bindCallback(IUpdateCallback cbk){
     updateCallback=cbk;
     label=updateCallback.getTxt();
     return this;
