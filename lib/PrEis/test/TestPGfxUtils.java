@@ -7,7 +7,7 @@ import processing.core.PVector;
  * @implNote Should do tests for the other functions, but they're simple enough
  * implementations proven in-app that I'm not worried thereof; so KISS for now!
  */
-public class TestPGfxUtils {
+public class TestPgfxUtils {
 
   public static void testRender(PApplet p){
     p.background(0,160,255);
