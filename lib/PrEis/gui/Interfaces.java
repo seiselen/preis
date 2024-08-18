@@ -2,7 +2,7 @@ package PrEis.gui;
 
 /** 
  * Interfaces for UIObject Handlers.
- * @TODO Put this within `UIObject` or its manager should I realize one?
+ * @TODO Partition these into their own `.java` files as I did with the public enums?
  */
 public class Interfaces {
 

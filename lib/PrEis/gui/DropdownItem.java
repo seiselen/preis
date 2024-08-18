@@ -2,6 +2,7 @@ package PrEis.gui;
 
 import PrEis.gui.Interfaces.LabelledActionCallback;
 import PrEis.utils.DataStructUtils;
+import PrEis.utils.Pgfx;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -32,7 +33,7 @@ public class DropdownItem extends UIObject {
   }
     
   public void scrollTransform(float val){
-    setTransform(PVector.add(pos,DataStructUtils.createVector(0,val)),dim);
+    addTranslate(DataStructUtils.createVector(0,val));
   }
   
   private int getFillCol(){
@@ -56,14 +57,14 @@ public class DropdownItem extends UIObject {
     p.strokeWeight(style.swgt);
     p.fill(getFillCol());
     p.stroke(getStrokeCol());
-    p.rect(pos.x,pos.y,dim.x,dim.y);
+    Pgfx.rect(p, bbox);
     p.fill(getStrokeCol());
     renderText();
   }
   
   public void renderText(){
     p.textAlign(PApplet.LEFT, PApplet.CENTER);
-    p.text(label, PApplet.lerp(pos.x,mPt.x,style.txt_off_pct), mPt.y);
+    p.text(label, PApplet.lerp(bbox.minX(), bbox.midX(), style.txt_off_pct), bbox.midY());
   }
 
 }

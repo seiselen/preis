@@ -1,5 +1,6 @@
 package PrEis.gui;
 import PrEis.gui.Interfaces.UpdateCallback;
+import PrEis.utils.Pgfx;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -49,7 +50,7 @@ public class Label extends UIObject {
     p.strokeWeight(style.swgt);
     p.fill(getFillCol());
     p.stroke(getStrokeCol());
-    p.rect(pos.x,pos.y,dim.x,dim.y);
+    Pgfx.rect(p, bbox);
     p.fill(getTxtFillCol());
     renderTextViaOri();
   }

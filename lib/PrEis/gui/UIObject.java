@@ -1,7 +1,6 @@
 package PrEis.gui;
-import PrEis.utils.Cons;
-import PrEis.utils.Cons.Act;
-import PrEis.utils.Cons.Err;
+import PrEis.utils.BBox;
+import PrEis.utils.Pgfx;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -14,17 +13,8 @@ abstract class UIObject {
   /** PApplet of the Sketch/Applet. */
   protected PApplet p;
 
-  /** Position of this UIObject. */
-  protected PVector pos;
-
-  /** Size of this UIObject. */  
-  protected PVector dim;
-
-  /** Endpoint position of this UIObject. */
-  protected PVector ePt;
-
-  /** Midpoint Position of this UIObject. */
-  protected PVector mPt;
+  /** Bounding Box (providing pos, dim, ept, mpt, and lerping thereof) */
+  protected BBox bbox;
 
   /** Is the mouse currently over this UIObject? */
   protected boolean mouseOver;
@@ -58,22 +48,16 @@ abstract class UIObject {
     style     = DefaultStyle.Get(iPar, iTyp);
     mouseOver = false;
     disabled  = false;
-    setTransform(iPos,iDim);
+    bbox      = new BBox(iPos, iDim);
+
   }
-  
-  public void setTransform(PVector in_pos, PVector in_dim){
-    pos=in_pos;
-    dim=in_dim;
-    ePt=new PVector(pos.x+dim.x,pos.y+dim.y);
-    mPt=PVector.mult(dim,0.5f).add(pos);
-  }
-  
+    
   public void addTranslate(PVector trs){
-    setTransform(PVector.add(pos,trs),dim);
+    bbox.translatePos(trs);
   }
   
   public boolean isMouseOver(){
-    return p.mouseX >= pos.x && p.mouseX <= ePt.x && p.mouseY >= pos.y && p.mouseY <= ePt.y;
+    return bbox.inBounds(p.mouseX, p.mouseY);
   }
   
   public boolean isHoveredState(){
@@ -86,15 +70,6 @@ abstract class UIObject {
   
   public boolean isDisabledState(){
     return disabled;
-  }
-
-  /** @TODO RESOLVE COMMENTED OUT CODE! */
-  public void changeFont(){
-    switch(objFont){
-      case TEXT: /*pApplet.textFont(titWeb);*/ return;
-      case GLYPH: /*pApplet.textFont(fontAw);*/ return;
-      default: Cons.err_act(Err.SWITCH_DROP_OUT, Act.RETURN_NO_ACTION);
-    }
   }
   
   public void onSetFont(){
@@ -128,17 +103,21 @@ abstract class UIObject {
 
   /** Abstract `render` used for common pre-pro; as children define how they render. */
   public void render(){
-    changeFont();
+    //> not the prettiest realization but QAD works for now. unsure about who/how WRT responsibility
+    UIManager.getFont(objFont);
   }
   
   public void renderRect(){
-    if(style.border_radius>0){p.rect(pos.x,pos.y,dim.x,dim.y,style.border_radius);}
-    else{p.rect(pos.x,pos.y,dim.x,dim.y);}
+    if(style.border_radius>0){Pgfx.rect(p,bbox,style.border_radius);}
+    else{Pgfx.rect(p,bbox);}
   }
   
-  /** @TODO: Revisit this if/when I define UIObjects with a `Dims` struct -vs- current `PVectors`. */
+  /** 
+   * @TODO Realize this at some point? Perhaps as specd-else-default normalized
+   * percent of widget width per its `BBox`.
+   */
   public void renderText(float x1, float y1){
-    //if(style.text_wrap!=null){p.text(label,x1,y1,style.text_wrap.wide(),style.text_wrap.tall());}
+    //if(style.text_wrap){p.text(label,x1,y1,style.text_wrap.wide(),style.text_wrap.tall());}
     //else{p.text(label,x1,y1);}
     p.text(label,x1,y1);
   }
@@ -150,11 +129,11 @@ abstract class UIObject {
     }
   }
 
-  private void rTL(){p.textAlign(PApplet.LEFT, PApplet.TOP); renderText(pos.x+style.txt_offset_x,pos.y+style.txt_offset_y);}
-  private void rTR(){p.textAlign(PApplet.RIGHT, PApplet.TOP); renderText(ePt.x-style.txt_offset_x,pos.y+style.txt_offset_y);} 
-  private void rCC(){p.textAlign(PApplet.CENTER, PApplet.CENTER); renderText(mPt.x+style.txt_offset_x,mPt.y+style.txt_offset_y);}
-  private void rTC(){p.textAlign(PApplet.CENTER, PApplet.TOP); renderText(mPt.x+style.txt_offset_x,pos.y+style.txt_offset_y);}
-  private void rCR(){p.textAlign(PApplet.RIGHT, PApplet.CENTER); renderText(pos.x-style.txt_offset_x,mPt.y+style.txt_offset_y);}
-  private void rCL(){p.textAlign(PApplet.LEFT, PApplet.CENTER); renderText(pos.x+style.txt_offset_x,mPt.y+style.txt_offset_y);}
+  private void rTL(){p.textAlign(PApplet.LEFT, PApplet.TOP); renderText(bbox.minX()+style.txt_offset.x,bbox.minY()+style.txt_offset.y);}
+  private void rTR(){p.textAlign(PApplet.RIGHT, PApplet.TOP); renderText(bbox.maxX()-style.txt_offset.x,bbox.minY()+style.txt_offset.y);} 
+  private void rCC(){p.textAlign(PApplet.CENTER, PApplet.CENTER); renderText(bbox.midX()+style.txt_offset.x,bbox.midY()+style.txt_offset.y);}
+  private void rTC(){p.textAlign(PApplet.CENTER, PApplet.TOP); renderText(bbox.midX()+style.txt_offset.x,bbox.minY()+style.txt_offset.y);}
+  private void rCR(){p.textAlign(PApplet.RIGHT, PApplet.CENTER); renderText(bbox.minX()-style.txt_offset.x,bbox.midY()+style.txt_offset.y);}
+  private void rCL(){p.textAlign(PApplet.LEFT, PApplet.CENTER); renderText(bbox.minX()+style.txt_offset.x,bbox.midY()+style.txt_offset.y);}
 
 } //> Ends Class UIObject

@@ -1,5 +1,5 @@
 package PrEis.test;
-import PrEis.utils.PGfxUtils;
+import PrEis.utils.Pgfx;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -14,13 +14,13 @@ public class TestPGfxUtils {
     p.textAlign(PApplet.CENTER, PApplet.CENTER);
     p.textSize(32);
 
-    PGfxUtils.shadowWeight = 1;
-    PGfxUtils.textWithShadow(
+    Pgfx.shadowWeight = 1;
+    Pgfx.textWithShadow(
       p, "# TEST (POS{X,Y} OVERLOAD, WGT=[1]) #", p.color(255), p.color(0), p.width*0.5f, p.height*0.25f
     );
 
-    PGfxUtils.shadowWeight = 2;
-    PGfxUtils.textWithShadow(
+    Pgfx.shadowWeight = 2;
+    Pgfx.textWithShadow(
       p, "# TEST (PVECTOR OVERLOAD, WGT=[3]) #", p.color(255), p.color(0), new PVector(p.width*0.5f, p.height*0.75f)
     );
   }

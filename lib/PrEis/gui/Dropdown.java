@@ -2,6 +2,7 @@ package PrEis.gui;
 
 import PrEis.gui.Interfaces.LabelledActionCallback;
 import PrEis.utils.DataStructUtils;
+import PrEis.utils.Pgfx;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -36,42 +37,36 @@ public class Dropdown extends UIObject {
   //> keeping this version for future generalized version within UIObjects
   public Dropdown appendChildren(String[] childValues){
     children = new DropdownItem[childValues.length];
-    
-    float xOff=pos.x+(dim.x-ddownItemWide)/2;
-    float yOff=pos.y;
-    
-    maxScrollOff = (children.length*ddownItemTall)-dim.y;
+    PVector baseOff = getChildBaseOffset();
+    maxScrollOff = (children.length*ddownItemTall)-bbox.maxY();
     
     for (int i=0; i<childValues.length; i++){
-      children[i] = new DropdownItem(p,DataStructUtils.createVector(xOff,yOff), DataStructUtils.createVector(ddownItemWide,ddownItemTall))
-      .appendValue(childValues[i])
-      .appendAction(null);
-      yOff+=ddownItemTall;
+      children[i] = new DropdownItem(
+        p,DataStructUtils.createVector(baseOff.x,baseOff.y),
+        DataStructUtils.createVector(ddownItemWide,ddownItemTall)
+      )
+      .appendValue(childValues[i]).appendAction(null);
+      baseOff.y+=ddownItemTall;
     }
-
     return this;
   }
 
   public Dropdown appendChildren(LabelledActionCallback[] actions){
     children = new DropdownItem[actions.length];
-    
-    float xOff=pos.x+(dim.x-ddownItemWide)/2;
-    float yOff=pos.y;
-    
-    maxScrollOff = (children.length*ddownItemTall)-dim.y;
+    PVector baseOff = getChildBaseOffset();
+    maxScrollOff = (children.length*ddownItemTall)-bbox.maxY();
     
     for (int i=0; i<actions.length; i++){
-      children[i] = new DropdownItem(p,DataStructUtils.createVector(xOff,yOff), DataStructUtils.createVector(ddownItemWide,ddownItemTall))
-      .appendValue(actions[i].getLabel())
-      .appendAction(actions[i]);
-      yOff+=ddownItemTall;
+      children[i] = new DropdownItem(
+        p,DataStructUtils.createVector(baseOff.x,baseOff.y),
+        DataStructUtils.createVector(ddownItemWide,ddownItemTall)
+      )
+      .appendValue(actions[i].getLabel()).appendAction(actions[i]);
+      baseOff.y+=ddownItemTall;
     }
-    
     return this;
   }
 
-
-  
   public void update(){
     for(DropdownItem ddi : children){ddi.update();}
   }
@@ -84,12 +79,21 @@ public class Dropdown extends UIObject {
   }
   
   public void onMousePressed(){
-    for(DropdownItem ddi : children){if(ddi.pos.y < ePt.y){ddi.onMousePressed();}}
+    for(DropdownItem ddi : children){
+      if(ddi.bbox.minY() < bbox.maxY()){ddi.onMousePressed();}
+    }
+  }
+
+  private PVector getChildBaseOffset(){
+    return DataStructUtils.createVector(
+      bbox.minX()+(bbox.maxX()-ddownItemWide)/2,
+      bbox.minY()
+    );
   }
 
   public void render(){
     renderBG();
-    p.clip(pos.x,pos.y,dim.x,dim.y);
+    Pgfx.clip(p, bbox);
     for(DropdownItem ddi : children){ddi.render();}
     p.noClip();
     renderFG();
@@ -98,14 +102,14 @@ public class Dropdown extends UIObject {
   private void renderBG(){
     p.fill(32);
     p.noStroke();
-    p.rect(pos.x,pos.y,dim.x,dim.y);
+    Pgfx.rect(p, bbox);
   }
 
   private void renderFG(){
     p.noFill();
     p.stroke(0,0,64);
     p.strokeWeight(2);
-    p.rect(pos.x,pos.y,dim.x,dim.y);
+    Pgfx.rect(p, bbox);
   }
   
 }

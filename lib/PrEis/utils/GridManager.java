@@ -65,8 +65,8 @@ public class GridManager {
     if(!showGrid){return;}
     p.stroke(strk_col);
     p.strokeWeight(strk_wgt);
-    for(int i=0; i<cellsTall; i++){PGfxUtils.lineh(p, 0, p.width, cellSize*i);}
-    for(int i=0; i<cellsWide; i++){PGfxUtils.linev(p, cellSize*i, 0, p.height);}
+    for(int i=0; i<cellsTall; i++){Pgfx.lineh(p, 0, p.width, cellSize*i);}
+    for(int i=0; i<cellsWide; i++){Pgfx.linev(p, cellSize*i, 0, p.height);}
   }
   
 } // Ends Class

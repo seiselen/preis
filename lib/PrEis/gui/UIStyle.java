@@ -1,16 +1,17 @@
 package PrEis.gui;
 import PrEis.utils.FormatUtils;
 import processing.core.PApplet;
+import processing.core.PVector;
 import processing.data.JSONObject;
 import PrEis.utils.Cons;
+import PrEis.utils.DataStructUtils;
 
 public class UIStyle {
   int     swgt;
   int     txt_size;
   int     border_radius;
   TxtOri  txt_anchor;
-  int     txt_offset_x;
-  int     txt_offset_y;
+  PVector txt_offset;
   int     strk_enabled;
   int     strk_disabled;
   int     fill;
@@ -60,8 +61,7 @@ public class UIStyle {
     txt_size        = curSubsheet.getInt("txt_size");
     border_radius   = curSubsheet.getInt("border_radius");
     txt_anchor      = TxtOri.withString(curSubsheet.getString("txt_anchor"));
-    txt_offset_x    = curSubsheet.getInt("txt_offset_x");
-    txt_offset_y    = curSubsheet.getInt("txt_offset_y");    
+    txt_offset      = DataStructUtils.createVector(curSubsheet.getJSONArray("txt_offset").toFloatArray()); 
     strk_enabled    = FormatUtils.colorFromIntArr(curSubsheet.getJSONArray("strk_enabled").toIntArray());
     strk_disabled   = FormatUtils.colorFromIntArr(curSubsheet.getJSONArray("strk_disabled").toIntArray());
   }

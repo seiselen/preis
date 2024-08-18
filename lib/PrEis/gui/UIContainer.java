@@ -1,5 +1,7 @@
 package PrEis.gui;
 import java.util.ArrayList;
+
+import PrEis.utils.Pgfx;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -21,7 +23,7 @@ class UIContainer extends UIObject {
   }
   
   public UIContainer addChild(UIObject obj){
-    obj.addTranslate(pos);
+    obj.addTranslate(bbox.pos());
     objects.add(obj);
     return this;
   }
@@ -45,7 +47,7 @@ class UIContainer extends UIObject {
     p.stroke(this.style.strk_enabled);
     p.rectMode(PApplet.CORNER);
     p.imageMode(PApplet.CORNER);
-    p.rect(pos.x, pos.y, dim.x, dim.y);
+    Pgfx.rect(p,bbox);
   }
 
 }

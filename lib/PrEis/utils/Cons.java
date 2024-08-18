@@ -17,6 +17,7 @@ public class Cons {
     RETURN_ZERO_VEC  {public String toString(){return "Returning Zeroed PVector";}},
     RETURN_DEF_VALUE {public String toString(){return "Returning Default Value";}},
     ADDING_REQ_SUFX  {public String toString(){return "Adding Required Suffix";}},
+    RETURN_NULL      {public String toString(){return "Returning `null`";}},    
   }
 
   public static void err(String s){System.err.println(errPfix+s+"!");}  

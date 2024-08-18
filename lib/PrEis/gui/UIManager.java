@@ -13,8 +13,8 @@ import java.util.ArrayList;
 public class UIManager {
 
   PApplet p;
-  PFont textFont;
-  PFont glyphFont;
+  private static PFont labelFont;
+  private static PFont glyphFont;
 
   ArrayList<UIObject> objects;
 
@@ -25,13 +25,22 @@ public class UIManager {
 
   public UIManager injectFonts(PFont tf, PFont gf){
     if(tf==null||gf==null){Cons.err_act(Err.NULL_XOR_INVALID, Act.RETURN_NO_ACTION);}
-    else{textFont=tf; glyphFont=gf;}
+    else{labelFont=tf; glyphFont=gf;}
     return this;
   }
 
   private UIObject bindUiObject(UIObject obj){
     objects.add(obj);
     return obj;
+  }
+
+  public static PFont getFont(AppFont f){
+    switch(f){
+      case TEXT: return labelFont;
+      case GLYPH: return glyphFont;
+    }
+    Cons.err_act(Err.SWITCH_DROP_OUT, Act.RETURN_NULL);
+    return null;
   }
 
 

@@ -1,4 +1,5 @@
 package PrEis.gui;
+import PrEis.utils.DataStructUtils;
 import processing.core.PApplet;
 
 /** 
@@ -49,8 +50,7 @@ class DefaultStyle {
     s.swgt          = 2;
     s.txt_size      = 24;
     s.txt_anchor    = TxtOri.CC;
-    s.txt_offset_x  = 0;
-    s.txt_offset_y  = 0;
+    s.txt_offset    = DataStructUtils.createVector(0,0);
     s.strk_enabled  = p.color(255, 255, 255);
     s.strk_disabled = p.color(192, 192, 192);
     s.border_radius = 0;

@@ -60,11 +60,19 @@ public class BBox {
     return this;
   }
 
+
   public BBox set_dim(PVector iDim){
     _dim.set(iDim);
     setTransform();
     return this;
   }
+
+  
+  public void translatePos(PVector dPos){
+    _pos.add(dPos);
+    setTransform();
+  }
+
 
   /** This version sets transform WRT current {@link #_pos} and {@link #_dim} vals. */
   private void setTransform(){
@@ -90,6 +98,14 @@ public class BBox {
     setTransform();
   }
 
+
+
+
+
+  /*----------------------------------------------------------------------------
+  |> UTIL GETTERS
+  +---------------------------------------------------------------------------*/
+
   /** 
    * Returns lerp from {@link #_pos} to {@link #ept} via input <b>normalized</b>
    * percent value. 
@@ -108,7 +124,6 @@ public class BBox {
     return PVector.lerp(_pos, _ept, PApplet.constrain(pct, 0, 100));
   }
 
-
   /** 
    * Returns lerp from {@link #_pos} to {@link #ept} via input ratio as divisor;
    * i.e. for input <code>r</code> a lerp of <code>1f/ratio</code>. 
@@ -118,6 +133,23 @@ public class BBox {
     return PVector.lerp(_pos, _ept, 1f/rat);
   }
 
+  /**
+   * Is the query PVector <code>q</code> within this bounding box region?
+   * @param q query {@link PVector}
+   */
+  public boolean inBounds(PVector q){
+    return q.x >= _pos.x && q.x <= _ept.x && q.y >= _pos.y && q.y <= _ept.y;
+  }
+
+  /**
+   * Is the query PVector <code>q</code> within this bounding box region?
+   * @param qx query <code>x</code> coordinate
+   * @param qy query <code>y</code> coordinate
+   */
+  public boolean inBounds(float qx, float qy){
+    return qx >= _pos.x && qx <= _ept.x && qy >= _pos.y && qy <= _ept.y;
+  }
+
   //> Misc. Syntax Sugar Getters (Not Nec. Optimal, KISS)
   public float   minX  (){return _pos.x;}
   public float   minY  (){return _pos.y;}
@@ -125,6 +157,8 @@ public class BBox {
   public float   midY  (){return _mpt.y;}
   public float   maxX  (){return _ept.x;}
   public float   maxY  (){return _ept.y;}
+  public float   dimX  (){return _dim.x;}
+  public float   dimY  (){return _dim.y;}
   public PVector pos   (){return _pos.copy();}
   public PVector mpt   (){return _mpt.copy();}
   public PVector ept   (){return _ept.copy();}
@@ -140,5 +174,5 @@ public class BBox {
   public PVector posRC (){return new PVector(maxX(), midY());}
   public PVector posTC (){return new PVector(midX(), minY());}
   public PVector posBC (){return new PVector(midX(), maxY());}
-
+  public float[] extentsToArray(){return new float[]{_pos.x,_pos.y,_ept.x,_ept.y};}
 }

@@ -2,12 +2,16 @@ package PrEis.utils;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-public class PGfxUtils {
+
+public class Pgfx {
 
   /**
    * Used for <code>textWithShadow</code> functions. Not actually stroke weight,
    * but +=  */
   public static int shadowWeight = 1;
+
+
+
 
   /**
    * Syntax sugar for calling `noFill` then setting `stroke`.
@@ -56,6 +60,40 @@ public class PGfxUtils {
     p.noStroke();
     p.fill(r,g,b,a);
   }
+
+
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  |# Note On `rectMode`|`ellipseMode` Support: Both are (thankfully) exposed as
+  |  read-only public props of the `PApplet` instance; s.t. I should be able to
+  |  easily reference them within a switch handler.
+  +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+  /** Syntax Sugar for <code>p.rect</code> with {@link BBox} input. */
+  public static void rect(PApplet p, BBox bbox){
+    p.rect(bbox.minX(), bbox.minY(), bbox.dimX(), bbox.dimY());
+  }
+
+  /** Syntax Sugar for <code>p.rect</code> with {@link BBox} input and border radius. */
+  public static void rect(PApplet p, BBox bbox, float bRad){
+    p.rect(bbox.minX(), bbox.minY(), bbox.dimX(), bbox.dimY(), bRad);
+  }
+
+  /** Syntax Sugar for <code>p.rect</code> with {@link PVector} input. */
+  public static void rect(PApplet p, PVector vecTL, PVector vecBR){
+    p.rect(vecTL.x, vecTL.y, vecBR.x, vecBR.y);
+  }
+
+  /** Syntax Sugar for <code>p.rect</code> with {@link PVector} input and border radius. */
+  public static void rect(PApplet p, PVector vecTL, PVector vecBR, float bRad){
+    p.rect(vecTL.x, vecTL.y, vecBR.x, vecBR.y, bRad);
+  }
+
+
+  public static void clip(PApplet p, BBox bbox){
+    p.clip(bbox.minX(), bbox.minY(), bbox.dimX(), bbox.dimY());
+  }
+
+
 
   /**
    * Renders Vertical Line.
