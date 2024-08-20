@@ -1,43 +1,45 @@
 package PrEis.gui;
+import PrEis.utils.BBox;
 import processing.core.PApplet;
 import processing.core.PVector;
 
 /** 
  * Toggle Button
- * @note PROTECTED to restrict instantiation via ONLY `UIManager` factory calls.
  */
-public class ToggleButton extends UIObject {
+public class UIToggle extends UIObject {
   
   private IToggleCallback toggleCallback;
+  private String labelT, labelF;
   
-  public ToggleButton(PApplet iApp, PVector iPos, PVector iDim){
-    super(iApp, iPos, iDim, WidgetType.TB);
+  public UIToggle(PApplet iApp, BBox iBox){
+    super(iApp, iBox, WidgetType.TB);
+  }
+
+  public UIToggle(PApplet iApp, PVector iPos, PVector iDim){
+    this(iApp,new BBox(iPos));
   }
   
-  public ToggleButton setLabel(String iLbl){
-    label = iLbl;
-    return this;
-  }
-  
-  public ToggleButton setTitle(String ittl){
-    title = ittl;
-    return this;
-  }
-  
-  public ToggleButton setFont(AppFont iFnt){
-    objFont = iFnt;
-    onSetFont();
-    return this;
-  }
-  
-  public ToggleButton bindCallback(IToggleCallback cbk){
+  public UIToggle bindCallback(IToggleCallback cbk){
     toggleCallback=cbk;
     return this;
   }
   
+  public UIToggle withLabel(String iLabel){return (UIToggle)super.withLabel(iLabel);}
+
+  public UIToggle withOnOffLabels(String lblT, String lblF){labelT=lblT; labelF=lblF; return this;}
+
+  public UIToggle withGlyph(String iGlyph){return (UIToggle)super.withGlyph(iGlyph);}  
+
+  public UIToggle bindManager(UIManager iMgr){return (UIToggle)super.bindManager(iMgr);}
+
   public void onMousePressed(){
     if(mouseOver){
       toggleCallback.toggleState();
+
+      if(labelT!=null && labelF!=null){
+        label = toggleCallback.getState() ? labelT : labelF;
+      }
+
       if(title!=null){/* STUB FOR FUTURE TOOLTIP HANDLING */}
     }
   }

@@ -1,4 +1,5 @@
 package PrEis.gui;
+import PrEis.utils.BBox;
 import PrEis.utils.Cons;
 import PrEis.utils.Cons.Act;
 import PrEis.utils.Cons.Err;
@@ -9,14 +10,14 @@ import java.util.ArrayList;
 
 public class UIManager {
 
-  PApplet p;
+  PApplet app;
   private static PFont labelFont;
   private static PFont glyphFont;
 
   ArrayList<UIObject> objects;
 
   public UIManager(PApplet parent){
-    p = parent;
+    app = parent;
     objects = new ArrayList<UIObject>();
   }
 
@@ -26,20 +27,18 @@ public class UIManager {
     return this;
   }
 
-  private UIObject bindUiObject(UIObject obj){
+  public UIObject bindUiObject(UIObject obj){
     objects.add(obj);
     return obj;
   }
 
   public static PFont getFont(AppFont f){
     switch(f){
-      case TEXT: return labelFont;
-      case GLYPH: return glyphFont;
+      case TEXT  : return labelFont;
+      case GLYPH : return glyphFont;
+      default    : Cons.err_act(Err.SWITCH_DROP_OUT, Act.RETURN_NULL); return null;
     }
-    Cons.err_act(Err.SWITCH_DROP_OUT, Act.RETURN_NULL);
-    return null;
   }
-
 
   /** Calls `update` ∀ objects bound hereto. */
   public void update(){
@@ -66,76 +65,40 @@ public class UIManager {
     for (UIObject obj : objects){obj.render();}
   }
 
-  public ClickButton createClickButton(String txt, AppFont fnt, IActionCallback cbk, PVector pos, PVector dim){
-    return (ClickButton)bindUiObject(new ClickButton(p,pos,dim).setLabel(txt).bindCallback(cbk).setFont(fnt));
+  public UIClick createUIClick(BBox box, String txt, AppFont fnt, IActionCallback cbk){
+    switch(fnt){
+      case TEXT  : return new UIClick(app,box).withLabel(txt).bindCallback(cbk).bindManager(this);
+      case GLYPH : return new UIClick(app,box).withGlyph(txt).bindCallback(cbk).bindManager(this);
+      default    : Cons.err(Err.SWITCH_DROP_OUT); return null;
+    }
+  }
+  public UIClick createUIClick(PVector pos, PVector dim, String txt, AppFont fnt, IActionCallback cbk){
+    return createUIClick(new BBox(pos, dim), txt, fnt, cbk);
+  } 
+
+  
+  public UIToggle createUIToggle(BBox box, String txt, AppFont fnt, IToggleCallback cbk){
+    switch(fnt){
+      case TEXT  : return new UIToggle(app,box).withLabel(txt).bindCallback(cbk).bindManager(this);
+      case GLYPH : return new UIToggle(app,box).withGlyph(txt).bindCallback(cbk).bindManager(this);
+      default    : Cons.err(Err.SWITCH_DROP_OUT); return null;
+    }
+  }
+  public UIToggle createUIToggle(PVector pos, PVector dim, String txt, AppFont fnt, IToggleCallback cbk){
+    return createUIToggle(new BBox(pos, dim), txt, fnt, cbk);
   }
 
-  public ClickButton createClickButton(String txt, IActionCallback cbk, PVector pos, PVector dim){
-    return (ClickButton)bindUiObject(new ClickButton(p,pos,dim).setLabel(txt).bindCallback(cbk));
+
+  public UILabel createUILabel(BBox box, String txt, AppFont fnt, LabelType typ, IUpdateCallback cbk){
+    switch(fnt){
+      case TEXT  : return new UILabel(app,box).withLabel(txt, typ).bindCallback(cbk).bindManager(this);
+      case GLYPH : return new UILabel(app,box).withGlyph(txt, typ).bindCallback(cbk).bindManager(this);
+      default    : Cons.err(Err.SWITCH_DROP_OUT); return null;
+    }
+  }
+  public UILabel createUILabel(PVector pos, PVector dim, String txt, AppFont fnt, LabelType typ, IUpdateCallback cbk){
+    return createUILabel(new BBox(pos, dim), txt, fnt, typ, cbk);
   }
 
-  public ToggleButton createToggleButton(String txt, AppFont fnt, IToggleCallback cbk, PVector pos, PVector dim){
-    return (ToggleButton)bindUiObject(new ToggleButton(p,pos,dim).setLabel(txt).bindCallback(cbk).setFont(fnt));
-  }
-
-  public ToggleButton createToggleButton(String txt, IToggleCallback cbk, PVector pos, PVector dim){
-    return (ToggleButton)bindUiObject(new ToggleButton(p,pos,dim).setLabel(txt).bindCallback(cbk));
-  }
-
-  public ToggleButton createToggleButton(IToggleCallback cbk, AppFont fnt, PVector pos, PVector dim){
-    return (ToggleButton)bindUiObject(new ToggleButton(p,pos,dim).bindCallback(cbk).setFont(fnt));
-  }
-
-  public ToggleButton createToggleButton(IToggleCallback cbk, PVector pos, PVector dim){
-    return (ToggleButton)bindUiObject(new ToggleButton(p,pos,dim).bindCallback(cbk));
-  }
-
-  public Label createLabel (String txt, IUpdateCallback cbk, PVector pos, PVector dim, LabelType typ, AppFont fnt){
-    return (Label)bindUiObject(new Label(p,pos,dim).setLabel(txt).bindCallback(cbk).setType(typ).setFont(fnt));
-  }
-
-  public Label createLabel (String txt, IUpdateCallback cbk, PVector pos, PVector dim, LabelType typ){
-    return (Label)bindUiObject(new Label(p,pos,dim).setLabel(txt).bindCallback(cbk).setType(typ));
-  }
-    
-  public Label createLabel (String txt, IUpdateCallback cbk, PVector pos, PVector dim, AppFont fnt){
-    return (Label)bindUiObject(new Label(p,pos,dim).setLabel(txt).bindCallback(cbk).setFont(fnt));
-  }
-  
-  public Label createLabel (String txt, IUpdateCallback cbk, PVector pos, PVector dim){
-    return (Label)bindUiObject(new Label(p,pos,dim).setLabel(txt).bindCallback(cbk));
-  }
-  
-  public Label createLabel (IUpdateCallback cbk, PVector pos, PVector dim, LabelType typ, AppFont fnt){
-    return (Label)bindUiObject(new Label(p,pos,dim).bindCallback(cbk).setType(typ).setFont(fnt));
-  }
-  
-  public  Label createLabel (IUpdateCallback cbk, PVector pos, PVector dim, LabelType typ){
-    return (Label)bindUiObject(new Label(p,pos,dim).bindCallback(cbk).setType(typ));
-  }
-  
-  public Label createLabel (IUpdateCallback cbk, PVector pos, PVector dim, AppFont fnt){
-    return (Label)bindUiObject(new Label(p,pos,dim).bindCallback(cbk).setFont(fnt));
-  }
-  
-  public Label createLabel (IUpdateCallback cbk, PVector pos, PVector dim){
-    return (Label)bindUiObject(new Label(p,pos,dim).bindCallback(cbk));
-  }
-  
-  public Label createLabel (String txt, PVector pos, PVector dim, LabelType typ, AppFont fnt){
-    return (Label)bindUiObject(new Label(p,pos,dim).setLabel(txt).setType(typ).setFont(fnt));
-  }
-  
-  public Label createLabel (String txt, PVector pos, PVector dim, LabelType typ){
-    return (Label)bindUiObject(new Label(p,pos,dim).setLabel(txt).setType(typ));
-  }
-  
-  public Label createLabel (String txt, PVector pos, PVector dim, AppFont fnt){
-    return (Label)bindUiObject(new Label(p,pos,dim).setLabel(txt).setFont(fnt));
-  }
-
-  public Label createLabel (String txt, PVector pos, PVector dim){
-    return (Label)bindUiObject(new Label(p,pos,dim).setLabel(txt));
-  }
 
 }

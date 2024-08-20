@@ -1,44 +1,54 @@
 package PrEis.gui;
+import PrEis.utils.BBox;
 import PrEis.utils.Pgfx;
 import processing.core.PApplet;
 import processing.core.PVector;
 
 /** 
  * Label
- * @note PROTECTED to restrict instantiation via ONLY `UIManager` factory calls.
  */
-public class Label extends UIObject {
+public class UILabel extends UIObject {
   
   private IUpdateCallback updateCallback;
   
   private LabelType lblType;
   
-  public Label(PApplet iApp, PVector iPos, PVector iDim){
+
+  public UILabel(PApplet iApp, BBox iBox){
+    super(iApp, iBox, WidgetType.LB);
+  }
+
+  public UILabel(PApplet iApp, PVector iPos, PVector iDim){
     super(iApp, iPos, iDim, WidgetType.LB);
   }
-  
-  public Label setLabel(String iLbl){
-    label = iLbl;
-    return this;
-  }
-  
-  public Label setFont(AppFont iFnt){
-    objFont = iFnt;
-    onSetFont();
-    return this;
-  }
-  
-  public Label setType(LabelType iTyp){
+    
+  public UILabel setType(LabelType iTyp){
     lblType = iTyp;
     return this;
   }
   
-  public Label bindCallback(IUpdateCallback cbk){
+  public UILabel bindCallback(IUpdateCallback cbk){
+    if(cbk==null){return this;} //> no conserr, intended pass-thru if `null`
     updateCallback=cbk;
     label=updateCallback.getTxt();
     return this;
   }
   
+  
+  public UILabel withLabel(String iLabel, LabelType iType){setType(iType); return (UILabel)super.withLabel(iLabel);}
+
+  public UILabel withGlyph(String iGlyph, LabelType iType){setType(iType); return (UILabel)super.withGlyph(iGlyph);}  
+
+  public UILabel bindManager(UIManager iMgr){return (UILabel)super.bindManager(iMgr);}
+
+
+
+
+
+
+
+
+
   public void update(){
     if(updateCallback!=null){label = updateCallback.getTxt();}
   }

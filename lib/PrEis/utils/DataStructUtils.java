@@ -26,6 +26,13 @@ public class DataStructUtils {
     }
   }
 
+  /** 
+   * Syntax Sugar for {@link DataStructUtils#createVector(float x, float y)}.
+   */
+  public static PVector vec2(float x, float y){
+    return createVector(x, y);
+  }
+
   public static PVector createVector(){
     return new PVector();
   }

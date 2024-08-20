@@ -1,40 +1,38 @@
 package PrEis.gui;
 
+import PrEis.utils.BBox;
 import processing.core.PApplet;
 import processing.core.PVector;
 
 /** 
  * Click Button
- * @note PROTECTED to restrict instantiation via ONLY `UIManager` factory calls.
  */
-class ClickButton extends UIObject {
+public class UIClick extends UIObject {
   
   private IActionCallback action;
   
-  public ClickButton(PApplet iApp, PVector iPos, PVector iDim){
+
+  public UIClick(PApplet iApp, BBox iBox){
+    super(iApp, iBox, WidgetType.CB);
+  }
+
+  public UIClick(PApplet iApp, PVector iPos, PVector iDim){
     super(iApp, iPos, iDim, WidgetType.CB);
   }
-  
-  public ClickButton setLabel(String iLbl){
-    label=iLbl; return this;
-  }
-  
-  public ClickButton setTitle(String ittl){
-    title = ittl;
-    return this;
-  }
-  
-  public ClickButton setFont(AppFont iFnt){
-    objFont = iFnt;
-    onSetFont();
-    return this;
-  }  
-  
-  public ClickButton bindCallback(IActionCallback act){
+
+  public UIClick bindCallback(IActionCallback act){
     action = act;
     return this;
   }
-  
+
+
+  public UIClick withLabel(String iLabel){return (UIClick)super.withLabel(iLabel);}
+
+  public UIClick withGlyph(String iGlyph){return (UIClick)super.withGlyph(iGlyph);}  
+
+  public UIClick bindManager(UIManager iMgr){return (UIClick)super.bindManager(iMgr);}
+
+
   public void onMousePressed(){
     if(mouseOver&&action!=null){action.action();}
   }
