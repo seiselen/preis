@@ -1,10 +1,14 @@
 package PrEis.gui;
-
 import PrEis.utils.DataStructUtils;
 import PrEis.utils.Pgfx;
 import processing.core.PApplet;
 import processing.core.PVector;
 
+/** 
+ * A Dropdown is injected at initialization with a callback handler and array of
+ * options; for which it instantiates an array of {@link DropdownItem}s of the
+ * latter, each associated with the handler and bound to itself.
+ */
 public class Dropdown extends UIObject {
 
   //> @TODO: these should be spec'd by UIStyles
@@ -57,7 +61,8 @@ public class Dropdown extends UIObject {
     
     for (int i=0; i<actions.length; i++){
       children[i] = new DropdownItem(
-        p,DataStructUtils.createVector(baseOff.x,baseOff.y),
+        p,
+        DataStructUtils.createVector(baseOff.x,baseOff.y),
         DataStructUtils.createVector(ddownItemWide,ddownItemTall)
       )
       .appendValue(actions[i].getLabel()).appendAction(actions[i]);
@@ -90,25 +95,27 @@ public class Dropdown extends UIObject {
     );
   }
 
+
   public void render(){
     renderBG();
-    Pgfx.clip(p, bbox);
-    for(DropdownItem ddi : children){ddi.render();}
-    p.noClip();
+    clipAndRenderOptions();
     renderFG();
   }
-  
+
   private void renderBG(){
-    p.fill(32);
-    p.noStroke();
+    Pgfx.fillnostroke(p,style.fill);
     Pgfx.rect(p, bbox);
   }
 
+  private void clipAndRenderOptions(){
+    Pgfx.clip(p, bbox);
+    for(DropdownItem ddi : children){ddi.render();}
+    p.noClip();
+  }
+
   private void renderFG(){
-    p.noFill();
-    p.stroke(0,0,64);
-    p.strokeWeight(2);
+    Pgfx.strokenofill(p, style.strk_enabled);
+    p.strokeWeight(style.swgt);
     Pgfx.rect(p, bbox);
   }
-  
 }

@@ -34,12 +34,22 @@ void setup(){switch(mode){
   default: return;
 }}
 
-void draw(){switch(mode){
-  case GRIDMGR: tgrid.testRender(); return;
-  case GUIOBJS: tGUI.testRender(); return;
-  case PGFXUTL: TestPgfxUtils.testRender(this); return;
-  default: return;
-}}
+void draw(){
+  //=[PER-FRAME IO CALLS]=======================================
+    
+  //=[UPDATE CALLS]=============================================
+  switch(mode){
+    case GUIOBJS: tGUI.update(); break;
+    default: break;
+  }
+  //=[RENDER CALLS]=============================================
+  switch(mode){
+    case GRIDMGR: tgrid.testRender(); break;
+    case GUIOBJS: tGUI.testRender(); break;
+    case PGFXUTL: TestPgfxUtils.testRender(this); break;
+    default: break;
+  }
+}
 
 void keyPressed(){switch(mode){
   case GRIDMGR: tgrid.onKeyPressed(); return;

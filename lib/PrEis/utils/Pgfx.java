@@ -13,53 +13,23 @@ public class Pgfx {
 
 
 
-  /**
-   * Syntax sugar for calling `noFill` then setting `stroke`.
-   * @param p - `PApplet` of caller
-   * @param r - RED   channel value
-   * @param g - GREEN channel value
-   * @param b - BLUE  channel value
-   */
-  public static void strokenofill(PApplet p, int r, int g, int b){
-    p.noFill();
-    p.stroke(r,g,b);
-  }
+  /** Syntax sugar for calling `noFill` then setting `stroke`; s.t. stroke is <code>{r,g,b,a} ints</code>. */
+  public static void strokenofill(PApplet p, int r, int g, int b){p.noFill(); p.stroke(r,g,b);}
 
-  /**
-   * Syntax sugar for calling `noFill` then setting `stroke`.
-   * @param r - RED   channel value
-   * @param g - GREEN channel value
-   * @param b - BLUE  channel value
-   * @param a - ALPHA channel value
-   */
-  public static void strokenofill(PApplet p, int r, int g, int b, int a){
-    p.noFill();
-    p.stroke(r,g,b,a);
-  }
+  /** Syntax sugar for calling `noFill` then setting `stroke`; s.t. stroke is <code>{r,g,b,a} ints</code>. */
+  public static void strokenofill(PApplet p, int r, int g, int b, int a){p.noFill(); p.stroke(r,g,b,a);}
 
-  /**
-   * Syntax sugar for calling `noStroke` then setting `fill`.
-   * @param p - `PApplet` of caller
-   * @param r - RED   channel value
-   * @param g - GREEN channel value
-   * @param b - BLUE  channel value
-   */
-  public static void fillnostroke(PApplet p, int r, int g, int b){
-    p.noStroke();
-    p.fill(r,g,b);
-  }
+  /** Syntax sugar for calling `noFill` then setting `stroke`; s.t. fill is a <code> color int</code>. */
+  public static void strokenofill(PApplet p, int c){p.noFill(); p.stroke(c);}  
 
-  /**
-   * Syntax sugar for calling `noStroke` then setting `fill`.
-   * @param r - RED   channel value
-   * @param g - GREEN channel value
-   * @param b - BLUE  channel value
-   * @param a - ALPHA channel value
-   */  
-  public static void fillnostroke(PApplet p, int r, int g, int b, int a){
-    p.noStroke();
-    p.fill(r,g,b,a);
-  }
+  /** Syntax sugar for calling `noStroke` then setting `fill`; s.t. fill is <code>{r,g,b} ints</code>. */
+  public static void fillnostroke(PApplet p, int r, int g, int b){p.noStroke(); p.fill(r,g,b);}
+
+  /** Syntax sugar for calling `noStroke` then setting `fill`; s.t. fill is <code>{r,g,b,a} ints</code>. */
+  public static void fillnostroke(PApplet p, int r, int g, int b, int a){p.noStroke(); p.fill(r,g,b,a);}
+
+  /** Syntax sugar for calling `noStroke` then setting `fill`; s.t. fill is a <code> color int</code>. */
+  public static void fillnostroke(PApplet p, int c){p.noStroke(); p.fill(c);}
 
 
   /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -39,7 +39,7 @@ class DefaultStyle {
       case TB: return _ToggleButton(p);
       case LB: return _Label(p);
       case DI: return _DropdownItem(p);
-      case DD:
+      case DD: return _Dropdown(p);
       case CO:    
       default: return Get(p);
     }
@@ -88,6 +88,14 @@ class DefaultStyle {
     s.fill_transp       = p.color(  0,   0,  32,  32);
     s.strk_transp       = p.color(255, 255, 255, 128);
     s.fill_txt          = p.color(255, 255, 255);
+    return s;
+  }
+
+  private static UIStyle _Dropdown(PApplet p){
+    UIStyle s      = _CommonVals(p);
+    s.fill         = p.color(32);
+    s.strk_enabled = p.color(0,0,64);
+    s.swgt         = 2;
     return s;
   }
 
