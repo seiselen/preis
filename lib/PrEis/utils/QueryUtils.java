@@ -16,4 +16,27 @@ public class QueryUtils {
     return arr==null || arr.length==0;
   }
 
+  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  |>>> TESTING NOTE: The following three `null<…>` functions WERE successfully
+  |                  (QAD) unit tested on `08/28/24` via W3Schools Java Editor.
+  +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+  /** Returns true if <b>ALL</b> of the input objects are <code>null</code>. */
+  public static boolean nullAll(Object ... objs){
+    for(Object o : objs){if (o!=null){return false;}}
+    return true;
+  }
+
+  /** Returns true if <b>NONE</b> of the input objects are <code>null</code>. */
+  public static boolean nullNone(Object ... objs){
+    for(Object o : objs){if (o==null){return false;}}
+    return true;
+  }
+
+  /** Returns true if <b>AT LEAST ONE</b> input object is <code>null</code>. */
+  public static boolean nullSome(Object ... objs){
+    for(Object o : objs){if (o==null){return true;}}
+    return false;
+  }  
+
 }

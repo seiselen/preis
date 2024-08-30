@@ -8,6 +8,8 @@ public class Cons {
 
   public enum Err {
     NULL_XOR_INVALID {public String toString(){return "Nullish Xor Invalid Input";}},
+    NULL_INPUT       {public String toString(){return "Nullish Input";}},
+    NULL_VALUE       {public String toString(){return "Nullish Value";}},    
     MISSING_SUFFIX   {public String toString(){return "Input Lacks Required Suffix";}},
     SWITCH_DROP_OUT  {public String toString(){return "Unexpected Drop From Switch Statement";}}
   }
@@ -19,10 +21,19 @@ public class Cons {
     ADDING_REQ_SUFX  {public String toString(){return "Adding Required Suffix";}},
     RETURN_NULL      {public String toString(){return "Returning `null`";}},    
   }
+  
+  public static void log(String l){System.out.println(l);}
+  public static void log(String ... ls){for(String l: ls){log(l);}}
+  
+  public static void err(String e){System.err.println(errPfix+e+"!");}
+  public static void err(String ... es){for(String e: es){err(e);}}
 
-  public static void err(String s){System.err.println(errPfix+s+"!");}  
+  public static void warn(String w){System.err.println(errPfix+w+"!");}
+  public static void warn(String ... ws){for(String w: ws){err(w);}}
+
   public static void err(Err e){System.err.println(errPfix+e+"!");}
   public static void err(Err e, String s){System.err.println(errPfix+e+" ["+s+"]!");}
+  public static void err_unx(Err e){System.err.println(errPfix+"Unexpected "+e+"!");}
 
   public static void act(Act a){System.err.println(actPfix+a+".");}
   public static void act(Act a, String s){System.err.println(actPfix+a+" ["+s+"].");}
@@ -32,8 +43,7 @@ public class Cons {
 
   public static void err_act(Err e, String es, Act a, String as){Cons.err(e,es); Cons.act(a,as);}
 
-  public static void log(String s){System.out.println(s);}
-  public static void log(String ... strs){for(String s: strs){log(s);}}
+
 
 
 

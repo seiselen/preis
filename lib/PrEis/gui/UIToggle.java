@@ -36,7 +36,7 @@ public class UIToggle extends UIObject {
     if(mouseOver){
       toggleCallback.toggleState();
 
-      if(labelT!=null && labelF!=null){
+      if(objFont==AppFont.TEXT && labelT!=null && labelF!=null){
         label = toggleCallback.getState() ? labelT : labelF;
       }
 

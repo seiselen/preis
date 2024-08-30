@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import processing.core.PApplet;
+import processing.data.JSONObject;
 import processing.data.StringList;
 
 /**
@@ -130,6 +133,11 @@ public class FileSysUtils {
         : paths[i].getFileName().toString();
     }
     return ret;
+  }
+
+
+  public static JSONObject loadJSONObjNullFail (PApplet app, String fPath){
+    return fPath==null ? null : app.loadJSONObject(fPath);
   }
 
 }

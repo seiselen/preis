@@ -15,33 +15,56 @@ import PrEis.utils.StringUtils;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
+import processing.data.IntDict;
+import processing.data.JSONObject;
 
 
 public class TestGUIObjects {
 
-
-
   private PApplet   app;
   private UIManager uim;
   private PImage    img;
+  private boolean dispImg;
+  private IntDict  glyphDict;
 
 
   ConslogAction  conslogAction;
   ToggAbleAction toggAbleAction;
   LitebulbAction litebulbAction;
   MousePosUpdate mousePosUpdate;
+  ToggleBGGrid   toggleBGGrid;
 
   public TestGUIObjects(PApplet p){
     app = p;
     uim = new UIManager(app);
+    uim.injectFonts(
+      app.loadFont("TitilliumWebBold32.vlw"),
+      app.loadFont("font-awesome-48.vlw")
+    );
+    dispImg = true;
+    initCustomGlyphs();
     initGUI();
   }
+
+
+  public void toggleDispBGImage(){dispImg = !dispImg;}
+  public boolean getDispBGImage(){return dispImg;}  
+
+
+  private void initCustomGlyphs(){
+    JSONObject jo = app.loadJSONObject("/data/fontAwesomeCharCodes.json");
+    glyphDict = new IntDict();
+    String[] keys = DataStructUtils.keyArrayOfJSONObj(jo);
+    for (String k : keys){glyphDict.add(k,jo.getInt(k));}
+  }
+
+  private String glyphChar(String n){return ""+(char)glyphDict.get(n);}
+
 
   public void initGUI(){
     conslogAction  = new ConslogAction("HELLO CONSOLE!");
     litebulbAction = new LitebulbAction(app, DataStructUtils.vec2(app.width/2f, app.height/2f));
     mousePosUpdate = new MousePosUpdate(app);
-
 
     int xOff = 128;
     int yOff = 64;
@@ -49,7 +72,8 @@ public class TestGUIObjects {
     uim.createUIClick(new BBox(xOff, yOff, 256, 64), "Test Click Button", AppFont.TEXT, conslogAction);
 
     uim.createUIToggle(new BBox(xOff, yOff+=96, 256, 64), "Light Bulb", AppFont.TEXT, litebulbAction)
-    .withOnOffLabels("Lightbulb [ON]", "Lightbulb [OFF]");
+    .withOnOffLabels("Lightbulb [ON]", "Lightbulb [OFF]")
+    ;
 
     uim.createUILabel(new BBox(xOff, yOff+=96, 256, 64), null, AppFont.TEXT, LabelType.OP, mousePosUpdate);
 
@@ -59,6 +83,13 @@ public class TestGUIObjects {
     toggAbleAction = new ToggAbleAction(needsToBeVar);
     uim.createUIClick(new BBox(xOff-32, yOff+=96, 320, 64), "(En/Dis)able Above Button", AppFont.TEXT, toggAbleAction);
 
+    
+    toggleBGGrid = new ToggleBGGrid(this);
+    uim.createUIToggle(
+      new BBox(app.width-128, 128, 96, 96),
+      glyphChar("gridish"),
+      AppFont.GLYPH, toggleBGGrid
+    );
 
   }
 
@@ -73,7 +104,8 @@ public class TestGUIObjects {
   public void onMouseWheel(int v){uim.onMouseWheel(v);}
 
   public void testRender(){
-    if(img!=null){app.imageMode(PApplet.CORNER); app.image(img, 0, 0);}
+    app.background(255);
+    if(img!=null && dispImg){app.imageMode(PApplet.CORNER); app.image(img, 0, 0);}
     uim.render();
     litebulbAction.renderLite();
   }
@@ -85,6 +117,14 @@ public class TestGUIObjects {
 /*==============================================================================
 |>>> TEST CALLBACK DEFINITIONS (COULD MOVE TO `PDE` CODE S.T. GITIGNORED)
 +=============================================================================*/
+
+class ToggleBGGrid implements IToggleCallback{
+  TestGUIObjects targetObj;
+  public ToggleBGGrid(TestGUIObjects tar){targetObj = tar;}
+  public boolean getState(){return targetObj.getDispBGImage();}
+  public void toggleState(){targetObj.toggleDispBGImage();}
+}
+
 
 class ToggAbleAction implements IActionCallback{
   UIObject targetObj;

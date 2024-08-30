@@ -1,5 +1,6 @@
 package PrEis.utils;
 
+import PrEis.gui.PosOri;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -8,16 +9,25 @@ import processing.core.PVector;
  * @implNote Not (yet?) tested standalone; but most-else-all functionality will
  * <i>effectively</i> be tested via <b>PrEis.GUI</b>, as <code>UIObject</code>
  * is pending replacing {@link Dims} and {@link PVector} instances herewith.
+ * @idea <b>(Lerp Functions)</b> Utilize memoization via `HashMap` to OnDemand
+ * cache lerped vals when generated? How would I handle encoding keys, though?
  */
 public class BBox {
+  /** <b>Position</b> */
   PVector _pos;
+  /** <b>Dimension</b>, of syntax <code>{x:wide, y:tall}</code> */
   PVector _dim;
+  /** <b>Dimension <i>Half</i></b>, of syntax <code>{x:wideh, y:tallh}</code> */
+  PVector _dih;
+  /** <b>Midpoint</b> WRT {@link #_pos} and {@link #_dim}. */
   PVector _mpt;
+  /** <b>Endpoint</b> WRT {@link #_pos} and {@link #_dim}. */
   PVector _ept;
 
   private BBox(){
     _pos = new PVector();
     _dim = new PVector();
+    _dih = new PVector();
     _mpt = new PVector();
     _ept = new PVector();
   }
@@ -76,7 +86,8 @@ public class BBox {
 
   /** This version sets transform WRT current {@link #_pos} and {@link #_dim} vals. */
   private void setTransform(){
-    _mpt.set(PVector.mult(_dim,0.5f).add(_pos));
+    _dih.set(PVector.mult(_dim, 0.5f));
+    _mpt.set(PVector.add(_pos, _dih));
     _ept.set(PVector.add(_pos, _dim));    
   }
 
@@ -150,29 +161,48 @@ public class BBox {
     return qx >= _pos.x && qx <= _ept.x && qy >= _pos.y && qy <= _ept.y;
   }
 
-  //> Misc. Syntax Sugar Getters (Not Nec. Optimal, KISS)
-  public float   minX  (){return _pos.x;}
-  public float   minY  (){return _pos.y;}
-  public float   midX  (){return _mpt.x;}
-  public float   midY  (){return _mpt.y;}
-  public float   maxX  (){return _ept.x;}
-  public float   maxY  (){return _ept.y;}
-  public float   dimX  (){return _dim.x;}
-  public float   dimY  (){return _dim.y;}
+  /** 
+   * Returns {@link PVector} corresponding to input {@link PosOri} member. Note
+   * that this method will return either a <b>NEW</b> vector xor a <b>COPY</b>
+   * of a state vector (i.e. of <code>{pos, dim, etc.}</code>); so there'll be
+   * some (likely negligible but nonetheless) cost of instantiation, etc.
+   */
+  public PVector getWithOri(PosOri ori){
+    switch (ori) {
+      case TL:  return _pos.copy();
+      case TOP: return new PVector(midX(), minY());
+      case TR:  return new PVector(maxX(), minY());
+      case LFT: return new PVector(minX(), midY());
+      case CTR: return _mpt.copy();
+      case RGT: return new PVector(maxX(), midY());
+      case BL:  return new PVector(minX(), maxY());
+      case BOT: return new PVector(midX(), maxY());
+      case BR:  return _ept.copy();
+      default:  return null;
+    }
+  }
+
+  /*----------------------------------------------------------------------------
+  |> @WHAT: Misc. Syntax Sugar Getters (Not Nec. Optimal, KISS)
+  |> @TODO: Occasionally inspect usage and prune as appropriate.
+  +---------------------------------------------------------------------------*/
   public PVector pos   (){return _pos.copy();}
   public PVector mpt   (){return _mpt.copy();}
   public PVector ept   (){return _ept.copy();}
   public PVector min   (){return pos();}
   public PVector mid   (){return mpt();}
-  public PVector max   (){return mpt();}
-  public PVector posTL (){return pos();}
-  public PVector posBR (){return ept();}
-  public PVector posCC (){return mpt();}  
-  public PVector posTR (){return new PVector(maxX(), minY());}
-  public PVector posBL (){return new PVector(minX(), maxY());}
-  public PVector posLC (){return new PVector(minX(), midY());}
-  public PVector posRC (){return new PVector(maxX(), midY());}
-  public PVector posTC (){return new PVector(midX(), minY());}
-  public PVector posBC (){return new PVector(midX(), maxY());}
+  public PVector max   (){return ept();}
+  public float   wide  (){return _dim.x;}
+  public float   tall  (){return _dim.y;}
+  public float   wideh (){return _dih.x;}
+  public float   tallh (){return _dih.y;}
+  public float   minX  (){return _pos.x;}
+  public float   midX  (){return _mpt.x;}
+  public float   maxX  (){return _ept.x;}
+  public float   dimX  (){return _dim.x;}
+  public float   minY  (){return _pos.y;}
+  public float   midY  (){return _mpt.y;}
+  public float   maxY  (){return _ept.y;}
+  public float   dimY  (){return _dim.y;}
   public float[] extentsToArray(){return new float[]{_pos.x,_pos.y,_ept.x,_ept.y};}
 }

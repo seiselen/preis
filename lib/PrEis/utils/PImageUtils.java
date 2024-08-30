@@ -17,12 +17,24 @@ public class PImageUtils {
   /** Possible results of image-2-image comparison. */
   enum ReturnCode {TEXS_PIXS_MATCH, TEXS_PIXS_MISMATCH, TEXS_DIMS_MISMATCH}
 
-  private PApplet p;
+  private PApplet app;
   PImage buffImage;
 
-  public PImageUtils(PApplet parent){
-    p = parent;
+  public PImageUtils(PApplet p){
+    app = p;
   }
+
+
+  /**
+   * Attempts to load image at specified filepath of an image. If anything goes
+   * wrong: the exception will print to `syserr` and `null` is returned.
+   * @param iPath full filepath of some image file
+   */
+  public PImage pimageWithFilepath(String iPath){
+    try{return app.loadImage(iPath);}
+    catch (Exception e){System.err.println(e); return null;}
+  } 
+
 
   void bakeDirOfTextures(String inDirpath, String outDirpath){
     String[] fNames = FileSysUtils.fileNamesOfDir(inDirpath, ExtType.PNG);
@@ -38,7 +50,7 @@ public class PImageUtils {
     String fullNameI = FileSysUtils.appendExtIfNeeded(FileSysUtils.pathConcat(inDirpath,fName),ExtType.PNG);
     String fullNameO = FileSysUtils.appendExtIfNeeded(FileSysUtils.pathConcat(outDirpath,fName),ExtType.PNG);
     Cons.log(fullNameO);
-    buffImage = p.loadImage(fullNameI);
+    buffImage = app.loadImage(fullNameI);
     buffImage.save(fullNameO);
     if(LOG_BAKE_DONE){Cons.log("successfully loaded ("+fullNameI+") and saved as ("+fullNameO+")");}
   }
@@ -51,8 +63,8 @@ ReturnCode imageColorValueCompare(String path1, String name1, String path2, Stri
 
   String fullName1 = FileSysUtils.appendExtIfNeeded(FileSysUtils.pathConcat(path1, name1),ExtType.PNG);
   String fullName2 = FileSysUtils.appendExtIfNeeded(FileSysUtils.pathConcat(path2, name2),ExtType.PNG);
-  PImage img1      = p.loadImage(fullName1);
-  PImage img2      = p.loadImage(fullName2);
+  PImage img1      = app.loadImage(fullName1);
+  PImage img2      = app.loadImage(fullName2);
 
   if(img1.width!=img2.width || img1.height!=img2.height){return ReturnCode.TEXS_DIMS_MISMATCH;}
   
@@ -64,7 +76,7 @@ ReturnCode imageColorValueCompare(String path1, String name1, String path2, Stri
   int     pxCol1 = -1;
   int     pxCol2 = -1;
 
-  FileWriteUtil fw = new FileWriteUtil(p);
+  FileWriteUtil fw = new FileWriteUtil(app);
   
   for(int i=0; i<pixLen; i++){
     pxCol1 = img1.pixels[i];
@@ -119,7 +131,7 @@ void imageColorValueCompareDirTextures(String path1, String path2){
   
   //> Need to handle mismatch list in this way
   if(mismatchDimsList.size()>0){
-    new FileWriteUtil(p)
+    new FileWriteUtil(app)
     .launchWrite("files_of_different_dims")
     .writeToFile(mismatchDimsList.toArray())
     .finishWrite();
@@ -129,7 +141,7 @@ void imageColorValueCompareDirTextures(String path1, String path2){
   //> Need to handle pixel col matching list in this way
   if(LOG_PX_MATCHES){
     if(matchingPixsList.size()>0){ 
-      new FileWriteUtil(p)
+      new FileWriteUtil(app)
       .launchWrite("files_that_match")
       .writeToFile(matchingPixsList.toArray())
       .finishWrite();      
@@ -140,7 +152,7 @@ void imageColorValueCompareDirTextures(String path1, String path2){
   
   if(oneDirFiles.length>0){
     numOnly1Dir = oneDirFiles.length;
-    new FileWriteUtil(p)
+    new FileWriteUtil(app)
     .launchWrite("files_unique_to_one_dir")
     .writeToFile(new String[]{("\n"+separator72_equalChar()),("Filenames within ONE directory..."),(separator72_dashChar())})
     .writeToFile(oneDirFiles)

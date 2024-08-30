@@ -36,11 +36,23 @@ public abstract class UIObject {
   /** UIObject Type of this UIObject. */
   protected WidgetType type; 
 
-  /** Style defining this UIObject. */
-  protected UIStyle style;
+  /** 
+   * Style defining this UIObject.
+   * @implNote currently set to <code>public</code> to make `EiSpriteViewer`
+   * integration a bit easier until I figure out how to better handle setters.
+   */
+  public UIStyle style;
 
   /** Current font used by this UIObject. */
   protected AppFont objFont;
+
+  /** 
+   * @implNote Used for setting fonts. Not a good design pattern but it's either
+   * this else injecting the {@link PApplet} into every {@link UIObject}. Plus:
+   * instances already <i><b>'know'</b></i> {@link UIManager} via the method
+   * {@link #bindManager} <i>(yeah, I know, also not a good design pattern)</i>.
+   */
+  protected UIManager manager;
 
   public UIObject(PApplet iPar, BBox iBox, WidgetType iTyp){
     p         = iPar;
@@ -51,6 +63,7 @@ public abstract class UIObject {
     mouseOver = false;
     disabled  = false;
     bbox      = iBox;
+
   }  
 
   public UIObject(PApplet iPar, PVector iPos, PVector iDim, WidgetType iTyp){
@@ -73,7 +86,11 @@ public abstract class UIObject {
     bbox.translatePos(trs);
   }
 
-  public UIObject bindManager(UIManager iMgr){iMgr.bindUiObject(this); return this;}
+  public UIObject bindManager(UIManager iMgr){
+    manager = iMgr;
+    iMgr.bindUiObject(this);
+    return this;
+  }
 
   public UIObject withBBox(BBox iBox){setTranslate(iBox); return this;}
 
@@ -84,7 +101,11 @@ public abstract class UIObject {
   /** This assumes {@link #withLabel(String)} was or will be called, as to call `setFont` within. */
   public UIObject withDLabel(String iLabel){setDLabel(iLabel); return this;}
 
-  public UIObject withGlyph(String iGlyph){setLabel(iGlyph); setFont(AppFont.TEXT); return this;}
+  public UIObject withGlyph(String iGlyph){
+    setLabel(iGlyph);
+    setFont(AppFont.GLYPH);
+    return this;
+  }
 
   public UIObject withDisabledState(boolean iState){setDisabled(iState); return this;}
 
@@ -119,8 +140,9 @@ public abstract class UIObject {
   }
 
 
-  public void setTitle(String iTitle){
+  public UIObject setTitle(String iTitle){
     title = iTitle;
+    return this;
   }
 
   public void setFont(AppFont iFont){
@@ -129,10 +151,9 @@ public abstract class UIObject {
   } 
   
   public UIObject setPredefStyle(String s){
-    style.setPredefStyle(s);
+    style.setStyleProp("txt_size", Integer.class, 32);
     return this;
   }
-
 
   //> These are dirty, I know...
   public UIClick castToClick()  {return (UIClick)this;}
@@ -162,7 +183,7 @@ public abstract class UIObject {
   /** Abstract `render` used for common pre-pro; as children define how they render. */
   public void render(){
     //> not the prettiest realization but QAD works for now. unsure about who/how WRT responsibility
-    UIManager.getFont(objFont);
+    manager.setFont(objFont);
   }
   
   public void renderRect(){
@@ -195,8 +216,13 @@ public abstract class UIObject {
 
   public void renderTextViaOri(){
     switch(style.txt_anchor){
-      case TL:rTL();return; case TR:rTR();return; case CC:rCC();return;
-      case TC:rTC();return; case CL:rCL();return; case CR:rCR();return;
+      case TL:rTL();return;
+      case TR:rTR();return;
+      case TOP:rTC();return;
+      case LFT:rCL();return;
+      case RGT:rCR();return;
+      case CTR:
+      default: rCC(); return;
     }
   }
 

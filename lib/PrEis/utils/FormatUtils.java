@@ -31,6 +31,7 @@ public class FormatUtils{
     return new int[]{(int)(c >> 16 & 0xFF),(int)(c >> 8 & 0xFF),(int)(c & 0xFF), (int)(c >> 24 & 0xFF)};
   }
 
+  /** @move MOVE THIS TO STRING UTILS? */
   public static String strValElseNone(String s){
     return QueryUtils.nullish(s) ? "NONE" : s;
   }
@@ -114,13 +115,5 @@ public class FormatUtils{
   public static <T> T[] arrFromList(Class<T> c, List<T> list) {
     return list.toArray((T[])Array.newInstance(c, list.size()));
   }
-
-
-  /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # KEEPING THESE IN CASE THE ABOVE GENERIC FUNCTIONS DON'T WORK
-  LoadConfig[] arr1FromObj(LoadConfig c){return new LoadConfig[]{c};}
-  String[] arr1FromObj(String s){return new String[]{s};}
-  LoadConfig[] arrFromArrList(ArrayList<LoadConfig> aList){return aList.toArray(new LoadConfig[0]);}
-  +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 }

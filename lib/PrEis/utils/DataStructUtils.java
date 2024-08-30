@@ -1,6 +1,9 @@
 package PrEis.utils;
+import java.util.Set;
+
 import processing.core.PVector;
 import processing.data.IntDict;
+import processing.data.JSONObject;
 import processing.data.StringList;
 
 /** Right Now: This contains factories and utils for Processing Data Structs. */
@@ -62,6 +65,18 @@ public class DataStructUtils {
     if(vs==null || vs.length<2){return conserrAndRetZVec();}
     return (vs.length==2) ? createVector(vs[0],vs[1]) : createVector(vs[0],vs[1],vs[2]);
   }
+
+
+
+  @SuppressWarnings("unchecked")
+  public static String[] keyArrayOfJSONObj(JSONObject jsonObj){
+    return ((Set<String>)jsonObj.keys()).toArray(new String[jsonObj.size()]);
+  }
+
+
+
+
+
 
   private static PVector conserrAndRetZVec(){
     Cons.err_act(Cons.Err.NULL_XOR_INVALID, Cons.Act.RETURN_ZERO_VEC);

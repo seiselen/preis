@@ -1,6 +1,7 @@
 package PrEis.gui;
 import PrEis.utils.BBox;
 import PrEis.utils.Cons;
+import PrEis.utils.QueryUtils;
 import PrEis.utils.Cons.Act;
 import PrEis.utils.Cons.Err;
 import processing.core.PFont;
@@ -11,8 +12,8 @@ import java.util.ArrayList;
 public class UIManager {
 
   PApplet app;
-  private static PFont labelFont;
-  private static PFont glyphFont;
+  public static PFont labelFont;
+  public static PFont glyphFont;
 
   ArrayList<UIObject> objects;
 
@@ -39,6 +40,20 @@ public class UIManager {
       default    : Cons.err_act(Err.SWITCH_DROP_OUT, Act.RETURN_NULL); return null;
     }
   }
+
+  public void setFont(AppFont f){
+    if(QueryUtils.nullAll(labelFont,glyphFont==null)){
+      Cons.err_act(Err.NULL_VALUE, Act.RETURN_NO_ACTION, "one ore more fonts");
+      return;
+    }
+    switch(f){
+      case TEXT  : app.textFont(labelFont); return;
+      case GLYPH : app.textFont(glyphFont); return;
+      default    : Cons.err_act(Err.SWITCH_DROP_OUT, Act.RETURN_NULL);
+    }
+  }
+
+
 
   /** Calls `update` ∀ objects bound hereto. */
   public void update(){

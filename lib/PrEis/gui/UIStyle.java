@@ -5,33 +5,39 @@ import processing.core.PVector;
 import processing.data.JSONObject;
 import PrEis.utils.Cons;
 import PrEis.utils.DataStructUtils;
+import java.lang.reflect.*;
 
+/**
+ * @implNote ALL state is set to <code>public</code> for now until I figure out
+ * a better means of encapsulation (e.g. reflection); and until I have time to
+ * focus hereto (alongside the other <b>UIObject</b> 'open sore' design issues).
+ */
 public class UIStyle {
-  int     swgt;
-  int     txt_size;
-  int     border_radius;
-  TxtOri  txt_anchor;
-  PVector txt_offset;
-  int     strk_enabled;
-  int     strk_disabled;
-  int     fill;
-  int     fill_hovered;
-  int     fill_clicked;
-  int     fill_disabled;
-  int     fill_on;
-  int     fill_on_hovered;
-  int     fill_on_clicked;
-  int     fill_on_disabled;
-  int     fill_off;
-  int     fill_off_hovered;
-  int     fill_off_clicked;
-  int     fill_off_disabled;
-  int     fill_opaque;
-  int     strk_opaque;
-  int     fill_transp;
-  int     strk_transp;
-  int     fill_txt; //> used for labels, especially transparent
-  float   txt_off_pct;
+  public int     swgt;
+  public int     txt_size;
+  public int     border_radius;
+  public PosOri  txt_anchor;
+  public PVector txt_offset;
+  public int     strk_enabled;
+  public int     strk_disabled;
+  public int     fill;
+  public int     fill_hovered;
+  public int     fill_clicked;
+  public int     fill_disabled;
+  public int     fill_on;
+  public int     fill_on_hovered;
+  public int     fill_on_clicked;
+  public int     fill_on_disabled;
+  public int     fill_off;
+  public int     fill_off_hovered;
+  public int     fill_off_clicked;
+  public int     fill_off_disabled;
+  public int     fill_opaque;
+  public int     strk_opaque;
+  public int     fill_transp;
+  public int     strk_transp;
+  public int     fill_txt; //> used for labels, especially transparent
+  public float   txt_off_pct;
 
   //> these are buffers; unused after constructor returns
   JSONObject stylesheet;
@@ -60,7 +66,7 @@ public class UIStyle {
     swgt            = curSubsheet.getInt("swgt");
     txt_size        = curSubsheet.getInt("txt_size");
     border_radius   = curSubsheet.getInt("border_radius");
-    txt_anchor      = TxtOri.withString(curSubsheet.getString("txt_anchor"));
+    txt_anchor      = PosOri.withString(curSubsheet.getString("txt_anchor"));
     txt_offset      = DataStructUtils.createVector(curSubsheet.getJSONArray("txt_offset").toFloatArray()); 
     strk_enabled    = FormatUtils.colorFromIntArr(curSubsheet.getJSONArray("strk_enabled").toIntArray());
     strk_disabled   = FormatUtils.colorFromIntArr(curSubsheet.getJSONArray("strk_disabled").toIntArray());
@@ -98,13 +104,25 @@ public class UIStyle {
     fill_txt          = FormatUtils.colorFromIntArr(curSubsheet.getJSONArray("fill_txt").toIntArray());
   }
 
-  //> Loads Custom [Sub-]Styles. WARNING: You must maintain this manually for now!!!
-  public void setPredefStyle(String style){
-    if(style==null){return;}
-    JSONObject curSubsheet = stylesheet.getJSONObject(style);
-    if(curSubsheet==null){return;}
-
-    try {txt_size = curSubsheet.getInt("txt_size");} catch (Exception e){}
+  /** 
+   * Given valid style prop name, class type, and desired value: sets the value
+   * accordingly. For primitive types: you must specify the appropriate wrapper
+   * class (e.g. <code>int→Integer</code>); though you may pass primitive values
+   * as input arguments via unboxing/autoboxing magic (see example below).
+   * @example <pre>{@code setStyleProp("txt_size", Integer.class, 32);}</pre>
+   */
+  public <T> void setStyleProp(String propName, Class<T> propType, Object propValue){
+    try{
+      Field propField = UIStyle.class.getDeclaredField(propName);
+      if(propField==null){Cons.err("Prop Name '"+propName+"' cannot be found!");}
+      else if(propType.getName()==Integer.class.getName()){propField.setInt(this, (Integer)propValue);}
+      else if(propType.getName()==Float.class.getName()){propField.setFloat(this, (Float)propValue);}
+      else if(propType.getName()==PVector.class.getName()){propField.set(this, (PVector)propValue);}
+      else if(propType.getName()==PosOri.class.getName()){propField.set(this, (PosOri)propValue);}
+    }
+    catch(Exception e){
+      Cons.err("Failed to set style of prop '"+propName+"'. Err string to follow...", e.toString());
+    }
   }
 
 }

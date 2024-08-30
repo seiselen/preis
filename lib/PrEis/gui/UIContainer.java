@@ -1,6 +1,7 @@
 package PrEis.gui;
 import java.util.ArrayList;
 
+import PrEis.utils.BBox;
 import PrEis.utils.Pgfx;
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -10,7 +11,7 @@ import processing.core.PVector;
  * @note PROTECTED to restrict instantiation via ONLY `UIManager` factory calls.
  * @TODO this is still the QAD one and needs refinement ASAP
  */
-class UIContainer extends UIObject {
+public class UIContainer extends UIObject {
   
   private static final boolean SHOW_BOUNDS = false;
   
@@ -22,12 +23,23 @@ class UIContainer extends UIObject {
     this.style.strk_enabled=p.color(0,255,0);
   }
   
+  public UIContainer(PApplet iApp, BBox iBBox){
+    super(iApp, iBBox, WidgetType.CO);
+    objects = new ArrayList<UIObject>();
+    this.style.strk_enabled=p.color(0,255,0);
+  }
+
   public UIContainer addChild(UIObject obj){
     obj.addTranslate(bbox.pos());
     objects.add(obj);
     return this;
   }
-  
+
+  public UIContainer addChildren(UIObject ... objs){
+    for(UIObject o : objs){addChild(o);}
+    return this;
+  }
+
   public void update(){
     for(UIObject o : objects){o.update();}
   }
