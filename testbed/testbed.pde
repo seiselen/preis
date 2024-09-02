@@ -30,7 +30,7 @@ void settings(){switch(mode){
 void setup(){switch(mode){
   case UTILS: testUtils(); exit(); return;
   case GRIDMGR: tgrid = new TestGridManager(this); return;
-  case GUIOBJS: tGUI = new TestGUIObjects(this).bindBGImg(loadImage(fname_bg_gui)); return;
+  case GUIOBJS: tGUI = new TestGUIObjects(this).Dark().bindBGImg(loadImage(fname_bg_gui)); return;
   default: return;
 }}
 

@@ -1,6 +1,8 @@
 package PrEis.gui;
 
 import PrEis.utils.BBox;
+import PrEis.utils.Cons;
+import PrEis.utils.Cons.Err;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -19,6 +21,28 @@ public class UIClick extends UIObject {
   public UIClick(PApplet iApp, PVector iPos, PVector iDim){
     super(iApp, iPos, iDim, WidgetType.CB);
   }
+
+  public static UIClick create(PApplet app, BBox box, String txt, AppFont fnt, IActionCallback cbk){
+    switch(fnt){
+      case TEXT  : return new UIClick(app,box).withLabel(txt).bindCallback(cbk);
+      case GLYPH : return new UIClick(app,box).withGlyph(txt).bindCallback(cbk);
+      default    : Cons.err(Err.SWITCH_DROP_OUT); return null;
+    }
+  }
+
+  public static UIClick create(PApplet app, PVector pos, PVector dim, String txt, AppFont fnt, IActionCallback cbk){
+    return create(app, new BBox(pos, dim), txt, fnt, cbk);
+  }
+
+
+  public static UIClick create(UIManager mgr, BBox box, String txt, AppFont fnt, IActionCallback cbk){
+    return create(mgr.app, box, txt, fnt, cbk).bindManager(mgr);
+  }
+
+  public static UIClick create(UIManager mgr, PVector pos, PVector dim, String txt, AppFont fnt, IActionCallback cbk){
+    return create(mgr.app, pos, dim, txt, fnt, cbk).bindManager(mgr);
+  }
+
 
   public UIClick bindCallback(IActionCallback act){
     action = act;

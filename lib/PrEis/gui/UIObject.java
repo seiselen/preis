@@ -21,6 +21,9 @@ public abstract class UIObject {
   /** Is this UIObject currently disabled? */
   protected boolean disabled;
 
+  /** Is this UIObject currently selected? <i>(currently used for Dropdown Items)</i> */
+  protected boolean selected;
+
   /** Display text of this UIObject. */  
   protected String label;
 
@@ -81,6 +84,20 @@ public abstract class UIObject {
   }
 
 
+  /** This is the QAD version for UIObjects created as children of UIContainers. */
+  public void setManager(UIManager iMgr){
+    manager = iMgr;    
+  }
+
+  /** This is the QAD version for UIObjects created as children of UIContainers. */
+  public UIObject withManager(UIManager iMgr){
+    manager = iMgr; return this;
+  }
+
+
+
+
+
 
   public void addTranslate(PVector trs){
     bbox.translatePos(trs);
@@ -122,11 +139,18 @@ public abstract class UIObject {
   public boolean isClickedState(){
     return isMouseOver() && p.mousePressed;
   }
+
+  public boolean isSelectedState(){
+    return selected;
+  }
   
   public boolean isDisabledState(){
     return disabled;
   }
   
+
+  public void setSelected(boolean v){selected = v;}
+  public void toggleSelected(){selected = !selected;}
 
   public void setDisabled(boolean v){disabled = v;}
   public void toggleDisabled(){disabled = !disabled;}
@@ -155,10 +179,30 @@ public abstract class UIObject {
     return this;
   }
 
+
+  /** 
+   * Calls {@link UIStyle#setStyleProp} on {@link #style}.
+   * @see UIStyle#setStyleProp
+   */
+  public <T> UIObject setStyleProp(String propName, Class<T> propType, Object propValue){
+    style.setStyleProp(propName, propType, propValue);
+    return this;
+  }
+  
+
   //> These are dirty, I know...
   public UIClick castToClick()  {return (UIClick)this;}
   public UIToggle castToToggle(){return (UIToggle)this;}
   public UILabel castToLabel()  {return (UILabel)this;}
+  public UIContainer castToContainer()  {return (UIContainer)this;}  
+
+
+  /** WICKED and NAUGHTY! LOL */
+  public <T> T castTo(Class<T> type){
+    try {return type.cast(this);}
+    catch(ClassCastException e){return null;}    
+  }
+  
 
   /** Abstract assigns `mouseOver`. See child types for resp. addl. handling. */  
   public void update(){
@@ -197,7 +241,8 @@ public abstract class UIObject {
    */
   private String getAppropriateLabel(){
     if(disabled&&label_disabled!=null){return label_disabled;}
-    return label;
+    if(label!=null){return label;}    
+    return "";
   }
   
   /** 

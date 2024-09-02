@@ -1,5 +1,7 @@
 package PrEis.gui;
 import PrEis.utils.BBox;
+import PrEis.utils.Cons;
+import PrEis.utils.Cons.Err;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -17,6 +19,26 @@ public class UIToggle extends UIObject {
 
   public UIToggle(PApplet iApp, PVector iPos, PVector iDim){
     this(iApp,new BBox(iPos));
+  }
+
+  public static UIToggle create(PApplet app, BBox box, String txt, AppFont fnt, IToggleCallback cbk){
+    switch(fnt){
+      case TEXT  : return new UIToggle(app,box).withLabel(txt).bindCallback(cbk);
+      case GLYPH : return new UIToggle(app,box).withGlyph(txt).bindCallback(cbk);
+      default    : Cons.err(Err.SWITCH_DROP_OUT); return null;
+    }
+  }
+
+  public static UIToggle create(PApplet app, PVector pos, PVector dim, String txt, AppFont fnt, IToggleCallback cbk){
+    return create(app, new BBox(pos, dim), txt, fnt, cbk);
+  }
+
+  public static UIToggle create(UIManager mgr, BBox box, String txt, AppFont fnt, IToggleCallback cbk){
+    return create(mgr.app, box, txt, fnt, cbk).bindManager(mgr);
+  }
+
+  public static UIToggle create(UIManager mgr, PVector pos, PVector dim, String txt, AppFont fnt, IToggleCallback cbk){
+    return create(mgr.app, pos, dim, txt, fnt, cbk).bindManager(mgr);
   }
   
   public UIToggle bindCallback(IToggleCallback cbk){

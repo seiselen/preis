@@ -39,4 +39,10 @@ public class QueryUtils {
     return false;
   }  
 
+  public static boolean strArrContainsStr(String[] arr, String str){
+    if(arrayNullOrEmpty(arr)){return false;}
+    for(String s : arr){if(str.equals(s)){return true;}}
+    return false;
+  }
+
 }

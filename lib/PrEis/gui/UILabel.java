@@ -1,5 +1,7 @@
 package PrEis.gui;
 import PrEis.utils.BBox;
+import PrEis.utils.Cons;
+import PrEis.utils.Cons.Err;
 import PrEis.utils.Pgfx;
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -22,6 +24,28 @@ public class UILabel extends UIObject {
     super(iApp, iPos, iDim, WidgetType.LB);
   }
     
+
+  public static UILabel create(PApplet app, BBox box, String txt, AppFont fnt, LabelType typ, IUpdateCallback cbk){
+    switch(fnt){
+      case TEXT  : return new UILabel(app,box).withLabel(txt, typ).bindCallback(cbk);
+      case GLYPH : return new UILabel(app,box).withGlyph(txt, typ).bindCallback(cbk);
+      default    : Cons.err(Err.SWITCH_DROP_OUT); return null;
+    }
+  }
+
+  public static UILabel create(PApplet app, PVector pos, PVector dim, String txt, AppFont fnt, LabelType typ, IUpdateCallback cbk){
+    return create(app, new BBox(pos, dim), txt, fnt, typ, cbk);
+  }
+
+  public static UILabel create(UIManager mgr, BBox box, String txt, AppFont fnt, LabelType typ, IUpdateCallback cbk){
+    return create(mgr.app, box, txt, fnt, typ, cbk).bindManager(mgr);
+  }
+
+  public static UILabel create(UIManager mgr, PVector pos, PVector dim, String txt, AppFont fnt, LabelType typ, IUpdateCallback cbk){
+    return create(mgr.app, pos, dim, txt, fnt, typ, cbk).bindManager(mgr);
+  }
+
+
   public UILabel setType(LabelType iTyp){
     lblType = iTyp;
     return this;
