@@ -27,7 +27,7 @@ import processing.data.IntDict;
 import processing.data.JSONObject;
 
 
-public class TestGUIObjects {
+public class TestGUIManager {
 
   private enum BGThMode {LITE, DARK};
   private BGThMode bgTheme = BGThMode.LITE;
@@ -49,7 +49,7 @@ public class TestGUIObjects {
   ExDDownAction  ayleidRuinsAction;
    
 
-  public TestGUIObjects(PApplet p){
+  public TestGUIManager(PApplet p){
     app = p;
     uim = new UIManager(app);
     uim.injectFonts(
@@ -62,8 +62,8 @@ public class TestGUIObjects {
     initMiscGFX();
   }
 
-  public TestGUIObjects Dark(){bgTheme=BGThMode.DARK; return this;}
-  public TestGUIObjects Lite(){bgTheme=BGThMode.LITE; return this;}
+  public TestGUIManager Dark(){bgTheme=BGThMode.DARK; return this;}
+  public TestGUIManager Lite(){bgTheme=BGThMode.LITE; return this;}
 
   public void initMiscGFX(){
     COL_ERR  = app.color(255,0,255);
@@ -118,9 +118,9 @@ public class TestGUIObjects {
       UIToggle.create(app, new BBox(48, 64, 96, 64), glyphChar("gridish"), AppFont.GLYPH, new ToggleBGGrid(this))
     ).toggleShowBounds();
 
-    xOff = 32; yOff = 32; xDim = 64; yDim = 32;
+    xOff = 32; yOff = 16; xDim = 64; yDim = 32;
 
-    UIContainer.create(uim, new BBox(app.width/2+96, app.height/2+32, 512, 160))
+    UIContainer.create(uim, new BBox(app.width/2+96, 480, 512, 128))
     .addChildren(
       UIClick.create(app, new BBox(xOff, yOff, xDim, yDim           ), "MER", AppFont.TEXT, new ConslogAction("Mercury")),
       UIClick.create(app, new BBox(xOff+=xDim+yDim, yOff, xDim, yDim), "VEN", AppFont.TEXT, new ConslogAction("Venus")),
@@ -142,7 +142,7 @@ public class TestGUIObjects {
       uim, new BBox((app.width/2)+256, 32, 320, 32), null, AppFont.TEXT, LabelType.OP, cb)
     .setStyleProp("txt_size", Integer.class, 16);
     
-    UIDropdown.create(uim, new BBox((app.width/2)+64, 32, 160, 320))
+    UIDropdown.create(uim, new BBox((app.width/2)+64, 32, 160, 400))
     .addOptions(ayleidRuinsAction.val_lbl_map)
     .bindAction(ayleidRuinsAction);
 
@@ -152,7 +152,7 @@ public class TestGUIObjects {
     Cons.log("Function 'initGui' has completed.");
   }
 
-  public TestGUIObjects bindBGImg(PImage i){img=i; return this;}
+  public TestGUIManager bindBGImg(PImage i){img=i; return this;}
 
   public void update(){uim.update();}
 
@@ -285,8 +285,8 @@ class SimpleDropdownAction implements ISelectAction {
 }
 
 class ToggleBGGrid implements IToggleCallback{
-  TestGUIObjects targetObj;
-  public ToggleBGGrid(TestGUIObjects tar){targetObj = tar;}
+  TestGUIManager targetObj;
+  public ToggleBGGrid(TestGUIManager tar){targetObj = tar;}
   public boolean getState(){return targetObj.getDispBGImage();}
   public void toggleState(){targetObj.toggleDispBGImage();}
 }
