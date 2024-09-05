@@ -1,4 +1,5 @@
 package PrEis.utils;
+import PrEis.utils.Cons.Err;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.data.IntDict;
@@ -24,6 +25,13 @@ public class PImageUtils {
     app = p;
   }
 
+
+  /** Renders input {@link PImage} at canvas center */
+  public void displayPImageAtCanvasCenter(PApplet app, PImage img){
+    if(img==null){Cons.err(Err.NULL_VALUE); return;}
+    app.imageMode(PApplet.CENTER);
+    app.image(img, app.width/2, app.height/2);
+  }
 
   /**
    * Attempts to load image at specified filepath of an image. If anything goes

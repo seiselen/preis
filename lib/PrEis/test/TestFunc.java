@@ -11,6 +11,8 @@ public class TestFunc {
   private static final String STR_TEST_PASS = "PASS";
   private static final String STR_TEST_FAIL = "FAIL";
 
+  private static final String STR_NULL_EXPD = "NULL OUTPUT EXPECTED";
+
   /** Output default message for passing tests indicating thereof? */
   public static boolean LOG_PASS = false; 
 
@@ -46,6 +48,20 @@ public class TestFunc {
     else{System.out.println(STR_TEST_FAIL); compareOutValExpVal(out,exp);}
     return result;
   }
+
+  /** 
+   * Special version of {@link #doEval} for tests in which <code>null</code> is
+   * expected as output. 
+   * @implNote No QAD way to handle false positives with the other versions of
+   * this function, ergo this'll do for now!
+   */
+  public static boolean doEvalExpNull(Object out){
+    if(out==null){return true;}
+    System.out.println(STR_NULL_EXPD);
+    return false;
+  }
+
+
 
 
   /**

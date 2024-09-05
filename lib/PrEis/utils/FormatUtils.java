@@ -20,11 +20,11 @@ public class FormatUtils{
 
   public static String colorRGBAToString(int[] c){
     if(c.length==3){c = new int[]{c[0],c[1],c[2],255};} //> add alpha channel (a/a)
-    return StringUtils.wrapWithParenChars(StringUtils.concatAsSCSV(StringUtils.padL(primArrToStrArr(c),3)));
+    return StringUtils.wrapParens(StringUtils.concatAsCSSV(StringUtils.padL(primArrToStrArr(c),3)));
   }
   
   public static String colorRGBAToString(int c){
-    return StringUtils.wrapWithParenChars(StringUtils.concatAsSCSV(StringUtils.padL(primArrToStrArr(colorRGBAFromPColor(c)),3)));
+    return StringUtils.wrapParens(StringUtils.concatAsCSSV(StringUtils.padL(primArrToStrArr(colorRGBAFromPColor(c)),3)));
   }
 
   public static int[] colorRGBAFromPColor(int c){

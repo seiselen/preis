@@ -19,7 +19,7 @@ public class TestAppUtil {
   TestUtilsManager   testUtils;
   TestGUIManager    testUIObjs;
 
-  public static TestMode curTestMode = TestMode.GUIOBJS;
+  public static TestMode curTestMode = TestMode.UTILS;
 
 
   public TestAppUtil(PApplet iApp){

@@ -34,15 +34,15 @@ public class QueryUtils {
   }
 
   /** Returns true if <b>AT LEAST ONE</b> input object is <code>null</code>. */
-  public static boolean nullSome(Object ... objs){
+  public static boolean nullAny(Object ... objs){
     for(Object o : objs){if (o==null){return true;}}
     return false;
-  }  
+  }
+
 
   public static boolean strArrContainsStr(String[] arr, String str){
     if(arrayNullOrEmpty(arr)){return false;}
     for(String s : arr){if(str.equals(s)){return true;}}
     return false;
   }
-
 }

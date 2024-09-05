@@ -28,7 +28,7 @@ public enum WidgetType {
   }
 
   public static String typeToNameAndID(WidgetType t){
-    return typeToName(t)+" "+StringUtils.wrapWithParenChars(t.toString());
+    return typeToName(t)+" "+StringUtils.wrapParens(t.toString());
   }
 
   public String toName(){return WidgetType.typeToName(this);}

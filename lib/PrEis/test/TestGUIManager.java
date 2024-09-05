@@ -235,7 +235,7 @@ class ExDDownAction implements ISelectAction {
 
   public void OnSelection(String selOpt){
     if (!QueryUtils.nullish(selOpt)){curSel=selOpt;}
-    Cons.log("Option "+StringUtils.wrapStringWith('"',selOpt)+" was just selected!");
+    Cons.log("Option "+StringUtils.wrapWith('"',selOpt)+" was just selected!");
   }
 
   public void curSelectionBlurbToConsole(){
@@ -245,7 +245,7 @@ class ExDDownAction implements ISelectAction {
   public String curSelectionBlurbToString(){
     String pfix = "Selected: ";
     if(QueryUtils.nullish(curSel)){return pfix+"Nothing Yet?!?";}
-    String ret = pfix + StringUtils.concatAsSCSV(curSel, siteNameWithID(curSel), regionNameWithID(curSel));
+    String ret = pfix + StringUtils.concatAsCSSV(curSel, siteNameWithID(curSel), regionNameWithID(curSel));
     return ret;
   }
 
@@ -280,7 +280,7 @@ class SimpleDropdownAction implements ISelectAction {
   }
 
   public String toString(){
-    return "Current Selection = "+StringUtils.wrapStringWith('[',curSelection,']');
+    return "Current Selection = "+StringUtils.wrapWith('[',curSelection,']');
   }
 }
 

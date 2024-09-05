@@ -83,9 +83,9 @@ public class UIDropdownItem extends UIObject implements Comparable<UIDropdownIte
 
 
   public String toString(){
-    return StringUtils.wrapStringWith('{',StringUtils.concatAsSCSV(
-      "value:"+StringUtils.wrapStringWith('"', value),
-      "label:"+StringUtils.wrapStringWith('"', label)
+    return StringUtils.wrapWith('{',StringUtils.concatAsCSSV(
+      "value:"+StringUtils.wrapWith('"', value),
+      "label:"+StringUtils.wrapWith('"', label)
     ),'}');
   }
 
