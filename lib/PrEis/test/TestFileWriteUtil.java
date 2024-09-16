@@ -1,12 +1,14 @@
 package PrEis.test;
 
+import PrEis.Testbed;
 import PrEis.utils.FileWriteUtil;
-import processing.core.PApplet;
+
 
 public class TestFileWriteUtil {
 
-  public static void runTests(PApplet p){
-    String pfix = "data/test_out/";
+
+  public static void runTests(Testbed p){
+    String pfix = p.sketchPath()+"/"+Testbed.TEST_DIRS.getString(TestAssetKey.TEST_OUT_DIR.s());
 
     FileWriteUtil.writeOneCall(p, pfix+"oneWrite_lg.txt", x_lg);
     FileWriteUtil.writeOneCall(p, pfix+"oneWrite_sm_asArray.txt", x_sm);

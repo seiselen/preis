@@ -72,9 +72,9 @@ public class UIDropdown extends UIObject {
 
   public UIDropdown addOption(String val, String lbl){
     options.add(
-      UIDropdownItem.create(this, p, curBaseOff.copy(), ddownItemDim.copy(), val, lbl)
+      UIDropdownItem.create(this, p, curBaseOff.copy(), ddownItemDim.copy(), val, (lbl==null?val:lbl))
       .withManager(manager).castTo(UIDropdownItem.class)
-    );    
+    );
     recomputeOffsets();
     return this;
   }
@@ -100,7 +100,7 @@ public class UIDropdown extends UIObject {
 
   private void recomputeOffsets(){
     curBaseOff.y+=ddownItemDim.y;
-    maxScrollOff = (options.size()*ddownItemDim.y)-bbox.maxY();
+    maxScrollOff = (options.size()*ddownItemDim.y)-bbox.dimY();
   }
 
 
@@ -115,7 +115,11 @@ public class UIDropdown extends UIObject {
   }
  
   public void onMouseWheel(int v){
-    nScrollOff = scrollOff+(v*scrollFactor);         
+    nScrollOff = scrollOff+(v*scrollFactor);        
+    System.err.println("nScrollOff="+nScrollOff);
+    System.err.println("maxScrollOff="+maxScrollOff);
+    System.err.println("#options="+options.size());
+
     if(nScrollOff<0||nScrollOff>maxScrollOff){return;}
     scrollOff=nScrollOff;
     for(UIDropdownItem ddi : options){ddi.scrollTransform(v*-scrollFactor);}
@@ -154,8 +158,9 @@ public class UIDropdown extends UIObject {
   }
 
   private void clipAndRenderOptions(){
+    p.imageMode(PApplet.CORNER);
+    Pgfx.clip(p, bbox);
     for(UIDropdownItem ddi : options){
-      Pgfx.clip(p, bbox);
       ddi.render();
     }
     p.noClip();

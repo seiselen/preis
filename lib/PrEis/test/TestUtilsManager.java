@@ -1,13 +1,12 @@
 package PrEis.test;
-
+import PrEis.Testbed;
 import PrEis.utils.Cons;
-import processing.core.PApplet;
 
 public class TestUtilsManager {
 
-  PApplet app;
+  Testbed app;
 
-  public TestUtilsManager(PApplet iApp){
+  public TestUtilsManager(Testbed iApp){
     app = iApp;
   }
 
@@ -25,8 +24,13 @@ public class TestUtilsManager {
   
   String[] getFileSysDirTests(){
     String [] ret = null;
-    try{ret = app.loadJSONObject("/data/testDirs.json").getJSONArray("EXAMPLE_DIRS").toStringArray();}
-    catch (Exception e){e.printStackTrace(); System.err.println("ERROR: Something went wrong loading JSON! Returning null.");}
+    try{
+      ret = Testbed.TEST_DIRS.getJSONArray("EXAMPLE_DIRS").toStringArray();
+    }
+    catch (Exception e){
+      Cons.err("Issue fetching one or more Utils Test assets");
+      e.printStackTrace();
+    }
     return ret;
   }
   

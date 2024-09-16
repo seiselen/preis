@@ -57,6 +57,10 @@ public abstract class UIObject {
    */
   protected UIManager manager;
 
+
+  protected IGUICallBack genericCallBack;
+
+
   public UIObject(PApplet iPar, BBox iBox, WidgetType iTyp){
     p         = iPar;
     objFont   = AppFont.TEXT;
@@ -84,6 +88,8 @@ public abstract class UIObject {
   }
 
 
+  public UIManager getManager(){return manager;}
+
   /** This is the QAD version for UIObjects created as children of UIContainers. */
   public void setManager(UIManager iMgr){
     manager = iMgr;    
@@ -94,7 +100,11 @@ public abstract class UIObject {
     manager = iMgr; return this;
   }
 
-
+  public UIObject bindManager(UIManager iMgr){
+    manager = iMgr;
+    iMgr.bindUiObject(this);
+    return this;
+  }
 
 
 
@@ -103,18 +113,41 @@ public abstract class UIObject {
     bbox.translatePos(trs);
   }
 
-  public UIObject bindManager(UIManager iMgr){
-    manager = iMgr;
-    iMgr.bindUiObject(this);
-    return this;
-  }
+
+
+
+
+
 
   public UIObject withBBox(BBox iBox){setTranslate(iBox); return this;}
 
   public UIObject withVectors(PVector iPos, PVector iDim){setTranslate(iPos, iDim); return this;}
 
-  public UIObject withLabel(String iLabel){setLabel(iLabel); setFont(AppFont.TEXT); return this;}
+  public UIObject withLabel(String iLabel){
+    if(iLabel != null){setLabel(iLabel);}
+    setFont(AppFont.TEXT);
+    return this;
+  }
   
+  public UIObject withValue(String iValue){
+    if(iValue != null){setValue(iValue);}
+    setFont(AppFont.TEXT);
+    return this;
+  }
+
+
+
+  public UIObject withValueAndLabel(String v){
+    return withValue(v).withLabel(v);
+  }
+
+  public UIObject withValueAndLabel(String v, String l){
+    return withValue(v).withLabel(l);
+  }
+
+
+
+
   /** This assumes {@link #withLabel(String)} was or will be called, as to call `setFont` within. */
   public UIObject withDLabel(String iLabel){setDLabel(iLabel); return this;}
 
@@ -123,6 +156,9 @@ public abstract class UIObject {
     setFont(AppFont.GLYPH);
     return this;
   }
+
+
+
 
   public UIObject withDisabledState(boolean iState){setDisabled(iState); return this;}
 
@@ -164,6 +200,11 @@ public abstract class UIObject {
   }
 
 
+  public void setValue(String iValue){
+    value = iValue;
+  }
+
+
   public UIObject setTitle(String iTitle){
     title = iTitle;
     return this;
@@ -190,12 +231,14 @@ public abstract class UIObject {
   }
   
 
-  //> These are dirty, I know...
+  /** @deprecated */
   public UIClick castToClick()  {return (UIClick)this;}
+  /** @deprecated */  
   public UIToggle castToToggle(){return (UIToggle)this;}
+  /** @deprecated */ 
   public UILabel castToLabel()  {return (UILabel)this;}
+  /** @deprecated */
   public UIContainer castToContainer()  {return (UIContainer)this;}  
-
 
   /** WICKED and NAUGHTY! LOL */
   public <T> T castTo(Class<T> type){
@@ -203,6 +246,14 @@ public abstract class UIObject {
     catch(ClassCastException e){return null;}    
   }
   
+  /** Stub for next hour 'till I realize custom callback subtype. */
+  public void bindCallback(IGUICallBack iCallBack){
+    genericCallBack = iCallBack;
+  }
+
+
+
+
 
   /** Abstract assigns `mouseOver`. See child types for resp. addl. handling. */  
   public void update(){
@@ -236,14 +287,7 @@ public abstract class UIObject {
   }
 
 
-  /** @TODO THIS BREAKS WRT TOGGLE BUTTON LABEL HANDLING. NEED TO RESOLVE ASAP.
-   *  MY DUMB ASS IS GETTING TOO COZY (GOOD!) BUT TOO EXPERIMENTAL (NOT GOOD!)
-   */
-  private String getAppropriateLabel(){
-    if(disabled&&label_disabled!=null){return label_disabled;}
-    if(label!=null){return label;}    
-    return "";
-  }
+
   
   /** 
    * @TODO Realize this at some point? Perhaps as specd-else-default normalized
@@ -252,11 +296,7 @@ public abstract class UIObject {
   public void renderText(float x1, float y1){
     //if(style.text_wrap){p.text(label,x1,y1,style.text_wrap.wide(),style.text_wrap.tall());}
     //else{p.text(label,x1,y1);}
-    p.text(
-      getAppropriateLabel(),
-      x1,
-      y1
-      );
+    p.text(label,x1,y1);
   }
 
   public void renderTextViaOri(){

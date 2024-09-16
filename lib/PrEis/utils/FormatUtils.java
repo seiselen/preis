@@ -33,7 +33,7 @@ public class FormatUtils{
 
   /** @move MOVE THIS TO STRING UTILS? */
   public static String strValElseNone(String s){
-    return QueryUtils.nullish(s) ? "NONE" : s;
+    return s==null ? "NONE" : s;
   }
 
   /**

@@ -1,2 +1,10 @@
 .vscode
-/testbed/data
+
+#-[ UNIQUE To Local Enviros, Analogous To CRA `env.local` file ]---------------#
+/assets/testDirs.json
+
+#-[ File Writer (& Otherwise) Test Output Files ]------------------------------#
+/tests/outputs
+
+#-[ All Windows Batch Scripts ]------------------------------------------------#
+*.bat

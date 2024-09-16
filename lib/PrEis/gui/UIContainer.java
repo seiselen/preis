@@ -48,11 +48,11 @@ public class UIContainer extends UIObject {
   }
 
   public static UIContainer create(UIManager mgr, BBox bbox){
-    return create(mgr.app, bbox).bindManager(mgr).castToContainer();
+    return create(mgr.app, bbox).bindManager(mgr).castTo(UIContainer.class);
   }
 
   public static UIContainer create(UIManager mgr, PVector pos, PVector dim){
-    return create(mgr.app, pos, dim).bindManager(mgr).castToContainer();
+    return create(mgr.app, pos, dim).bindManager(mgr).castTo(UIContainer.class);
   }
 
 

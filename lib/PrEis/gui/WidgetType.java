@@ -6,13 +6,13 @@ import PrEis.utils.StringUtils;
  * {@link #CB} {@link #FB} {@link #TB} {@link #LB} {@link #CO} {@link #DD} {@link #DI} 
  */
 public enum WidgetType {
-  /** ClickButton   */ CB,
-  /** ConfirmButton */ FB,
-  /** ToggleButton  */ TB,
-  /** Label         */ LB,
-  /** Container     */ CO,
-  /** Dropdown      */ DD,
-  /** DropdownItem  */ DI;
+  /** <b>ClickButton</b>   */ CB,
+  /** <b>ConfirmButton</b> */ FB,
+  /** <b>ToggleButton</b>  */ TB,
+  /** <b>Label</b>         */ LB,
+  /** <b>Container</b>     */ CO,
+  /** <b>Dropdown</b>      */ DD,
+  /** <b>DropdownItem</b>  */ DI;
 
   public static String typeToName(WidgetType t){
     switch(t){

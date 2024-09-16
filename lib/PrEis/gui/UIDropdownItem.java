@@ -2,7 +2,6 @@ package PrEis.gui;
 import PrEis.utils.Cons;
 import PrEis.utils.DataStructUtils;
 import PrEis.utils.Pgfx;
-import PrEis.utils.QueryUtils;
 import PrEis.utils.StringUtils;
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -23,24 +22,14 @@ public class UIDropdownItem extends UIObject implements Comparable<UIDropdownIte
   }
 
   public static UIDropdownItem create(UIDropdown iPar, PApplet iApp, PVector iPos, PVector iDim, String val){
-    return create(iPar, iApp, iPos, iDim).withValue(val);
+    return create(iPar, iApp, iPos, iDim).withValue(val).castTo(UIDropdownItem.class);
   }
 
   public static UIDropdownItem create(UIDropdown iPar, PApplet iApp, PVector iPos, PVector iDim, String val, String lbl){
-    return create(iPar, iApp, iPos, iDim, val).withLabel(lbl);
+    return create(iPar, iApp, iPos, iDim).withValue(val).withLabel(lbl).castTo(UIDropdownItem.class);
   }
 
-  public UIDropdownItem withValue(String v){
-    if(!QueryUtils.nullish(v)){value = v;} return this;
-  }
 
-  public UIDropdownItem withLabel(String l){
-    if(!QueryUtils.nullish(l)){label = l;} return this;
-  }
-
-  public UIDropdownItem withValueAndLabel(String v, String l){
-    return withValue(v).withLabel(l);
-  }
     
   public void scrollTransform(float val){
     addTranslate(DataStructUtils.createVector(0,val));
@@ -67,6 +56,7 @@ public class UIDropdownItem extends UIObject implements Comparable<UIDropdownIte
   }
   
   public void render(){
+    super.render();
     p.textSize(style.txt_size);
     p.strokeWeight(style.swgt);
     p.fill(getFillCol());
@@ -96,7 +86,7 @@ public class UIDropdownItem extends UIObject implements Comparable<UIDropdownIte
 
   /** Returns {@link #label} if it exists, else {@link #value} <i>(which <b>MUST</b> exist!)</i>. */
   public String getID(){
-    return (QueryUtils.nullish(label) ? value : label);
+    return (label==null ? value : label);
   }
 
 

@@ -27,6 +27,9 @@ import processing.core.PApplet;
  */
 class DefaultStyle {
 
+  /** <i>Good 'Ol <b>Error Purple</b></i> i.e. <code>rgb(255,0,255)</code>. */
+  public static final int ERR_COL = -65281;
+
   static UIStyle Get(PApplet p){
     return _CommonVals(p);
   }
@@ -51,6 +54,7 @@ class DefaultStyle {
     s.txt_size      = 24;
     s.txt_anchor    = PosOri.CTR;
     s.txt_offset    = DataStructUtils.createVector(0,0);
+    s.fill_txt      = p.color(255);
     s.strk_enabled  = p.color(255, 255, 255);
     s.strk_disabled = p.color(192, 192, 192);
     s.border_radius = 0;
@@ -87,7 +91,7 @@ class DefaultStyle {
     s.strk_opaque       = p.color(  0, 112, 255);
     s.fill_transp       = p.color(  0,   0,  32,  32);
     s.strk_transp       = p.color(255, 255, 255, 128);
-    s.fill_txt          = p.color(255, 255, 255);
+    s.fill_txt          = p.color(255);
     return s;
   }
 
@@ -104,7 +108,6 @@ class DefaultStyle {
     s.fill         = p.color(  0, 112, 255);
     s.fill_hovered = p.color(  0, 144, 255);
     s.fill_clicked = p.color(  0, 176, 255);
-    s.fill_txt     = p.color(255);
     s.txt_size     = 20;
     s.strk_enabled = p.color(255);
     s.swgt         = 2;
@@ -112,26 +115,27 @@ class DefaultStyle {
     return s;
   }
 
-  /** Gonna hack with ToggleButtons vars for now. */
+  /** 
+   * @implNote uses {@link UIToggle}'s style specials s.t. <b>[OnInit]</b> uses
+   * <code>_on</code> suffix and <b>[OnWarn]</b> uses <code>_off</code> suffix.
+   * @implNote default style is realizes app exit button; s.t. <b>[OnInit]</b>
+   * colors are <b>blue</b> and <b>[OnWarn]</b> colors are red.
+   */
   private static UIStyle _ConfirmButton(PApplet p){
+    /*-[ COMMON TO BOTH STATES ]----------------------------------------------*/
     UIStyle s = _CommonVals(p);
-    s.fill_on         = p.color(  0,   0,  80);
-    s.fill_on_hovered = p.color(  0,   0, 114);
-    s.fill_on_clicked = p.color(  0,   0, 144);
-    s.strk_enabled    = p.color(255);
-    s.txt_size        = 32;
-    s.strk_enabled    = p.color(255);
-    s.swgt            = 2;
-    /*----------------------------------*/
-    s.fill_on         = p.color( 80,   0,   0);
-    s.fill_on_hovered = p.color(114,   0,   0);
-    s.fill_on_clicked = p.color(144,   0,   0);
-    s.strk_enabled    = p.color(255);
-    s.txt_size        = 32;
-    s.strk_enabled    = p.color(255);
-    s.swgt            = 2;
+    s.txt_size         = 32;
+    s.swgt             = 2;
+    s.strk_enabled     = p.color(255);
+    /*-[ WRT 'ON INIT' STATE ]------------------------------------------------*/
+    s.fill_on          = p.color(  0,   0,  80);
+    s.fill_on_hovered  = p.color(  0,   0, 114);
+    s.fill_on_clicked  = p.color(  0,   0, 144);
+    /*-[ WRT 'ON WARN' STATE ]------------------------------------------------*/
+    s.fill_off         = p.color( 80,   0,   0);
+    s.fill_off_hovered = p.color(114,   0,   0);
+    s.fill_off_clicked = p.color(144,   0,   0);
     return s;
   }
   
-
 }

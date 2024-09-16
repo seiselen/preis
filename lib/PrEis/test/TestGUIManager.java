@@ -2,8 +2,12 @@ package PrEis.test;
 
 import java.util.HashMap;
 import java.util.Set;
+
+import PrEis.Testbed;
 import PrEis.gui.AppFont;
+import PrEis.gui.ConfirmState;
 import PrEis.gui.IActionCallback;
+import PrEis.gui.IConfirmAction;
 import PrEis.gui.ISelectAction;
 import PrEis.gui.IToggleCallback;
 import PrEis.gui.IUpdateCallback;
@@ -15,17 +19,18 @@ import PrEis.gui.UILabel;
 import PrEis.gui.UIManager;
 import PrEis.gui.UIObject;
 import PrEis.gui.UIToggle;
+import PrEis.gui.UIConfirm;
 import PrEis.utils.BBox;
 import PrEis.utils.Cons;
 import PrEis.utils.DataStructUtils;
 import PrEis.utils.QueryUtils;
 import PrEis.utils.StringUtils;
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PVector;
 import processing.data.IntDict;
 import processing.data.JSONObject;
-
 
 public class TestGUIManager {
 
@@ -35,11 +40,15 @@ public class TestGUIManager {
   private int COL_ERR, COL_LITE, COL_DARK;
   private int ALP_ERR, ALP_LITE, ALP_DARK;
 
-  private PApplet   app;
+  private Testbed   app;
   private UIManager uim;
-  private PImage    img;
-  private boolean dispImg;
+  private PImage    guiBgImg;
+  private boolean dispImg = true;
   private IntDict  glyphDict;
+
+  PFont textFont;
+  PFont glyphFont;
+  JSONObject glyphCodes;
 
   ConslogAction  conslogAction;
   ToggAbleAction toggAbleAction;
@@ -48,19 +57,39 @@ public class TestGUIManager {
   ToggleBGGrid   toggleBGGrid;
   ExDDownAction  ayleidRuinsAction;
    
-
-  public TestGUIManager(PApplet p){
+  /** @implNote Call Order <b>COUNTS</b>! */
+  public TestGUIManager(Testbed p){
     app = p;
     uim = new UIManager(app);
-    uim.injectFonts(
-      app.loadFont("TitilliumWebBold32.vlw"),
-      app.loadFont("font-awesome-48.vlw")
-    );
-    dispImg = true;
+    loadFonts();
+    injectFonts();
     initCustomGlyphs();
     initGUI();
     initMiscGFX();
   }
+
+  private void loadFonts(){
+    try {
+      textFont  = app.loadFont(Testbed.getPathOf(TestAssetKey.TEXT_FONT));
+      glyphFont = app.loadFont(Testbed.getPathOf(TestAssetKey.GLYPH_FONT));
+      glyphCodes = app.loadJSONObject(Testbed.getPathOf(TestAssetKey.GLYPH_CODES));
+      guiBgImg  = app.loadImage(Testbed.getPathOf(TestAssetKey.GUI_BG_IMG));
+    } catch (Exception e) {
+      System.err.println("Issue fetching one or more GUI Testbed assets. Check that filepaths are correct.");
+      e.printStackTrace();
+      app.exit();
+      return;
+    }
+  }
+
+  private void injectFonts(){
+    uim.injectFonts(textFont, glyphFont);
+  }
+
+
+
+
+
 
   public TestGUIManager Dark(){bgTheme=BGThMode.DARK; return this;}
   public TestGUIManager Lite(){bgTheme=BGThMode.LITE; return this;}
@@ -74,17 +103,16 @@ public class TestGUIManager {
     ALP_ERR  = 255;
   }
 
+  private void initCustomGlyphs(){
+    glyphDict = new IntDict();
+    String[] keys = DataStructUtils.keyArrayOfJSONObj(glyphCodes);
+    for (String k : keys){glyphDict.add(k,glyphCodes.getInt(k));}
+  }
+
 
   public void toggleDispBGImage(){dispImg = !dispImg;}
-  public boolean getDispBGImage(){return dispImg;}  
 
-
-  private void initCustomGlyphs(){
-    JSONObject jo = app.loadJSONObject("/data/fontAwesomeCharCodes.json");
-    glyphDict = new IntDict();
-    String[] keys = DataStructUtils.keyArrayOfJSONObj(jo);
-    for (String k : keys){glyphDict.add(k,jo.getInt(k));}
-  }
+  public boolean getDispBGImage(){return dispImg;}
 
   private String glyphChar(String n){return ""+(char)glyphDict.get(n);}
 
@@ -106,7 +134,7 @@ public class TestGUIManager {
     UILabel.create(uim, new BBox(xOff, yOff+=96, 256, 64), null, AppFont.TEXT, LabelType.OP, mousePosUpdate);
 
     UIClick needsToBeVar = UIClick.create(uim, new BBox(xOff, yOff+=96, 256, 64), "I Am Enabled!", AppFont.TEXT, conslogAction)
-    .withDisabledState(true).withDLabel("I Am Disabled!").castToClick();
+    .withDisabledState(true).withDLabel("I Am Disabled!").castTo(UIClick.class);
 
     toggAbleAction = new ToggAbleAction(needsToBeVar);
     UIClick.create(uim, new BBox(xOff-32, yOff+=96, 320, 64), "(En/Dis)able Above Button", AppFont.TEXT, toggAbleAction);
@@ -114,13 +142,13 @@ public class TestGUIManager {
 
     UIContainer.create(uim, new BBox(xOff+304, 32, 192, 144)).addChildren(
       UILabel.create(app, new BBox(16, 16, 160, 32), "TOGGLE BG GRID", AppFont.TEXT, LabelType.OP, null)
-      .setStyleProp("txt_size", Integer.class, 18).castToLabel(),
+      .setStyleProp("txt_size", Integer.class, 18),
       UIToggle.create(app, new BBox(48, 64, 96, 64), glyphChar("gridish"), AppFont.GLYPH, new ToggleBGGrid(this))
     ).toggleShowBounds();
 
     xOff = 32; yOff = 16; xDim = 64; yDim = 32;
 
-    UIContainer.create(uim, new BBox(app.width/2+96, 480, 512, 128))
+    UIContainer.create(uim, new BBox(64, 512+32, 512, 128))
     .addChildren(
       UIClick.create(app, new BBox(xOff, yOff, xDim, yDim           ), "MER", AppFont.TEXT, new ConslogAction("Mercury")),
       UIClick.create(app, new BBox(xOff+=xDim+yDim, yOff, xDim, yDim), "VEN", AppFont.TEXT, new ConslogAction("Venus")),
@@ -134,6 +162,7 @@ public class TestGUIManager {
       UIClick.create(app, new BBox(xOff+=xDim+yDim, yOff, xDim, yDim), "PLT", AppFont.TEXT, new ConslogAction("Pluto"))      
     )
     .toggleShowBounds();
+    
 
     ayleidRuinsAction = new ExDDownAction();
     AyledidRuinsCallback cb = new AyledidRuinsCallback(ayleidRuinsAction);
@@ -142,21 +171,55 @@ public class TestGUIManager {
       uim, new BBox((app.width/2)+256, 32, 320, 32), null, AppFont.TEXT, LabelType.OP, cb)
     .setStyleProp("txt_size", Integer.class, 16);
     
-    UIDropdown.create(uim, new BBox((app.width/2)+64, 32, 160, 400))
+    /*UIDropdown ddown =*/ UIDropdown.create(uim, new BBox((app.width/2)+64, 32, 160, 320))
     .addOptions(ayleidRuinsAction.val_lbl_map)
     .bindAction(ayleidRuinsAction);
 
 
+    xOff = (app.width/2)+64;
+    yOff = (app.height/2)+64;
+    xDim = 256;
+    yDim = 32;
 
+    //> keeping these as vars for future 'cancel' and other testing
+    ConslogConfirmAction cfirmAct = new ConslogConfirmAction();
+    UIConfirm cfirmWidget = UIConfirm.create(uim, new BBox(xOff, yOff, xDim, yDim), cfirmAct);
+    
+    cfirmWidget.setButtonLabelsΘ(
+      "Click Here To Conslog Something.",
+      "Sure Ya Wanna Conslog Something?",
+      "You've Just Conslog'd Something!"
+    )
+    .setStyleProp("txt_size", Integer.class, 16)    
+    ;
+
+
+    yDim +=32;
+    yOff +=48;
+
+    class CancelConfirmAction implements IActionCallback {
+      ConslogConfirmAction act;
+      public CancelConfirmAction(ConslogConfirmAction iAct){act=iAct;}
+      public void action(){act.cancel();}
+    }
+
+    UIClick.create(
+      uim, new BBox(xOff, yOff, xDim, yDim),
+      "Cancel Confirm Sequence", AppFont.TEXT,
+      new CancelConfirmAction(cfirmAct)
+    );
+
+  
     /*=[ DON'T REMOVE THIS, NOR EVEN TOUCH IT ]===============================*/
     Cons.log("Function 'initGui' has completed.");
   }
 
-  public TestGUIManager bindBGImg(PImage i){img=i; return this;}
-
   public void update(){uim.update();}
 
-  public void onKeyPressed(){uim.onKeyPressed();}
+  public void onKeyPressed(){
+    if(app.key=='q'||app.key=='Q'||app.keyCode==PApplet.ESC){app.exit(); return;}
+    uim.onKeyPressed();
+  }
   
   public void onMousePressed(){uim.onMousePressed();}
   
@@ -178,14 +241,14 @@ public class TestGUIManager {
   }
 
   private void renderBGImg(){
-    if(img!=null && dispImg){
+    if(guiBgImg!=null && dispImg){
       switch(bgTheme){
         case LITE: app.tint(255, ALP_LITE); break;
         case DARK: app.tint(255, ALP_DARK); break;
         default:   app.tint(255, ALP_ERR); break;
       }
       app.imageMode(PApplet.CORNER);
-      app.image(img, 0, 0);
+      app.image(guiBgImg, 0, 0);
       app.tint(ALP_ERR); //> reset to full opaque J.I.C.
     }
   }
@@ -196,6 +259,35 @@ public class TestGUIManager {
 /*==============================================================================
 |>>> TEST CALLBACK DEFINITIONS (COULD MOVE TO `PDE` CODE S.T. GITIGNORED)
 +=============================================================================*/
+
+class ConslogConfirmAction implements IConfirmAction {
+  private static final String DEF_LOG_MSG = "You Confirmed An Action To Conslog This!";
+  private ConfirmState curState;
+  private String logMsg;
+
+  public ConslogConfirmAction(){
+    logMsg = DEF_LOG_MSG;
+    curState = ConfirmState.ONINIT;
+  }
+
+  public ConslogConfirmAction(String inLogMsg){
+    this();
+    logMsg = inLogMsg;
+  }
+
+  public void action() {switch (curState) {
+    case ONINIT: curState = ConfirmState.ONWARN; return;
+    case ONWARN: curState = ConfirmState.ONDONE; doAction(); return;
+    default: return; //> ONDONE action is nothing for now.
+  }}
+
+  private void doAction(){System.out.println(logMsg);}
+
+  public void cancel(){curState = ConfirmState.ONINIT;}
+
+  public ConfirmState getState(){return curState;}
+}
+
 
 class ExDDownAction implements ISelectAction {
   private String curSel;
@@ -234,7 +326,7 @@ class ExDDownAction implements ISelectAction {
   }
 
   public void OnSelection(String selOpt){
-    if (!QueryUtils.nullish(selOpt)){curSel=selOpt;}
+    if (selOpt!=null){curSel=selOpt;}
     Cons.log("Option "+StringUtils.wrapWith('"',selOpt)+" was just selected!");
   }
 
@@ -244,7 +336,7 @@ class ExDDownAction implements ISelectAction {
 
   public String curSelectionBlurbToString(){
     String pfix = "Selected: ";
-    if(QueryUtils.nullish(curSel)){return pfix+"Nothing Yet?!?";}
+    if(curSel==null){return pfix+"Nothing Yet?!?";}
     String ret = pfix + StringUtils.concatAsCSSV(curSel, siteNameWithID(curSel), regionNameWithID(curSel));
     return ret;
   }
@@ -271,7 +363,7 @@ class SimpleDropdownAction implements ISelectAction {
   private String curSelection = "N/A";
   
   public void OnSelection(String selOpt){
-    if (!QueryUtils.nullish(selOpt)){curSelection=selOpt;}
+    if (selOpt!=null){curSelection=selOpt;}
     toConsole();
   }
 
@@ -311,7 +403,7 @@ class AyledidRuinsCallback implements IUpdateCallback {
 
 class ConslogAction implements IActionCallback {
   private String message;
-  public ConslogAction(String iMsg){message=QueryUtils.nullish(iMsg)?"":iMsg;}
+  public ConslogAction(String iMsg){message=(iMsg==null?"":iMsg);}
   public void action(){System.out.println(message);}
 }
 

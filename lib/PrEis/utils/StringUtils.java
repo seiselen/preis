@@ -71,7 +71,7 @@ public class StringUtils {
   public static String wrapParens(String str){return wrapWith('(', str);}
 
   public static char lastCharOf(String str){
-    return (QueryUtils.nullish(str)) ? '\0' : str.charAt(str.length()-1);
+    return (str==null) ? '\0' : str.charAt(str.length()-1);
   }
 
   public static String capFirstChar(String str) {
@@ -90,7 +90,7 @@ public class StringUtils {
    * </ol>
    */
   public static String valToSSVCapdWords(String val){
-    if(QueryUtils.nullish(val)){return null;}
+    if(val==null){return null;}
 
     if(val.charAt(0)=='_' || lastCharOf(val)=='_'){
       return capFirstChar(val.replaceAll("[_]", ""));
@@ -125,7 +125,7 @@ public class StringUtils {
   }
 
   /** <b>(Space Separated)</b> Returns input strings concatenated with space chars. */
-  public static String concatAsSCV(String ... strs){
+  public static String concatAsSSV(String ... strs){
     return _concatAsCSV(strs, ConcatOption.SSV);    
   }
 

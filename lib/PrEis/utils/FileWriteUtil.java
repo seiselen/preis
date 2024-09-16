@@ -17,7 +17,7 @@ public class FileWriteUtil {
    * called; and if suffix is not <code>.txt</code>: such will be appended.
    */
   public FileWriteUtil launchWrite(String filename){
-    if(QueryUtils.nullish(filename)){return launchWrite();}
+    if(filename==null){return launchWrite();}
     if(!filename.endsWith(ExtType.TXT.val())){filename+=ExtType.TXT.val();}
     w = p.createWriter(filename);
     return this;

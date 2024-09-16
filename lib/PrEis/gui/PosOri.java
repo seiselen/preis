@@ -20,15 +20,15 @@ import PrEis.utils.Cons;
  */
 public enum PosOri {
   /*=[ENUM VALS]============================================================*/
-  /**     Top Left */ TL,
-  /**    Top Right */ TR,
-  /**  Bottom Left */ BL,
-  /** Bottom Right */ BR,
-  /**       Center */ CTR,
-  /**          Top */ TOP,
-  /**       Bottom */ BOT, 
-  /**         Left */ LFT,
-  /**        Right */ RGT;
+  /** <b>     Top Left </b> */ TL,
+  /** <b>    Top Right </b> */ TR,
+  /** <b>  Bottom Left </b> */ BL,
+  /** <b> Bottom Right </b> */ BR,
+  /** <b>       Center </b> */ CTR,
+  /** <b>          Top </b> */ TOP,
+  /** <b>       Bottom </b> */ BOT, 
+  /** <b>         Left </b> */ LFT,
+  /** <b>        Right </b> */ RGT;
 
   /*=[UTIL CONSTS]==========================================================*/
   private final static PosOri TxtOri_DEFAULT = PosOri.CTR;

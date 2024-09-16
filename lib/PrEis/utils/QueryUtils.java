@@ -7,11 +7,6 @@ package PrEis.utils;
  */
 public class QueryUtils {
   
-  /** For String Args: Is it null, empty, or blank? */
-  public static boolean nullish(String qStr){
-    return qStr==null || qStr.isEmpty();
-  }
-
   public static <T> boolean arrayNullOrEmpty(T[] arr){
     return arr==null || arr.length==0;
   }
