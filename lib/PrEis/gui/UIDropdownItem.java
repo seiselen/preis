@@ -57,18 +57,18 @@ public class UIDropdownItem extends UIObject implements Comparable<UIDropdownIte
   
   public void render(){
     super.render();
-    p.textSize(style.txt_size);
-    p.strokeWeight(style.swgt);
-    p.fill(getFillCol());
-    p.stroke(getStrokeCol());
-    Pgfx.rect(p, bbox);
+    app.textSize(style.txt_size);
+    app.strokeWeight(style.swgt);
+    app.fill(getFillCol());
+    app.stroke(getStrokeCol());
+    Pgfx.rect(app, bbox);
     renderText();
   }
   
   public void renderText(){
-    p.fill(getStrokeCol());
-    p.textAlign(PApplet.LEFT, PApplet.CENTER);
-    p.text(getID(), PApplet.lerp(bbox.minX(), bbox.midX(), style.txt_off_pct),bbox.midY());
+    app.fill(getStrokeCol());
+    app.textAlign(PApplet.LEFT, PApplet.CENTER);
+    app.text(getID(), PApplet.lerp(bbox.minX(), bbox.midX(), style.txt_off_pct),bbox.midY());
   }
 
 

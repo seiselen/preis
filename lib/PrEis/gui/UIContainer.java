@@ -30,13 +30,13 @@ public class UIContainer extends UIObject {
   public UIContainer(PApplet iApp, PVector iPos, PVector iDim){
     super(iApp, iPos, iDim, WidgetType.CO);
     objects = new ArrayList<UIObject>();
-    this.style.strk_enabled=p.color(0,255,0);
+    this.style.strk_enabled=app.color(0,255,0);
   }
   
   public UIContainer(PApplet iApp, BBox iBBox){
     super(iApp, iBBox, WidgetType.CO);
     objects = new ArrayList<UIObject>();
-    this.style.strk_enabled=p.color(0,255,0);
+    this.style.strk_enabled=app.color(0,255,0);
   }
 
   public static UIContainer create(PApplet app, BBox bbox){
@@ -106,11 +106,11 @@ public class UIContainer extends UIObject {
   
   private void renderBounds(){
     if(!SHOW_BOUNDS){return;}
-    p.noFill();
-    p.stroke(this.style.strk_enabled);
-    p.rectMode(PApplet.CORNER);
-    p.imageMode(PApplet.CORNER);
-    Pgfx.rect(p,bbox);
+    app.noFill();
+    app.stroke(this.style.strk_enabled);
+    app.rectMode(PApplet.CORNER);
+    app.imageMode(PApplet.CORNER);
+    Pgfx.rect(app,bbox);
   }
 
 }

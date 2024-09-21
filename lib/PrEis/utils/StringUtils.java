@@ -119,23 +119,32 @@ public class StringUtils {
     }
   }
 
-  /** <b>(Comma Separated)</b> Returns input strings concatenated with comma chars. */
-  public static String concatAsCSV(String ... strs){
-    return _concatAsCSV(strs, ConcatOption.CSV);
-  }
+  /** <b>(Comma Separated)</b> Returns input concatenated with comma chars. */
+  public static String concatAsCSV(String ... strs){return _concatAsCSV(strs, ConcatOption.CSV);}
+  /** <b>(Comma Separated)</b> Returns input concatenated with comma chars. */
+  public static String concatAsCSV(int ... ints){return _concatAsCSV(FormatUtils.primArrToStrArr(ints), ConcatOption.CSV);}
+  /** <b>(Comma Separated)</b> Returns input concatenated with comma chars. */
+  public static String concatAsCSV(float ... flts){return _concatAsCSV(FormatUtils.primArrToStrArr(flts), ConcatOption.CSV);}
+  /** <b>(Comma Separated)</b> Returns input concatenated with comma chars. */
+  public static String concatAsCSV(double ... dbls){return _concatAsCSV(FormatUtils.primArrToStrArr(dbls), ConcatOption.CSV);}
 
-  /** <b>(Space Separated)</b> Returns input strings concatenated with space chars. */
-  public static String concatAsSSV(String ... strs){
-    return _concatAsCSV(strs, ConcatOption.SSV);    
-  }
+  /** <b>(Space Separated)</b> Returns input concatenated with space chars. */
+  public static String concatAsSSV(String ... strs){return _concatAsCSV(strs, ConcatOption.SSV);}
+  /** <b>(Space Separated)</b> Returns input concatenated with space chars. */
+  public static String concatAsSSV(int ... ints){return _concatAsCSV(FormatUtils.primArrToStrArr(ints), ConcatOption.SSV);}
+  /** <b>(Space Separated)</b> Returns input concatenated with space chars. */
+  public static String concatAsSSV(float ... flts){return _concatAsCSV(FormatUtils.primArrToStrArr(flts), ConcatOption.SSV);}
+  /** <b>(Space Separated)</b> Returns input concatenated with space chars. */
+  public static String concatAsSSV(double ... dbls){return _concatAsCSV(FormatUtils.primArrToStrArr(dbls), ConcatOption.SSV);}
 
-  /** <b>(Comma+Space Separated)</b> Returns input strings concatenated with comma and space chars. */
-  public static String concatAsCSSV(String ... strs){
-    return _concatAsCSV(strs, ConcatOption.CSSV);    
-  }
-
-
-
+  /** <b>(Comma+Space Separated)</b> Returns input concatenated with comma and space chars. */
+  public static String concatAsCSSV(String ... strs){return _concatAsCSV(strs, ConcatOption.CSSV);}
+  /** <b>(Comma+Space Separated)</b> Returns input concatenated with comma and space chars. */
+  public static String concatAsCSSV(int ... ints){return _concatAsCSV(FormatUtils.primArrToStrArr(ints), ConcatOption.CSSV);}
+  /** <b>(Comma+Space Separated)</b> Returns input concatenated with comma and space chars. */
+  public static String concatAsCSSV(float ... flts){return _concatAsCSV(FormatUtils.primArrToStrArr(flts), ConcatOption.CSSV);}
+  /** <b>(Comma+Space Separated)</b> Returns input concatenated with comma and space chars. */
+  public static String concatAsCSSV(double ... dbls){return _concatAsCSV(FormatUtils.primArrToStrArr(dbls), ConcatOption.CSSV);}
   
   private static String _concatAsCSV(String[] strs, ConcatOption copt){
     if(strs.length==0){return null;} //> just in case

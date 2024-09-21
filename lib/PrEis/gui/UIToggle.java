@@ -72,12 +72,12 @@ public class UIToggle extends UIObject {
   
   public void render(){
     super.render();
-    p.textSize(style.txt_size);
-    p.strokeWeight(style.swgt);
-    p.fill(getFillCol());
-    p.stroke(getStrokeCol());
+    app.textSize(style.txt_size);
+    app.strokeWeight(style.swgt);
+    app.fill(getFillCol());
+    app.stroke(getStrokeCol());
     renderRect();
-    p.fill(getStrokeCol());
+    app.fill(getStrokeCol());
     renderTextViaOri();
     if(mouseOver&&title!=null){/* STUB FOR FUTURE TOOLTIP HANDLING */}
   }

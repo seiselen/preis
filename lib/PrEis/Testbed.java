@@ -31,7 +31,7 @@ public class Testbed extends PApplet {
   public void settings(){
     switch(curTestMode){
       case GRIDMGR: size(640,320); return;
-      case GUIOBJS: size(1280,720); return;
+      case GUIOBJS: size(1280,768); return;
       default: return;
     }
   }
@@ -101,7 +101,7 @@ public class Testbed extends PApplet {
   }
 
   public static String getPathOf(TestAssetKey k){
-    return TEMP_ROOT_DIR+"/"+ TEST_DIRS.getString(k.s());
+    return TEMP_ROOT_DIR+"/"+ TEST_DIRS.getString(k.get());
   }
 
 

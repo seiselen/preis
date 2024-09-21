@@ -161,6 +161,21 @@ public class BBox {
     return qx >= _pos.x && qx <= _ept.x && qy >= _pos.y && qy <= _ept.y;
   }
 
+
+  /** 
+   * Returns <code>true</code> if the bounding box is <b>square</b> shaped; s.t.
+   * its width and height are equal <i>(i.r. not the beatnick definition... get
+   * a haircut, hippie!)</i>
+   */
+  public boolean isSquare(){
+    return dimX()==dimY();
+  }
+
+  /** Returns max dimension ᴀᴋᴀ length i.e. <code>max(width,height)</code>. */
+  public float length(){
+    return Math.max(dimX(),dimY());
+  }
+
   /** 
    * Returns {@link PVector} corresponding to input {@link PosOri} member. Note
    * that this method will return either a <b>NEW</b> vector xor a <b>COPY</b>
@@ -187,6 +202,7 @@ public class BBox {
   |> @TODO: Occasionally inspect usage and prune as appropriate.
   +---------------------------------------------------------------------------*/
   public PVector pos   (){return _pos.copy();}
+  public PVector dim   (){return _dim.copy();}
   public PVector mpt   (){return _mpt.copy();}
   public PVector ept   (){return _ept.copy();}
   public PVector min   (){return pos();}

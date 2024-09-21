@@ -40,7 +40,7 @@ public class UIManager {
   }
 
   public void setFont(AppFont f){
-    if(QueryUtils.nullAll(labelFont,glyphFont==null)){
+    if(QueryUtils.nullAll(labelFont,glyphFont)){
       Cons.err_act(Err.NULL_VALUE, Act.RETURN_NO_ACTION, "one ore more fonts");
       return;
     }

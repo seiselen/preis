@@ -1,10 +1,7 @@
 package PrEis.gui;
 import PrEis.utils.StringUtils;
 
-/** 
- * Enumeration of UIObject Types.
- * {@link #CB} {@link #FB} {@link #TB} {@link #LB} {@link #CO} {@link #DD} {@link #DI} 
- */
+/** Enumeration of UIObject Types. */
 public enum WidgetType {
   /** <b>ClickButton</b>   */ CB,
   /** <b>ConfirmButton</b> */ FB,
@@ -12,7 +9,8 @@ public enum WidgetType {
   /** <b>Label</b>         */ LB,
   /** <b>Container</b>     */ CO,
   /** <b>Dropdown</b>      */ DD,
-  /** <b>DropdownItem</b>  */ DI;
+  /** <b>DropdownItem</b>  */ DI,
+  /** <b>Image</b>         */ IM;
 
   public static String typeToName(WidgetType t){
     switch(t){
@@ -23,6 +21,7 @@ public enum WidgetType {
       case FB: return "Confirm Button";
       case LB: return "Label";
       case TB: return "Toggle Button";
+      case IM: return "Image";
       default: return "Unknown Type";
     }
   }

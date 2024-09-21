@@ -100,6 +100,18 @@ public class FormatUtils{
     return r;
   }
 
+  public static String[] primArrToStrArr(double[] a){
+    String[] r = new String[a.length];
+    for(int i=0; i<a.length; i++){r[i]=""+a[i];}
+    return r;
+  }
+
+  public static String[] primArrToStrArr(boolean[] a){
+    String[] r = new String[a.length];
+    for(int i=0; i<a.length; i++){r[i]=""+a[i];}
+    return r;
+  }
+
 
   @SuppressWarnings("unchecked")
   public static <T> T[] arr1FromObj(T obj){

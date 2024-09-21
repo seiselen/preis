@@ -10,7 +10,7 @@ import processing.core.PVector;
 public abstract class UIObject {
 
   /** PApplet of the Sketch/Applet. */
-  protected PApplet p;
+  protected PApplet app;
 
   /** Bounding Box (providing pos, dim, ept, mpt, and lerping thereof) */
   protected BBox bbox;
@@ -62,7 +62,7 @@ public abstract class UIObject {
 
 
   public UIObject(PApplet iPar, BBox iBox, WidgetType iTyp){
-    p         = iPar;
+    app         = iPar;
     objFont   = AppFont.TEXT;
     label     = "";
     type      = iTyp;
@@ -165,15 +165,15 @@ public abstract class UIObject {
 
   
   public boolean isMouseOver(){
-    return bbox.inBounds(p.mouseX, p.mouseY);
+    return bbox.inBounds(app.mouseX, app.mouseY);
   }
   
   public boolean isHoveredState(){
-    return isMouseOver() && !p.mousePressed;
+    return isMouseOver() && !app.mousePressed;
   }
    
   public boolean isClickedState(){
-    return isMouseOver() && p.mousePressed;
+    return isMouseOver() && app.mousePressed;
   }
 
   public boolean isSelectedState(){
@@ -282,8 +282,8 @@ public abstract class UIObject {
   }
   
   public void renderRect(){
-    if(style.border_radius>0){Pgfx.rect(p,bbox,style.border_radius);}
-    else{Pgfx.rect(p,bbox);}
+    if(style.border_radius>0){Pgfx.rect(app,bbox,style.border_radius);}
+    else{Pgfx.rect(app,bbox);}
   }
 
 
@@ -296,7 +296,7 @@ public abstract class UIObject {
   public void renderText(float x1, float y1){
     //if(style.text_wrap){p.text(label,x1,y1,style.text_wrap.wide(),style.text_wrap.tall());}
     //else{p.text(label,x1,y1);}
-    p.text(label,x1,y1);
+    app.text(label,x1,y1);
   }
 
   public void renderTextViaOri(){
@@ -311,11 +311,11 @@ public abstract class UIObject {
     }
   }
 
-  private void rTL(){p.textAlign(PApplet.LEFT, PApplet.TOP); renderText(bbox.minX()+style.txt_offset.x,bbox.minY()+style.txt_offset.y);}
-  private void rTR(){p.textAlign(PApplet.RIGHT, PApplet.TOP); renderText(bbox.maxX()-style.txt_offset.x,bbox.minY()+style.txt_offset.y);} 
-  private void rCC(){p.textAlign(PApplet.CENTER, PApplet.CENTER); renderText(bbox.midX()+style.txt_offset.x,bbox.midY()+style.txt_offset.y);}
-  private void rTC(){p.textAlign(PApplet.CENTER, PApplet.TOP); renderText(bbox.midX()+style.txt_offset.x,bbox.minY()+style.txt_offset.y);}
-  private void rCR(){p.textAlign(PApplet.RIGHT, PApplet.CENTER); renderText(bbox.minX()-style.txt_offset.x,bbox.midY()+style.txt_offset.y);}
-  private void rCL(){p.textAlign(PApplet.LEFT, PApplet.CENTER); renderText(bbox.minX()+style.txt_offset.x,bbox.midY()+style.txt_offset.y);}
+  private void rTL(){app.textAlign(PApplet.LEFT, PApplet.TOP); renderText(bbox.minX()+style.txt_offset.x,bbox.minY()+style.txt_offset.y);}
+  private void rTR(){app.textAlign(PApplet.RIGHT, PApplet.TOP); renderText(bbox.maxX()-style.txt_offset.x,bbox.minY()+style.txt_offset.y);} 
+  private void rCC(){app.textAlign(PApplet.CENTER, PApplet.CENTER); renderText(bbox.midX()+style.txt_offset.x,bbox.midY()+style.txt_offset.y);}
+  private void rTC(){app.textAlign(PApplet.CENTER, PApplet.TOP); renderText(bbox.midX()+style.txt_offset.x,bbox.minY()+style.txt_offset.y);}
+  private void rCR(){app.textAlign(PApplet.RIGHT, PApplet.CENTER); renderText(bbox.minX()-style.txt_offset.x,bbox.midY()+style.txt_offset.y);}
+  private void rCL(){app.textAlign(PApplet.LEFT, PApplet.CENTER); renderText(bbox.minX()+style.txt_offset.x,bbox.midY()+style.txt_offset.y);}
 
 } //> Ends Class UIObject

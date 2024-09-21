@@ -79,12 +79,12 @@ public class UILabel extends UIObject {
   
   public void render(){
     super.render();
-    p.textSize(style.txt_size);
-    p.strokeWeight(style.swgt);
-    p.fill(getFillCol());
-    p.stroke(getStrokeCol());
-    Pgfx.rect(p, bbox);
-    p.fill(getTxtFillCol());
+    app.textSize(style.txt_size);
+    app.strokeWeight(style.swgt);
+    app.fill(getFillCol());
+    app.stroke(getStrokeCol());
+    Pgfx.rect(app, bbox);
+    app.fill(getTxtFillCol());
     renderTextViaOri();
   }
   
