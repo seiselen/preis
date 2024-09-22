@@ -355,9 +355,10 @@ public abstract class UIObject {
     app.textAlign(PApplet.CENTER, PApplet.CENTER);
     app.text(title,xo,yo);
 
-    app.stroke(255);
-    app.noFill();
-    app.circle(app.mouseX, app.mouseY, 8);
+    //> Diagnostic (TBH: realized for demo screengrabs to place mouse cursor imgs at lol)
+    //app.stroke(255);
+    //app.noFill();
+    //app.circle(app.mouseX, app.mouseY, 8);
   }
 
 
