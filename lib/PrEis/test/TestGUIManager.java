@@ -145,13 +145,13 @@ public class TestGUIManager {
 
   private String glyphChar(String n){return ""+(char)glyphDict.get(n);}
 
-  private PVector vec(float x, float y){return new PVector(x, y);}
-
   private BBox box(float x, float y, float w, float t){return new BBox(x,y,w,t);}
 
-
   public void initGUI(){
-    test_Image_01(Do.RUN);
+    mousePosUpdate = new MousePosUpdate(app);
+
+    test_Tooltips_01(Do.RUN);
+    test_Image_01(Do.SKIP);
     test_misc_01(Do.SKIP);
     test_Container_01(Do.SKIP);
     test_Container_02(Do.SKIP);
@@ -160,6 +160,52 @@ public class TestGUIManager {
     /*=[ DON'T REMOVE THIS, NOR EVEN TOUCH IT ]===============================*/
     Cons.log("Function 'initGui' has completed.");
   }
+
+
+  private void test_Tooltips_01(Do d){
+    if(d==Do.SKIP){return;}
+
+    int xd = 256;
+    int yd = 64;
+    int xo = 64;
+    int yo = 64;
+    int xs = xd+32;
+    int ys = yd+128;
+
+
+    UIClick.create(uim, new BBox(16, yo, xd, yd), "Test Click Button", AppFont.TEXT, new ConslogAction("HELLO CONSOLE!"))
+    .setTitle("I am a UIClick!")
+    ;
+
+    UIClick.create(uim, new BBox(992, yo, xd, yd), "Test Click Button", AppFont.TEXT, new ConslogAction("HELLO CONSOLE!"))
+    .setTitle("I am a UIClick!")
+    ;
+
+    UIClick.create(uim, new BBox(640, 688, xd, yd), "Test Click Button", AppFont.TEXT, new ConslogAction("HELLO CONSOLE!"))
+    .setTitle("I am a UIClick!")
+    ;
+
+    UIClick.create(uim, new BBox(1024, 688, xd, yd), "Test Click Button", AppFont.TEXT, new ConslogAction("HELLO CONSOLE!"))
+    .setTitle("I am a UIClick!")
+    ;
+
+    UIToggle.create(uim, new BBox(xo+=xs, yo, xd, yd), "Toggle Example", AppFont.TEXT, new StubToggleAct())
+    .withOnOffLabels("Toggle [ON]", "Toggle [OFF]")
+    .setTitle("I am a UIToggle!")
+    ;
+
+    UILabel.create(uim, new BBox(xo+=xs, yo, xd, yd), null, AppFont.TEXT, LabelType.OP, mousePosUpdate)
+    .setTitle("I am a UILabel!")
+    ;
+
+    UIImage.create(uim, box(xo+=xs, ys, xd,yd), diagImg.get(TestAssetKey.DIMG_128X64))
+    .asΘ(ImageSpecial.STRETCH_TO_FIT).doDebugVizΘ()
+    .setTitle("I am a UIImage!")
+    ;
+
+
+  }
+
 
 
   private void test_Image_01(Do d){
@@ -277,7 +323,7 @@ public class TestGUIManager {
     if(d==Do.SKIP){return;}
 
     litebulbAction = new LitebulbAction(app, DataStructUtils.vec2(352, 192));
-    mousePosUpdate = new MousePosUpdate(app);
+    
     int xOff = 64;
     int yOff = 64;
 
@@ -295,7 +341,7 @@ public class TestGUIManager {
     UILabel.create(uim, new BBox(xOff, yOff+=96, 256, 64), null, AppFont.TEXT, LabelType.OP, mousePosUpdate);
 
     UIClick needsToBeVar = UIClick.create(uim, new BBox(xOff, yOff+=96, 256, 64), "I Am Enabled!", AppFont.TEXT, conslogAction)
-    .withDisabledState(true).withDLabel("I Am Disabled!").castTo(UIClick.class);
+    .setDisabledΘ(true).withDLabel("I Am Disabled!").castTo(UIClick.class);
 
     toggAbleAction = new ToggAbleAction(needsToBeVar);
     UIClick.create(uim, new BBox(xOff, yOff+=96, 320, 64), "(En/Dis)able Above Button", AppFont.TEXT, toggAbleAction);
@@ -593,6 +639,13 @@ class ConslogAction implements IActionCallback {
   private String message;
   public ConslogAction(String iMsg){message=(iMsg==null?"":iMsg);}
   public void action(){System.out.println(message);}
+}
+
+class StubToggleAct implements IToggleCallback {
+  private boolean state;
+  public StubToggleAct(){;}
+  public boolean getState() {return state;}
+  public void toggleState() {state = !state;}
 }
 
 class LitebulbAction implements IToggleCallback {

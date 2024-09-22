@@ -141,4 +141,18 @@ public class Pgfx {
     app.text(txt, pos.x, pos.y);
   }
 
+
+  public static PVector mousePtToVec(PApplet app){
+    return new PVector(app.mouseX, app.mouseY);
+  }
+
+  public static boolean mouseInCanvas(PApplet app){
+    return app.mouseX >= 0 && app.mouseX <= app.width && app.mouseY >= 0 && app.mouseY <= app.height;
+  }
+
+  /** @implNote Note: is WRT current text settings WRT `PApplet`. */
+  public static int textMaxHeight(PApplet app){
+    return Math.round(app.textAscent() + app.textDescent());
+  }
+
 }

@@ -9,11 +9,32 @@ import processing.core.PVector;
  */
 public abstract class UIObject {
 
+  /** UIObject Type of this UIObject. */
+  protected WidgetType type; 
+
   /** PApplet of the Sketch/Applet. */
   protected PApplet app;
 
+  /** 
+   * @implNote Used for setting fonts. Not a good design pattern but it's either
+   * this else injecting the {@link PApplet} into every {@link UIObject}. Plus:
+   * instances already <i><b>'know'</b></i> {@link UIManager} via the method
+   * {@link #bindManager} <i>(yeah, I know, also not a good design pattern)</i>.
+   */
+  protected UIManager manager;
+
   /** Bounding Box (providing pos, dim, ept, mpt, and lerping thereof) */
   protected BBox bbox;
+
+  /** 
+   * Style defining this UIObject.
+   * @implNote currently set to <code>public</code> to make `EiSpriteViewer`
+   * integration a bit easier until I figure out how to better handle setters.
+   */
+  public UIStyle style;
+
+  /** Current font used by this UIObject. */
+  protected AppFont objFont;
 
   /** Is the mouse currently over this UIObject? */
   protected boolean mouseOver;
@@ -36,30 +57,9 @@ public abstract class UIObject {
   /** Tooltip text of this UIObject (A/A). */
   protected String title;
 
-  /** UIObject Type of this UIObject. */
-  protected WidgetType type; 
 
-  /** 
-   * Style defining this UIObject.
-   * @implNote currently set to <code>public</code> to make `EiSpriteViewer`
-   * integration a bit easier until I figure out how to better handle setters.
-   */
-  public UIStyle style;
-
-  /** Current font used by this UIObject. */
-  protected AppFont objFont;
-
-  /** 
-   * @implNote Used for setting fonts. Not a good design pattern but it's either
-   * this else injecting the {@link PApplet} into every {@link UIObject}. Plus:
-   * instances already <i><b>'know'</b></i> {@link UIManager} via the method
-   * {@link #bindManager} <i>(yeah, I know, also not a good design pattern)</i>.
-   */
-  protected UIManager manager;
-
-
-  protected IGUICallBack genericCallBack;
-
+  /*-[ CONSTRUCTORS ]-----------------------------------------------------------
+  +===========================================================================*/
 
   public UIObject(PApplet iPar, BBox iBox, WidgetType iTyp){
     app         = iPar;
@@ -78,55 +78,117 @@ public abstract class UIObject {
   }
 
 
+  /*-[ STATE GETTERS (INCL. QUERIERS & FORMATTERS ]-----------------------------
+  +===========================================================================*/
+
+  public UIManager getManager(){return manager;}
+
+  public boolean isMouseOver(){return bbox.inBounds(app.mouseX, app.mouseY);}
+  
+  public boolean isHoveredState(){return isMouseOver() && !app.mousePressed;}
+   
+  public boolean isClickedState(){return isMouseOver() && app.mousePressed;}
+
+  public boolean isSelectedState(){return selected;}
+  
+  public boolean isDisabledState(){return disabled;}
+
+  public <T> T castTo(Class<T> type){try {return type.cast(this);} catch(Exception e){return null;}}
+
+
+  /*-[ STATE SETTERS ]----------------------------------------------------------
+  +===========================================================================*/
+
+  public void toggleSelected(){
+    selected = !selected;
+  }
+
+  public void setSelected(boolean v){
+    selected = v;
+  }
+
+  public UIObject setSelectedΘ(boolean v){
+    setSelected(v);
+    return this;
+  }
+  
+  public void toggleDisabled(){
+    disabled = !disabled;
+  }
+
+  public void setDisabled(boolean v){
+    disabled = v;
+  }
+
+  public UIObject setDisabledΘ(boolean iState){
+    setDisabled(iState);
+    return this;
+  }
 
   public void setTranslate(PVector iPos, PVector iDim){
-    bbox = new BBox(iPos, iDim);
-  }
+    bbox = new BBox(iPos, iDim);}
 
   public void setTranslate(BBox iBox){
     bbox = iBox;
   }
 
-
-  public UIManager getManager(){return manager;}
-
-  /** This is the QAD version for UIObjects created as children of UIContainers. */
   public void setManager(UIManager iMgr){
-    manager = iMgr;    
-  }
-
-  /** This is the QAD version for UIObjects created as children of UIContainers. */
-  public UIObject withManager(UIManager iMgr){
-    manager = iMgr; return this;
-  }
-
-  public UIObject bindManager(UIManager iMgr){
     manager = iMgr;
-    iMgr.bindUiObject(this);
+  }
+
+  public UIObject setManagerΘ(UIManager iMgr){
+    setManager(iMgr);
     return this;
   }
 
-
-
+  public UIObject bindManager(UIManager iMgr){
+    setManager(iMgr);
+    iMgr.bindUiObject(this);
+    return this;
+  }
 
   public void addTranslate(PVector trs){
     bbox.translatePos(trs);
   }
 
+  public UIObject withBBox(BBox iBox){
+    setTranslate(iBox);
+    return this;
+  }
 
+  public UIObject withVectors(PVector iPos, PVector iDim){
+    setTranslate(iPos, iDim);
+    return this;
+  }
 
-
-
-
-
-  public UIObject withBBox(BBox iBox){setTranslate(iBox); return this;}
-
-  public UIObject withVectors(PVector iPos, PVector iDim){setTranslate(iPos, iDim); return this;}
+  public UIObject withGlyph(String iGlyph){
+    setLabel(iGlyph);
+    setFont(AppFont.GLYPH);
+    return this;
+  }
 
   public UIObject withLabel(String iLabel){
     if(iLabel != null){setLabel(iLabel);}
     setFont(AppFont.TEXT);
     return this;
+  }
+
+  public void setLabel(String iLabel){
+    label = iLabel;
+  }
+
+  public void setDLabel(String iLabel){
+    label_disabled = iLabel;
+  }
+  
+  /** This assumes {@link #withLabel(String)} was or will be called, as to call `setFont` within. */
+  public UIObject withDLabel(String iLabel){
+    setDLabel(iLabel);
+    return this;
+  }
+
+  public void setValue(String iValue){
+    value = iValue;
   }
   
   public UIObject withValue(String iValue){
@@ -135,7 +197,10 @@ public abstract class UIObject {
     return this;
   }
 
-
+  public UIObject setTitle(String iTitle){
+    title = iTitle;
+    return this;
+  }
 
   public UIObject withValueAndLabel(String v){
     return withValue(v).withLabel(v);
@@ -145,81 +210,16 @@ public abstract class UIObject {
     return withValue(v).withLabel(l);
   }
 
-
-
-
-  /** This assumes {@link #withLabel(String)} was or will be called, as to call `setFont` within. */
-  public UIObject withDLabel(String iLabel){setDLabel(iLabel); return this;}
-
-  public UIObject withGlyph(String iGlyph){
-    setLabel(iGlyph);
-    setFont(AppFont.GLYPH);
-    return this;
-  }
-
-
-
-
-  public UIObject withDisabledState(boolean iState){setDisabled(iState); return this;}
-
-
-  
-  public boolean isMouseOver(){
-    return bbox.inBounds(app.mouseX, app.mouseY);
-  }
-  
-  public boolean isHoveredState(){
-    return isMouseOver() && !app.mousePressed;
-  }
-   
-  public boolean isClickedState(){
-    return isMouseOver() && app.mousePressed;
-  }
-
-  public boolean isSelectedState(){
-    return selected;
-  }
-  
-  public boolean isDisabledState(){
-    return disabled;
-  }
-  
-
-  public void setSelected(boolean v){selected = v;}
-  public void toggleSelected(){selected = !selected;}
-
-  public void setDisabled(boolean v){disabled = v;}
-  public void toggleDisabled(){disabled = !disabled;}
-
-  public void setLabel(String iLabel){
-    label = iLabel;
-  }
-
-  public void setDLabel(String iLabel){
-    label_disabled = iLabel;
-  }
-
-
-  public void setValue(String iValue){
-    value = iValue;
-  }
-
-
-  public UIObject setTitle(String iTitle){
-    title = iTitle;
-    return this;
-  }
-
   public void setFont(AppFont iFont){
     objFont = iFont;
     if (objFont!=null && objFont==AppFont.GLYPH){setPredefStyle("GLYPH");}
   } 
   
+  /** @deprecated who currently uses this? */
   public UIObject setPredefStyle(String s){
     style.setStyleProp("txt_size", Integer.class, 32);
     return this;
   }
-
 
   /** 
    * Calls {@link UIStyle#setStyleProp} on {@link #style}.
@@ -229,36 +229,15 @@ public abstract class UIObject {
     style.setStyleProp(propName, propType, propValue);
     return this;
   }
-  
-
-  /** @deprecated */
-  public UIClick castToClick()  {return (UIClick)this;}
-  /** @deprecated */  
-  public UIToggle castToToggle(){return (UIToggle)this;}
-  /** @deprecated */ 
-  public UILabel castToLabel()  {return (UILabel)this;}
-  /** @deprecated */
-  public UIContainer castToContainer()  {return (UIContainer)this;}  
-
-  /** WICKED and NAUGHTY! LOL */
-  public <T> T castTo(Class<T> type){
-    try {return type.cast(this);}
-    catch(ClassCastException e){return null;}    
-  }
-  
-  /** Stub for next hour 'till I realize custom callback subtype. */
-  public void bindCallback(IGUICallBack iCallBack){
-    genericCallBack = iCallBack;
-  }
 
 
-
-
+  /*-[ GAME LOOP AND I/O (STUB) HANDLERS ]--------------------------------------
+  +===========================================================================*/
 
   /** Abstract assigns `mouseOver`. See child types for resp. addl. handling. */  
   public void update(){
     mouseOver = isMouseOver();
-  }  
+  }
   
   /** Abstract for `mousePressed` events. See child types for resp. handling. */
   public void onMousePressed(){
@@ -275,25 +254,31 @@ public abstract class UIObject {
     /*> ABSTRACT STUB <*/
   }
 
+
+  /*-[ RENDER CALLS ]-----------------------------------------------------------
+  +===========================================================================*/
+
   /** Abstract `render` used for common pre-pro; as children define how they render. */
   public void render(){
-    //> not the prettiest realization but QAD works for now. unsure about who/how WRT responsibility
-    manager.setFont(objFont);
+    /*> ABSTRACT STUB <*/
+  }
+
+  public void lateRender(){
+    if(mouseOver && title!=null){renderTooltip();}
   }
   
   public void renderRect(){
+    app.rectMode(PApplet.CORNER);
     if(style.border_radius>0){Pgfx.rect(app,bbox,style.border_radius);}
     else{Pgfx.rect(app,bbox);}
   }
 
-
-
-  
   /** 
    * @TODO Realize this at some point? Perhaps as specd-else-default normalized
    * percent of widget width per its `BBox`.
    */
   public void renderText(float x1, float y1){
+    manager.setFont(objFont);
     //if(style.text_wrap){p.text(label,x1,y1,style.text_wrap.wide(),style.text_wrap.tall());}
     //else{p.text(label,x1,y1);}
     app.text(label,x1,y1);
@@ -301,21 +286,79 @@ public abstract class UIObject {
 
   public void renderTextViaOri(){
     switch(style.txt_anchor){
-      case TL:rTL();return;
-      case TR:rTR();return;
-      case TOP:rTC();return;
-      case LFT:rCL();return;
-      case RGT:rCR();return;
-      case CTR:
-      default: rCC(); return;
+      case TL:  rTL(); return;
+      case TR:  rTR(); return;
+      case TOP: rTC(); return;
+      case LFT: rCL(); return;
+      case RGT: rCR(); return;
+      case CTR: default: rCC(); return;
     }
   }
 
-  private void rTL(){app.textAlign(PApplet.LEFT, PApplet.TOP); renderText(bbox.minX()+style.txt_offset.x,bbox.minY()+style.txt_offset.y);}
-  private void rTR(){app.textAlign(PApplet.RIGHT, PApplet.TOP); renderText(bbox.maxX()-style.txt_offset.x,bbox.minY()+style.txt_offset.y);} 
-  private void rCC(){app.textAlign(PApplet.CENTER, PApplet.CENTER); renderText(bbox.midX()+style.txt_offset.x,bbox.midY()+style.txt_offset.y);}
-  private void rTC(){app.textAlign(PApplet.CENTER, PApplet.TOP); renderText(bbox.midX()+style.txt_offset.x,bbox.minY()+style.txt_offset.y);}
-  private void rCR(){app.textAlign(PApplet.RIGHT, PApplet.CENTER); renderText(bbox.minX()-style.txt_offset.x,bbox.midY()+style.txt_offset.y);}
-  private void rCL(){app.textAlign(PApplet.LEFT, PApplet.CENTER); renderText(bbox.minX()+style.txt_offset.x,bbox.midY()+style.txt_offset.y);}
+  private void rTL(){
+    app.textAlign(PApplet.LEFT, PApplet.TOP);
+    renderText(bbox.minX()+style.txt_offset.x,bbox.minY()+style.txt_offset.y);
+  }
+  
+  private void rTR(){
+    app.textAlign(PApplet.RIGHT, PApplet.TOP);
+    renderText(bbox.maxX()-style.txt_offset.x,bbox.minY()+style.txt_offset.y);
+  }
+  
+  private void rCC(){
+    app.textAlign(PApplet.CENTER, PApplet.CENTER);
+    renderText(bbox.midX()+style.txt_offset.x,bbox.midY()+style.txt_offset.y);
+  }
+  
+  private void rTC(){
+    app.textAlign(PApplet.CENTER, PApplet.TOP);
+    renderText(bbox.midX()+style.txt_offset.x,bbox.minY()+style.txt_offset.y);
+  }
+  
+  private void rCR(){
+    app.textAlign(PApplet.RIGHT, PApplet.CENTER);
+    renderText(bbox.minX()-style.txt_offset.x,bbox.midY()+style.txt_offset.y);
+  }
+  
+  private void rCL(){
+    app.textAlign(PApplet.LEFT, PApplet.CENTER);
+    renderText(bbox.minX()+style.txt_offset.x,bbox.midY()+style.txt_offset.y);
+  }
 
-} //> Ends Class UIObject
+  public void renderTooltip(){
+    if(!mouseOver||title==null){return;}
+
+    //> ORDER COUNTS! `setFont` CALL WIPES FONT STATE!
+    manager.setFont(AppFont.TEXT);
+    app.textSize(style.txt_size_ttip);
+
+    int off = style.txt_size_ttip/2;
+
+    //> this is the approx size of the text string, plus a small offset
+    PVector ttDim = new PVector(app.textWidth(title)+off,Pgfx.textMaxHeight(app)+off);
+
+    float x1 = (app.mouseX+ttDim.x+style.txt_size_ttip>app.width) ? app.mouseX-ttDim.x : app.mouseX;
+    float y1 = (app.mouseY+ttDim.y+style.txt_size_ttip>app.height) ? app.mouseX-ttDim.y : app.mouseY;
+    float xo = app.mouseX;
+    float yo = app.mouseY;
+
+    xo = (x1==app.mouseX) ? (xo+(ttDim.x/2)+style.txt_size_ttip) : (xo-(ttDim.x/2)-off);
+    yo = (y1==app.mouseY) ? (yo+(ttDim.y/2)+style.txt_size_ttip) : (yo-(ttDim.y/2)-off);
+
+    app.stroke(app.color(0));
+    app.strokeWeight(1);
+    app.fill(app.color(255));
+    app.rectMode(PApplet.CENTER);
+    app.rect(xo,yo,ttDim.x,ttDim.y,4);
+    app.noStroke();
+    app.fill(0);
+    app.textAlign(PApplet.CENTER, PApplet.CENTER);
+    app.text(title,xo,yo);
+
+    app.stroke(255);
+    app.noFill();
+    app.circle(app.mouseX, app.mouseY, 8);
+  }
+
+
+}

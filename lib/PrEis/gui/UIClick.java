@@ -70,7 +70,6 @@ public class UIClick extends UIObject {
     renderRect();
     app.fill(getStrokeCol());
     renderTextViaOri();
-    if(mouseOver&&title!=null){/* STUB FOR FUTURE TOOLTIP HANDLING */}
   }
   
   private int getFillCol(){

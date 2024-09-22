@@ -52,6 +52,7 @@ class DefaultStyle {
     UIStyle s = new UIStyle();
     s.swgt          = 2;
     s.txt_size      = 24;
+    s.txt_size_ttip = 16;
     s.txt_anchor    = PosOri.CTR;
     s.txt_offset    = DataStructUtils.createVector(0,0);
     s.fill_txt      = p.color(255);

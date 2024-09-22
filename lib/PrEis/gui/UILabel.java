@@ -2,7 +2,6 @@ package PrEis.gui;
 import PrEis.utils.BBox;
 import PrEis.utils.Cons;
 import PrEis.utils.Cons.Err;
-import PrEis.utils.Pgfx;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -74,6 +73,7 @@ public class UILabel extends UIObject {
 
 
   public void update(){
+    super.update();
     if(updateCallback!=null){label = updateCallback.getTxt();}
   }
   
@@ -83,7 +83,7 @@ public class UILabel extends UIObject {
     app.strokeWeight(style.swgt);
     app.fill(getFillCol());
     app.stroke(getStrokeCol());
-    Pgfx.rect(app, bbox);
+    renderRect();
     app.fill(getTxtFillCol());
     renderTextViaOri();
   }

@@ -74,6 +74,7 @@ public class UIManager {
   /** Calls `render` ∀ objects bound hereto. */
   public void render(){
     for (UIObject obj : objects){obj.render();}
+    for (UIObject obj : objects){obj.lateRender();}
   }
 
 

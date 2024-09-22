@@ -39,6 +39,8 @@ public class UIStyle {
   public int     fill_txt; //> used for labels, especially transparent
   public float   txt_off_pct;
 
+  public int txt_size_ttip;
+
   //> these are buffers; unused after constructor returns
   JSONObject stylesheet;
   JSONObject curSubsheet;

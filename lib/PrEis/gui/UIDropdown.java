@@ -73,7 +73,7 @@ public class UIDropdown extends UIObject {
   public UIDropdown addOption(String val, String lbl){
     options.add(
       UIDropdownItem.create(this, app, curBaseOff.copy(), ddownItemDim.copy(), val, (lbl==null?val:lbl))
-      .withManager(manager).castTo(UIDropdownItem.class)
+      .setManagerΘ(manager).castTo(UIDropdownItem.class)
     );
     recomputeOffsets();
     return this;

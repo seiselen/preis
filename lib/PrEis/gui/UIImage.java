@@ -1,7 +1,5 @@
 package PrEis.gui;
 import PrEis.utils.BBox;
-import PrEis.utils.Cons;
-import PrEis.utils.StringUtils;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
