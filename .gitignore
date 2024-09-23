@@ -1,11 +1,11 @@
 .vscode
 
 #-[ UNIQUE To Local Enviros, Analogous To CRA `env.local` file ]---------------#
-/assets/testDirs.json
-/build/PrEis.jar
+assets/testDirs.json
+build/PrEis.jar
 
 #-[ File Writer (& Otherwise) Test Output Files ]------------------------------#
-/tests/outputs
+tests/outputs
 
 #-[ All Windows Batch Scripts ]------------------------------------------------#
 *.bat
