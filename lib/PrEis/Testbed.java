@@ -2,6 +2,7 @@ package PrEis;
 import PrEis.test.TestAssetKey;
 import PrEis.test.TestGUIManager;
 import PrEis.test.TestGridManager;
+import PrEis.test.TestHTMLParsing;
 import PrEis.test.TestPgfxUtils;
 import PrEis.test.TestUtilsManager;
 import PrEis.utils.Cons;
@@ -12,20 +13,22 @@ import processing.data.JSONObject;
 
 public class Testbed extends PApplet {
 
-  public enum TestMode {UTILS, GRIDMGR, PGFXUTL, GUIOBJS};
-  public static TestMode curTestMode = TestMode.GUIOBJS;
+  public enum TestMode {UTILS, GRIDMGR, PGFXUTL, GUIOBJS, HTMLPARSE};
+  public static TestMode curTestMode = TestMode.UTILS;
 
-  private static final String TEMP_ROOT_DIR = "C:/Users/Phoenix/Documents/projectsWorkspace/PrEis";
+  private String APP_ROOT_DIR = "";
   private static final String TEST_DIRS_SUBPATH = "assets/testDirs.json";
 
   public static TestGridManager  testGridMgr;
   public static TestUtilsManager   testUtils;
   public static TestGUIManager    testUIObjs;
+  public static TestHTMLParsing  testHTMLPrs;
 
   public static JSONObject TEST_DIRS;
 
   public static void main(String[] args) {
-    PApplet.main("PrEis.Testbed"); 
+    PApplet.main("PrEis.Testbed");
+    System.out.println("\n \n"); //> corrects debug launch blurb lack of newline
   }
 
   public void settings(){
@@ -35,23 +38,27 @@ public class Testbed extends PApplet {
       default: return;
     }
   }
-
+  
   public void setup(){
+    APP_ROOT_DIR = sketchPath();
     loadTestDirsJSON();
 
     switch(curTestMode){
       case UTILS:
         testUtils = new TestUtilsManager(this).testUtils();
-        exit();
-        return;
+        noLoop(); exit(); return;
       case GRIDMGR: 
         testGridMgr = new TestGridManager(this);
         return;
       case GUIOBJS:
         testUIObjs = new TestGUIManager(this).Dark();
         return;
+      case HTMLPARSE:
+        testHTMLPrs = new TestHTMLParsing(this);
+        testHTMLPrs.test1();
+        noLoop(); exit(); return;
       default: 
-      return;
+        return;
     }
   }
 
@@ -73,6 +80,10 @@ public class Testbed extends PApplet {
   }
   
   public void keyPressed(){
+    if(key=='q'||key=='Q'||keyCode==PApplet.ESC){
+      exit(); return;
+    }
+
     switch(curTestMode){
       case GRIDMGR: testGridMgr.onKeyPressed(); return;
       case GUIOBJS: testUIObjs.onKeyPressed(); return;
@@ -100,15 +111,16 @@ public class Testbed extends PApplet {
     render();
   }
 
-  public static String getPathOf(TestAssetKey k){
-    return TEMP_ROOT_DIR+"/"+ TEST_DIRS.getString(k.get());
+  public String getPathOf(TestAssetKey k){
+    return APP_ROOT_DIR+"/"+ TEST_DIRS.getString(k.get());
   }
 
-
+  public String getRootDir(){
+    return APP_ROOT_DIR;
+  }
 
   private void loadTestDirsJSON(){
-    String testDirsFilePath = TEMP_ROOT_DIR+"/"+TEST_DIRS_SUBPATH;
-    System.out.println("Fullpath Of 'testDirs' : ("+testDirsFilePath+")");
+    String testDirsFilePath = APP_ROOT_DIR+"/"+TEST_DIRS_SUBPATH;
     try {
       TEST_DIRS = loadJSONObject(testDirsFilePath);
     }

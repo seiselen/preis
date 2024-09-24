@@ -82,9 +82,9 @@ public class TestGUIManager {
 
   private void loadFonts(){
     try {
-      textFont  = app.loadFont(Testbed.getPathOf(TestAssetKey.TEXT_FONT));
-      glyphFont = app.loadFont(Testbed.getPathOf(TestAssetKey.GLYPH_FONT));
-      glyphCodes = app.loadJSONObject(Testbed.getPathOf(TestAssetKey.GLYPH_CODES));    
+      textFont  = app.loadFont(app.getPathOf(TestAssetKey.TEXT_FONT));
+      glyphFont = app.loadFont(app.getPathOf(TestAssetKey.GLYPH_FONT));
+      glyphCodes = app.loadJSONObject(app.getPathOf(TestAssetKey.GLYPH_CODES));    
     } catch (Exception e) {
       System.err.println("Issue fetching one or more Font assets. Check that filepaths are correct.");
       e.printStackTrace();
@@ -102,10 +102,10 @@ public class TestGUIManager {
 
   private void loadImages(){
     try{
-      bgImgLite  = app.loadImage(Testbed.getPathOf(TestAssetKey.GUI_BG_IMG_LITE));
-      bgImgDark  = app.loadImage(Testbed.getPathOf(TestAssetKey.GUI_BG_IMG_DARK));
+      bgImgLite  = app.loadImage(app.getPathOf(TestAssetKey.GUI_BG_IMG_LITE));
+      bgImgDark  = app.loadImage(app.getPathOf(TestAssetKey.GUI_BG_IMG_DARK));
 
-      String diagImgPath = Testbed.getPathOf(TestAssetKey.DIAG_IMG_PFIX);
+      String diagImgPath = app.getPathOf(TestAssetKey.DIAG_IMG_PFIX);
 
       loadDiagImg(TestAssetKey.DIMG_32X32   , diagImgPath , TestAssetKey.DIMG_32X32  );
       loadDiagImg(TestAssetKey.DIMG_32X64   , diagImgPath , TestAssetKey.DIMG_32X64  );
@@ -451,7 +451,6 @@ public class TestGUIManager {
   public void update(){uim.update();}
 
   public void onKeyPressed(){
-    if(app.key=='q'||app.key=='Q'||app.keyCode==PApplet.ESC){app.exit(); return;}
     uim.onKeyPressed();
   }
   

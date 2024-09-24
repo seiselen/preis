@@ -4,6 +4,9 @@
 assets/testDirs.json
 build/PrEis.jar
 
+#-[ Ignoring external test inputs for now ]------------------------------------#
+tests/inputs
+
 #-[ File Writer (& Otherwise) Test Output Files ]------------------------------#
 tests/outputs
 

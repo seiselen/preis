@@ -71,7 +71,7 @@ public class StringUtils {
   public static String wrapParens(String str){return wrapWith('(', str);}
 
   public static char lastCharOf(String str){
-    return (str==null) ? '\0' : str.charAt(str.length()-1);
+    return (str==null||str.isEmpty()) ? '\0' : str.charAt(str.length()-1);
   }
 
   public static String capFirstChar(String str) {
@@ -90,7 +90,7 @@ public class StringUtils {
    * </ol>
    */
   public static String valToSSVCapdWords(String val){
-    if(val==null){return null;}
+    if(val==null||val.isEmpty()){return null;}
 
     if(val.charAt(0)=='_' || lastCharOf(val)=='_'){
       return capFirstChar(val.replaceAll("[_]", ""));

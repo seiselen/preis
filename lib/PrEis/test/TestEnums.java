@@ -7,26 +7,24 @@ import PrEis.utils.ExtType;
  * have a good reason not to).
  */
 public class TestEnums {
-  private static final String P = "PASS";
-  private static final String F = "FAIL";
 
-  public static void runTests(){
+  public static void runTests(){ 
+    System.out.println("<=[ Testing Enum: 'ExtType' ]==================>");
     test_ExtType();
   }
 
   public static void test_ExtType(){
-    TestFunc.strArrToConsole(new String[]{
-      (ExtType.DEH.val().equals(".deh")?P:F),
-      (ExtType.JSON.val().equals(".json")?P:F),
-      (ExtType.MP3.val().equals(".mp3")?P:F),
-      (ExtType.OGG.val().equals(".ogg")?P:F),
-      (ExtType.PK3.val().equals(".pk3")?P:F),
-      (ExtType.PNG.val().equals(".png")?P:F),
-      (ExtType.TXT.val().equals(".txt")?P:F),
-      (ExtType.WAD.val().equals(".wad")?P:F),
-      (ExtType.WAV.val().equals(".wav")?P:F),
-      (ExtType.ZIP.val().equals(".zip")?P:F),      
+    TestFunc.testResultsToConsole(new boolean[]{
+      TestFunc.doEval(ExtType.DEH.val().equals(".deh"),true),
+      TestFunc.doEval(ExtType.JSON.val().equals(".json"),true),
+      TestFunc.doEval(ExtType.MP3.val().equals(".mp3"),true),
+      TestFunc.doEval(ExtType.OGG.val().equals(".ogg"),true),
+      TestFunc.doEval(ExtType.PK3.val().equals(".pk3"),true),
+      TestFunc.doEval(ExtType.PNG.val().equals(".png"),true),
+      TestFunc.doEval(ExtType.TXT.val().equals(".txt"),true),
+      TestFunc.doEval(ExtType.WAD.val().equals(".wad"),true),
+      TestFunc.doEval(ExtType.WAV.val().equals(".wav"),true),
+      TestFunc.doEval(ExtType.ZIP.val().equals(".zip"),true)
     });
-
   }
 }
