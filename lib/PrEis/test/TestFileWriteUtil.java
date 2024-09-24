@@ -8,7 +8,8 @@ public class TestFileWriteUtil {
 
 
   public static void runTests(Testbed p){
-    String pfix = p.sketchPath()+"/"+Testbed.TEST_DIRS.getString(TestAssetKey.TEST_OUT_DIR.get());
+    //> WARNING: '/' SUFFIX! (not using `pathConcat` as policy is not to use utils in their test code)
+    String pfix = p.sketchPath()+"/"+Testbed.TEST_DIRS.getString(TestAssetKey.TEST_OUT_DIR.get())+"/";
 
     FileWriteUtil.writeOneCall(p, pfix+"oneWrite_lg.txt", x_lg);
     FileWriteUtil.writeOneCall(p, pfix+"oneWrite_sm_asArray.txt", x_sm);
