@@ -3,7 +3,6 @@ package PrEis.test;
 import java.util.HashMap;
 import java.util.Set;
 
-import PrEis.Testbed;
 import PrEis.gui.AppFont;
 import PrEis.gui.ConfirmState;
 import PrEis.gui.IActionCallback;
@@ -76,6 +75,7 @@ public class TestGUIManager {
     loadImages();
     uim.injectFonts(textFont, glyphFont);
     initCustomGlyphs();
+    initExternTestInputs();
     initGUI();
     initMiscGFX();
   }
@@ -136,6 +136,33 @@ public class TestGUIManager {
     glyphDict = new IntDict();
     String[] keys = DataStructUtils.keyArrayOfJSONObj(glyphCodes);
     for (String k : keys){glyphDict.add(k,glyphCodes.getInt(k));}
+  }
+
+  public void initExternTestInputs(){
+    prepDropdownExData();
+  }
+
+
+  /**
+   * @todo <b>WORK IN PROGRESS</b> (a/o <code>09/24</code>)
+   */
+  public void prepDropdownExData(){
+    //> WARNING: '/' SUFFIX! (not using `pathConcat` as policy is not to use utils in their test code)
+    String fn = app.sketchPath().replace('\\', '/') +"/"+Testbed.TEST_DIRS.getString("FN_DDOWN_EX_01");
+    
+    JSONObject obj = app.loadJSONObject(fn);
+
+    System.out.println(obj);
+
+    /*
+    ruin_keys
+    region_keys
+    region_to_ruin
+     */
+
+
+
+
   }
 
 
@@ -527,6 +554,8 @@ class ExDDownAction implements ISelectAction {
 
   public String[][] val_lbl_map;
   public HashMap<String, String[]> loc_val_map;
+
+
   
   /** @todo use then CRUD a <code>json</code> file you fucking degenerate! :-) */
   public ExDDownAction(){

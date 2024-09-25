@@ -13,14 +13,14 @@ public class TestDataStructUtils {
   }
 
   public static void test_PVector_factories(){
-    TestFunc.testResultsToConsole(new boolean[]{
-      TestFunc.doEval(DataStructUtils.createVector().equals(new PVector(0, 0, 0)), true),
-      TestFunc.doEval(DataStructUtils.createVector(3, 4).equals(new PVector(3, 4)), true),
-      TestFunc.doEval(DataStructUtils.createVector(3, 4, 5).equals(new PVector(3, 4, 5)), true),
-      TestFunc.doEval(DataStructUtils.createVector(1.2f, 2.3f).equals(new PVector(1.2f, 2.3f)), true),
-      TestFunc.doEval(DataStructUtils.createVector(3.4f, 4.5f, 5.6f).equals(new PVector(3.4f, 4.5f, 5.6f)), true),
-      TestFunc.doEval(DataStructUtils.createVector(1, 2, 3, 4, 5, 6).equals(new PVector(1, 2, 3)), true),
-      TestFunc.doEval(DataStructUtils.createVector(1.2f, 2.3f, 3.4f, 4.5f, 5.6f).equals(new PVector(1.2f, 2.3f, 3.4f)), true),
+    PrEisTestFunc.testResultsToConsole(new boolean[]{
+      PrEisTestFunc.doEval(DataStructUtils.createVector().equals(new PVector(0, 0, 0)), true),
+      PrEisTestFunc.doEval(DataStructUtils.createVector(3, 4).equals(new PVector(3, 4)), true),
+      PrEisTestFunc.doEval(DataStructUtils.createVector(3, 4, 5).equals(new PVector(3, 4, 5)), true),
+      PrEisTestFunc.doEval(DataStructUtils.createVector(1.2f, 2.3f).equals(new PVector(1.2f, 2.3f)), true),
+      PrEisTestFunc.doEval(DataStructUtils.createVector(3.4f, 4.5f, 5.6f).equals(new PVector(3.4f, 4.5f, 5.6f)), true),
+      PrEisTestFunc.doEval(DataStructUtils.createVector(1, 2, 3, 4, 5, 6).equals(new PVector(1, 2, 3)), true),
+      PrEisTestFunc.doEval(DataStructUtils.createVector(1.2f, 2.3f, 3.4f, 4.5f, 5.6f).equals(new PVector(1.2f, 2.3f, 3.4f)), true),
     });
   }
 }

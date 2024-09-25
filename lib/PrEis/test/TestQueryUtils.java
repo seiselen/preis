@@ -10,12 +10,12 @@ public class TestQueryUtils {
   }
 
   public static void test_ArrayNullOrEmpty(){
-    TestFunc.testResultsToConsole(new boolean[]{
-      TestFunc.doEval(QueryUtils.arrayNullOrEmpty(null),true),
-      TestFunc.doEval(QueryUtils.arrayNullOrEmpty(new String[]{}),true),
-      TestFunc.doEval(QueryUtils.arrayNullOrEmpty(new PVector[]{}),true),
-      TestFunc.doEval(QueryUtils.arrayNullOrEmpty(new String[]{"a","b"}),false),
-      TestFunc.doEval(QueryUtils.arrayNullOrEmpty(new Integer[]{1,2,3}),false)
+    PrEisTestFunc.testResultsToConsole(new boolean[]{
+      PrEisTestFunc.doEval(QueryUtils.arrayNullOrEmpty(null),true),
+      PrEisTestFunc.doEval(QueryUtils.arrayNullOrEmpty(new String[]{}),true),
+      PrEisTestFunc.doEval(QueryUtils.arrayNullOrEmpty(new PVector[]{}),true),
+      PrEisTestFunc.doEval(QueryUtils.arrayNullOrEmpty(new String[]{"a","b"}),false),
+      PrEisTestFunc.doEval(QueryUtils.arrayNullOrEmpty(new Integer[]{1,2,3}),false)
     });
   }
 }

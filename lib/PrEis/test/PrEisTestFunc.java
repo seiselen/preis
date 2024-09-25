@@ -4,7 +4,7 @@ package PrEis.test;
 /**
  * Test Functions.
  */
-public class TestFunc {
+public class PrEisTestFunc {
 
   private static final String STR_HASH_LINE = "################################";
   private static final String STR_DASH_LINE = "--------------------------------";
@@ -37,6 +37,7 @@ public class TestFunc {
     return result;
   }
 
+  
   /**
    * Evaluates i.e. compares function output with expected input.
    * @param out function output 
@@ -48,6 +49,7 @@ public class TestFunc {
     else{System.out.println(STR_TEST_FAIL); compareOutValExpVal(out,exp);}
     return result;
   }
+
 
   /** 
    * Special version of {@link #doEval} for tests in which <code>null</code> is
@@ -62,8 +64,6 @@ public class TestFunc {
   }
 
 
-
-
   /**
    * Evaluates i.e. compares function output with expected input.
    * @param out function output 
@@ -75,8 +75,6 @@ public class TestFunc {
     else{System.out.println(STR_TEST_FAIL); compareOutValExpVal(out,exp);}
     return result;
   }
-
-
 
 
   /**
@@ -93,6 +91,7 @@ public class TestFunc {
     return doesPass;
   }
 
+
   /**
    * Evaluates i.e. compares function output with expected input.
    * @param out function output 
@@ -106,7 +105,6 @@ public class TestFunc {
     else{System.out.println(STR_TEST_FAIL);}
     return doesPass;
   }
-
 
 
   /**
@@ -127,9 +125,6 @@ public class TestFunc {
 
 
 
-  /** Syntax Sugar for {@link #doEval} */
-  public static boolean e(String o, String e){return doEval(o, e);}
-  
 
   public void print_launchingTesting(){
     System.out.println(STR_HASH_LINE);
@@ -171,9 +166,7 @@ public class TestFunc {
   
   /**
    * Returns ratio in int range `[0:100]`.
-   * @todo `TestCase` will need this as its current implementation seems to be
-   * hillariously broken. Also, this ought to be a utils function, maybe put it
-   * in `FormatUtils` (in lieu of a `MathUtils`)?
+   * @todo could be a utils function, maybe put in `FormatUtils` (in lieu of `MathUtils`)?
    * @param n <b>numerator</b>
    * @param d <b>denominator</b>
    */

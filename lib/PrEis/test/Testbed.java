@@ -1,10 +1,4 @@
-package PrEis;
-import PrEis.test.TestAssetKey;
-import PrEis.test.TestGUIManager;
-import PrEis.test.TestGridManager;
-import PrEis.test.TestHTMLParsing;
-import PrEis.test.TestPgfxUtils;
-import PrEis.test.TestUtilsManager;
+package PrEis.test;
 import PrEis.utils.Cons;
 
 import processing.core.PApplet;
@@ -27,7 +21,7 @@ public class Testbed extends PApplet {
   public static JSONObject TEST_DIRS;
 
   public static void main(String[] args) {
-    PApplet.main("PrEis.Testbed");
+    PApplet.main("PrEis.test.Testbed");
     System.out.println("\n \n"); //> corrects debug launch blurb lack of newline
   }
 

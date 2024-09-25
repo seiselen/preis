@@ -5,6 +5,7 @@ public enum TestAssetKey {
   GLYPH_FONT,
   GLYPH_CODES,
   TEST_OUT_DIR,
+  TEST_IN_DIR,
   GUI_BG_IMG_LITE,
   GUI_BG_IMG_DARK,
 
