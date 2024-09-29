@@ -122,6 +122,7 @@ public class UIDropdown extends UIObject {
   }
  
   public void onMouseWheel(int v){
+    if(!bbox.inBounds(app.mouseX, app.mouseY)){return;}   
     nScrollOff = scrollOff+(v*scrollFactor);        
     if(nScrollOff<0||nScrollOff>maxScrollOff){return;}
     scrollOff=nScrollOff;

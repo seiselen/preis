@@ -151,15 +151,16 @@ public class TestGUIManager {
 
   public void initGUI(){
     mousePosUpdate = new MousePosUpdate(app);
+    Do r = Do.RUN; Do s = Do.SKIP;
 
-    test_Dropdown_02(Do.RUN);
-    test_Dropdown_01(Do.SKIP);
-    test_Tooltips_01(Do.SKIP);
-    test_Image_01(Do.SKIP);
-    test_misc_01(Do.SKIP);
-    test_Container_01(Do.SKIP);
-    test_Container_02(Do.SKIP);
-    test_Confirm_01(Do.SKIP);
+    test_Dropdown_02  (s);
+    test_Dropdown_01  (r);
+    test_Tooltips_01  (s);
+    test_Image_01     (s);
+    test_misc_01      (s);
+    test_Container_01 (s);
+    test_Container_02 (s);
+    test_Confirm_01   (s);
     /*=[ DON'T REMOVE THIS, NOR EVEN TOUCH IT ]===============================*/
     Cons.log("Function 'initGui' has completed.");
   }

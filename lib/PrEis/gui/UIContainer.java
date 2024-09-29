@@ -92,6 +92,13 @@ public class UIContainer extends UIObject {
     for(UIObject o : objects){o.update();}
   }
   
+
+  public void onMouseWheel(int v){
+    if(!bbox.inBounds(app.mouseX, app.mouseY)){return;}
+    for(UIObject o : objects){o.onMouseWheel(v);}
+  }
+
+  
   public void onMousePressed(){
     if(!bbox.inBounds(app.mouseX, app.mouseY)){return;}
     for(UIObject o : objects){o.onMousePressed();}
