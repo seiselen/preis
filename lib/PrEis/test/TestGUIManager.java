@@ -1,8 +1,6 @@
 package PrEis.test;
 
 import java.util.HashMap;
-import java.util.Set;
-
 import PrEis.gui.AppFont;
 import PrEis.gui.ConfirmState;
 import PrEis.gui.IActionCallback;
@@ -26,7 +24,6 @@ import PrEis.utils.BBox;
 import PrEis.utils.Cons;
 import PrEis.utils.DataStructUtils;
 import PrEis.utils.FileSysUtils;
-import PrEis.utils.QueryUtils;
 import PrEis.utils.StringUtils;
 import processing.core.PApplet;
 import processing.core.PFont;
@@ -46,7 +43,6 @@ public class TestGUIManager {
 
   private int COL_ERR, COL_LITE, COL_DARK;
 
-
   private Testbed   app;
   private UIManager uim;
   private PImage    bgImgLite;
@@ -54,6 +50,8 @@ public class TestGUIManager {
   private boolean dispImg = true;
   private IntDict  glyphDict;
   private HashMap<TestAssetKey,PImage> diagImg;
+
+  private HashMap<TestAssetKey,String[]> exStrArrs;
 
   PFont textFont;
   PFont glyphFont;
@@ -71,6 +69,7 @@ public class TestGUIManager {
     app = p;
     uim = new UIManager(app);
     diagImg = new HashMap<TestAssetKey,PImage>();
+    exStrArrs = new HashMap<TestAssetKey,String[]>();
     loadFonts();
     loadImages();
     uim.injectFonts(textFont, glyphFont);
@@ -139,32 +138,8 @@ public class TestGUIManager {
   }
 
   public void initExternTestInputs(){
-    prepDropdownExData();
-  }
-
-
-  /**
-   * @todo <b>WORK IN PROGRESS</b> (a/o <code>09/24</code>)
-   */
-  public void prepDropdownExData(){
-    //> WARNING: '/' SUFFIX! (not using `pathConcat` as policy is not to use utils in their test code)
-    String fn = app.sketchPath().replace('\\', '/') +"/"+Testbed.TEST_DIRS.getString("FN_DDOWN_EX_01");
-    
-    JSONObject obj = app.loadJSONObject(fn);
-
-    System.out.println(obj);
-
-    /*
-    ruin_keys
-    region_keys
-    region_to_ruin
-     */
-
-
-
 
   }
-
 
   public void toggleDispBGImage(){dispImg = !dispImg;}
 
@@ -177,16 +152,79 @@ public class TestGUIManager {
   public void initGUI(){
     mousePosUpdate = new MousePosUpdate(app);
 
-    test_Tooltips_01(Do.RUN);
+    test_Dropdown_02(Do.RUN);
+    test_Dropdown_01(Do.SKIP);
+    test_Tooltips_01(Do.SKIP);
     test_Image_01(Do.SKIP);
     test_misc_01(Do.SKIP);
     test_Container_01(Do.SKIP);
     test_Container_02(Do.SKIP);
-    test_Dropdown_01(Do.SKIP);
     test_Confirm_01(Do.SKIP);
     /*=[ DON'T REMOVE THIS, NOR EVEN TOUCH IT ]===============================*/
     Cons.log("Function 'initGui' has completed.");
   }
+
+  /** Performs test encompassing clearing and replacing a dropdown's options. */
+  private void test_Dropdown_02(Do d){
+    if(d==Do.SKIP){return;}
+
+    JSONObject obj;
+
+    String fp = FileSysUtils.pathConcat(app.getRootDir(),"tests","inputs","smallSets.json");
+    System.out.println("Filepath For Test Data: '"+fp+"'");
+
+    obj = app.loadJSONObject(fp).getJSONObject("KEY_VAL_LBL").getJSONObject("PLANETS");
+    exStrArrs.put(TestAssetKey.PLANET_VALS, obj.getJSONArray("ABBR").toStringArray());
+    exStrArrs.put(TestAssetKey.PLANET_LBLS, obj.getJSONArray("NAME").toStringArray());
+    
+    obj = app.loadJSONObject(fp).getJSONObject("KEY_VAL_LBL").getJSONObject("MONTHS");
+    exStrArrs.put(TestAssetKey.MONTH_VALS, obj.getJSONArray("ABBR").toStringArray());
+    exStrArrs.put(TestAssetKey.MONTH_LBLS, obj.getJSONArray("NAME").toStringArray());
+
+
+    UIDropdown sel = UIDropdown.create(uim, box(480, 64, 320, 640))
+    .bindAction(new SimpleDropdownAction());
+
+
+    int ctrWide = 320;
+    int ctrTall = 320-32;
+    int butWide = 320-16;
+    int butTall = 64;
+    int xCur = 8;
+    int yCur = 16;
+    int xOff = 0;
+    int yOff = butTall+32;
+
+    UIContainer ctr = UIContainer.create(uim, box(64, 64, ctrWide, ctrTall));
+
+    class ChangeOptionsAction implements IActionCallback{
+      public TestAssetKey keyVals, keyLbls;
+      public ChangeOptionsAction(TestAssetKey kv, TestAssetKey kl){keyVals=kv; keyLbls=kl;}
+      @Override public void action() {
+        sel.reset();
+        if(keyVals==TestAssetKey.STUB||keyLbls==TestAssetKey.STUB){return;}
+        sel.addOptions(exStrArrs.get(keyVals), exStrArrs.get(keyLbls));
+      }
+    }
+
+    ChangeOptionsAction planetsAct = new ChangeOptionsAction(TestAssetKey.PLANET_VALS, TestAssetKey.PLANET_LBLS);
+    ChangeOptionsAction monthsAct = new ChangeOptionsAction(TestAssetKey.MONTH_VALS, TestAssetKey.MONTH_LBLS);
+    ChangeOptionsAction clearAct = new ChangeOptionsAction(TestAssetKey.STUB, TestAssetKey.STUB);
+
+    ctr.addChildren(
+      UIClick.create(app, box(xCur, yCur, butWide, butTall), "Change Options To Planets", AppFont.TEXT, planetsAct),
+      UIClick.create(app, box(xCur+=xOff, yCur+=yOff, butWide, butTall), "Change Options To Months", AppFont.TEXT, monthsAct),
+      UIClick.create(app, box(xCur+=xOff, yCur+=yOff, butWide, butTall), "Reset Options To  -None-", AppFont.TEXT, clearAct)
+    )
+    .setStyleProp("fill", Integer.class, app.color(128,128))
+    .setStyleProp("strk_enabled", Integer.class, app.color(0,255,255))    
+    .setStyleProp("border_radius", Integer.class, 16)
+    ;
+  }
+
+
+
+
 
 
   private void test_Tooltips_01(Do d){
@@ -360,7 +398,8 @@ public class TestGUIManager {
       "Test Click Button",
       AppFont.TEXT,
       new ConslogAction("HELLO CONSOLE!")
-    );
+    )
+    .setTitle("Will Print 'HELLO CONSOLE!' To Console");
 
     UIToggle.create(uim, new BBox(xOff, yOff+=96, 256, 64), "Light Bulb", AppFont.TEXT, litebulbAction)
     .withOnOffLabels("Lightbulb [ON]", "Lightbulb [OFF]");
@@ -411,7 +450,7 @@ public class TestGUIManager {
     ,
 
 
-      UIClick.create(app, new BBox(xOff+=32, yOff+=64, xDim, yDim           ), "MER", AppFont.TEXT, new ConslogAction("Mercury")),
+      UIClick.create(app, new BBox(xOff+=32, yOff+=64, xDim, yDim),    "MER", AppFont.TEXT, new ConslogAction("Mercury")),
       UIClick.create(app, new BBox(xOff+=xDim+yDim, yOff, xDim, yDim), "VEN", AppFont.TEXT, new ConslogAction("Venus")),
       UIClick.create(app, new BBox(xOff+=xDim+yDim, yOff, xDim, yDim), "EAR", AppFont.TEXT, new ConslogAction("Earth")),
       UIClick.create(app, new BBox(xOff+=xDim+yDim, yOff, xDim, yDim), "MAR", AppFont.TEXT, new ConslogAction("Mars")),
@@ -425,11 +464,27 @@ public class TestGUIManager {
     .toggleShowBounds();
   }
 
-
+  /**
+   * 
+   * @implNote can reduce this further via moving ayleid ruins hashmap inits to
+   * the test manager constructor (which i may do 'later'); but KISS for now...
+   */
   private void test_Dropdown_01(Do d){
     if(d==Do.SKIP){return;}
 
-    ExDDownAction ayleidRuinsAction = new ExDDownAction();
+    JSONObject obj;
+
+    String fp = FileSysUtils.pathConcat(app.getRootDir(),"tests","inputs","smallSets.json");
+    System.out.println("Filepath For Test Data: '"+fp+"'");
+
+    obj = app.loadJSONObject(fp).getJSONObject("KEY_VAL_LBL").getJSONObject("AYLEID_RUINS_SUBSET");
+    String [] vs = obj.getJSONArray("ABBR").toStringArray();
+    String [] ls = obj.getJSONArray("NAME").toStringArray();
+
+    exStrArrs.put(TestAssetKey.AYLEID_VALS,vs);
+    exStrArrs.put(TestAssetKey.AYLEID_LBLS,ls);
+
+    AyleidDDownAction ayleidRuinsAction = new AyleidDDownAction(vs,ls);
     AyledidRuinsCallback cb = new AyledidRuinsCallback(ayleidRuinsAction);
 
     UILabel.create(
@@ -438,7 +493,7 @@ public class TestGUIManager {
     
     @SuppressWarnings("unused")
     UIDropdown ddown = UIDropdown.create(uim, new BBox(640, 416, 160, 320))
-    .addOptions(ayleidRuinsAction.val_lbl_map)
+    .addOptions(vs,ls)
     .bindAction(ayleidRuinsAction);
   }
 
@@ -549,46 +604,19 @@ class ConslogConfirmAction implements IConfirmAction {
 }
 
 
-class ExDDownAction implements ISelectAction {
-  private String curSel;
+class AyleidDDownAction implements ISelectAction {
+  private String curSelVal;
+  private String curSelLbl;
+  private HashMap<String,String> vals2lbls;
 
-  public String[][] val_lbl_map;
-  public HashMap<String, String[]> loc_val_map;
-
-
-  
-  /** @todo use then CRUD a <code>json</code> file you fucking degenerate! :-) */
-  public ExDDownAction(){
-    val_lbl_map = new String[][]{
-      {"ARP","Arpenia"},   {"ATA","Atatar"},       {"TEL","Telepe"},
-      {"VEY","Veyond"},    {"WEL","Welke"},        {"NON","Nonungalo"},
-      {"TAL","Talwinque"}, {"TRU","Trumbe"},       {"VAR","Varondo"},
-      {"BEL","Beldaburo"}, {"NIR","Niryastare"},   {"ANG","Anga"},
-      {"CEY","Ceyatatar"}, {"ELE","Elenglynn"},    {"LIN","Lindai"},
-      {"NAR","Narfinsel"}, {"PIU","Piukanda"},     {"VIN","Vindasel"},
-      {"WEN","Wendir"},    {"CUL","Culotte"},      {"NAG","Nagastani"},
-      {"SER","Sercen"},    {"VIL","Vilverin"},     {"FAN","Fanacasecul"},
-      {"NIN","Ninendava"}, {"RIE","Rielle"},       {"SED","Sedor"},
-      {"HAM","Hame"},      {"MAC","Mackamentain"}, {"MAL","Malada"},
-      {"OND","Ondo"},      {"VAH","Vahtacen"},     {"ANU","Anutwyll"},
-      {"BAW","Bawn"},      {"MOR","Morahame"},     {"NEN","Nenalata"},
-      {"MIS","Miscarcand"},{"NOR","Nornalhorst"},  {"SIL","Silorn"}
-    };
-
-    loc_val_map = new HashMap<String, String[]>();
-      loc_val_map.put("Blackwood",          new String[]{"ARP","ATA","TEL","VEY","WEL"});
-      loc_val_map.put("Colovian Highlands", new String[]{"NON","TAL","TRU","VAR"});
-      loc_val_map.put("Gold Coast",         new String[]{"BEL","NIR"});
-      loc_val_map.put("Great Forest",       new String[]{"ANG","CEY","ELE","LIN","NAR","PIU","VIN","WEN"});
-      loc_val_map.put("Heartlands",         new String[]{"CUL","NAG","SER","VIL","FAN"});
-      loc_val_map.put("Jerall Mountains",   new String[]{"NIN","RIE","SED"});
-      loc_val_map.put("Nibenay Basin",      new String[]{"HAM","MAC","MAL","OND","VAH"});
-      loc_val_map.put("Nibenay Valley",     new String[]{"ANU","BAW","MOR","NEN"});
-      loc_val_map.put("West Weald",         new String[]{"MIS","NOR","SIL"});
+  public AyleidDDownAction(String[] vals, String[] lbls){
+    curSelVal = null;
+    vals2lbls = new HashMap<String,String>();
+    for(int i=0; i<vals.length; i++){vals2lbls.put(vals[i], lbls[i]);}
   }
 
   public void OnSelection(String selOpt){
-    if (selOpt!=null){curSel=selOpt;}
+    if (selOpt!=null){curSelVal=selOpt; curSelLbl=vals2lbls.get(curSelVal);}
     Cons.log("Option "+StringUtils.wrapWith('"',selOpt)+" was just selected!");
   }
 
@@ -598,25 +626,11 @@ class ExDDownAction implements ISelectAction {
 
   public String curSelectionBlurbToString(){
     String pfix = "DDown Selection: ";
-    if(curSel==null){return pfix+"Nothing Yet?!?";}
-    String ret = pfix + StringUtils.concatAsCSSV(curSel, siteNameWithID(curSel), regionNameWithID(curSel));
+    if(curSelVal==null || curSelLbl==null){return pfix+"Nothing Yet?!?";}
+    String ret = pfix+curSelVal+" "+StringUtils.wrapWith('(',curSelLbl);
     return ret;
   }
 
-  public String siteNameWithID(String siteID){
-    for(String[] s : val_lbl_map){if(s[0].equals(siteID)){return s[1];}}
-    return "N/A";
-  }
-
-  public String regionNameWithID(String siteID){
-    Set<String> kList = loc_val_map.keySet();
-    String [] buffSites;
-    for(String r : kList){
-      buffSites = loc_val_map.get(r);
-      if(QueryUtils.strArrContainsStr(buffSites, siteID)){return r;}
-    }
-    return "N/A";
-  }
 }
 
 
@@ -658,8 +672,8 @@ class MousePosUpdate implements IUpdateCallback {
 }
 
 class AyledidRuinsCallback implements IUpdateCallback {
-  ExDDownAction act;
-  public AyledidRuinsCallback(ExDDownAction iAct){act=iAct;}
+  AyleidDDownAction act;
+  public AyledidRuinsCallback(AyleidDDownAction iAct){act=iAct;}
   public String getTxt(){return act.curSelectionBlurbToString();}
 }
 

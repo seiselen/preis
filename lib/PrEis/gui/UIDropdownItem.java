@@ -1,7 +1,6 @@
 package PrEis.gui;
 import PrEis.utils.Cons;
 import PrEis.utils.DataStructUtils;
-import PrEis.utils.Pgfx;
 import PrEis.utils.StringUtils;
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -61,7 +60,7 @@ public class UIDropdownItem extends UIObject implements Comparable<UIDropdownIte
     app.strokeWeight(style.swgt);
     app.fill(getFillCol());
     app.stroke(getStrokeCol());
-    Pgfx.rect(app, bbox);
+    renderRect();
     renderText();
   }
   

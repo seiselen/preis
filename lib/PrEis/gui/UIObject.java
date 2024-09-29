@@ -210,17 +210,15 @@ public abstract class UIObject {
     return withValue(v).withLabel(l);
   }
 
+
+
   public void setFont(AppFont iFont){
     objFont = iFont;
-    if (objFont!=null && objFont==AppFont.GLYPH){setPredefStyle("GLYPH");}
+    if (objFont!=null && objFont==AppFont.GLYPH){
+      setStyleProp("txt_size", Integer.class, DefaultStyle.GLYPH_TEXT_SIZE);
+    }
   } 
   
-  /** @deprecated who currently uses this? */
-  public UIObject setPredefStyle(String s){
-    style.setStyleProp("txt_size", Integer.class, 32);
-    return this;
-  }
-
   /** 
    * Calls {@link UIStyle#setStyleProp} on {@link #style}.
    * @see UIStyle#setStyleProp
@@ -258,9 +256,11 @@ public abstract class UIObject {
   /*-[ RENDER CALLS ]-----------------------------------------------------------
   +===========================================================================*/
 
+
   /** Abstract `render` used for common pre-pro; as children define how they render. */
   public void render(){
-    /*> ABSTRACT STUB <*/
+    //> here because `setFont` RESETS all text style settings, ergo needs to be called first
+    if(objFont!=null){manager.setFont(objFont);}
   }
 
   public void lateRender(){
@@ -278,7 +278,6 @@ public abstract class UIObject {
    * percent of widget width per its `BBox`.
    */
   public void renderText(float x1, float y1){
-    manager.setFont(objFont);
     //if(style.text_wrap){p.text(label,x1,y1,style.text_wrap.wide(),style.text_wrap.tall());}
     //else{p.text(label,x1,y1);}
     app.text(label,x1,y1);

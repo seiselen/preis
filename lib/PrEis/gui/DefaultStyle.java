@@ -30,6 +30,16 @@ class DefaultStyle {
   /** <i>Good 'Ol <b>Error Purple</b></i> i.e. <code>rgb(255,0,255)</code>. */
   public static final int ERR_COL = -65281;
 
+  /** <i><b>Debug Green</b><i> i.e. <code>rgb(0,255,0)</code>. */  
+  public static final int DBG_COL = -16711936;
+
+  /** 
+   * Default GLYPH {@link UIStyle#txt_size}. Used by {@link UIObject#setFont}.
+   * @todo should realize this as prop in `UIStyle`; as is still 'magic value'
+   * of whose prior realization confused me on one prior event.
+   */
+  public static final int GLYPH_TEXT_SIZE = 32; 
+
   static UIStyle Get(PApplet p){
     return _CommonVals(p);
   }
@@ -43,7 +53,7 @@ class DefaultStyle {
       case LB: return _Label(p);
       case DI: return _DropdownItem(p);
       case DD: return _Dropdown(p);
-      case CO:    
+      case CO: return _Container(p);    
       default: return Get(p);
     }
   }
@@ -138,5 +148,13 @@ class DefaultStyle {
     s.fill_off_clicked = p.color(144,   0,   0);
     return s;
   }
-  
+
+  private static UIStyle _Container(PApplet p){
+    UIStyle s       = _CommonVals(p);
+    s.fill          = p.color(0,0);
+    s.strk_enabled  = p.color(0,0);
+    s.border_radius = 4;
+    return s;
+  }
+
 }

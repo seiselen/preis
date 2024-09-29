@@ -19,7 +19,15 @@ public enum TestAssetKey {
   DIMG_64X128("64x128.png"),
   DIMG_128X128("128x128.png"),
 
+  //-[ EXAMPLE SET NAMES ]-----------------------------------------------------#
+  PLANET_VALS,
+  PLANET_LBLS,
+  MONTH_VALS,
+  MONTH_LBLS,
+  AYLEID_VALS,
+  AYLEID_LBLS,
 
+  //-[ STUB ]------------------------------------------------------------------#
   STUB; //> Exists Only For Semicolon
 
   /** 

@@ -30,13 +30,11 @@ public class UIContainer extends UIObject {
   public UIContainer(PApplet iApp, PVector iPos, PVector iDim){
     super(iApp, iPos, iDim, WidgetType.CO);
     objects = new ArrayList<UIObject>();
-    this.style.strk_enabled=app.color(0,255,0);
   }
   
   public UIContainer(PApplet iApp, BBox iBBox){
     super(iApp, iBBox, WidgetType.CO);
     objects = new ArrayList<UIObject>();
-    this.style.strk_enabled=app.color(0,255,0);
   }
 
   public static UIContainer create(PApplet app, BBox bbox){
@@ -95,19 +93,26 @@ public class UIContainer extends UIObject {
   }
   
   public void onMousePressed(){
+    if(!bbox.inBounds(app.mouseX, app.mouseY)){return;}
     for(UIObject o : objects){o.onMousePressed();}
   }
 
 
   public void render(){
-    renderBounds();
+    app.fill(style.fill);
+    app.stroke(style.strk_enabled);
+    renderRect();
     for(UIObject o : objects){o.render();}
+    if(SHOW_BOUNDS){renderBounds();}
+  }
+  
+  public void lateRender(){
+    for(UIObject o : objects){o.lateRender();}
   }
   
   private void renderBounds(){
-    if(!SHOW_BOUNDS){return;}
     app.noFill();
-    app.stroke(this.style.strk_enabled);
+    app.stroke(DefaultStyle.DBG_COL);
     app.rectMode(PApplet.CORNER);
     app.imageMode(PApplet.CORNER);
     Pgfx.rect(app,bbox);

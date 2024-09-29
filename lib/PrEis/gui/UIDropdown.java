@@ -29,12 +29,23 @@ public class UIDropdown extends UIObject {
 
   public UIDropdown(PApplet iApp, BBox iBBox){
     super(iApp, iBBox, WidgetType.DD);
-    scrollOff=0;
-    maxScrollOff=0;
-    scrollFactor=16;
     options = new ArrayList<UIDropdownItem>();
-    //> TEMPORARY INIT VALS, REFINE LATER
     setItemDims(bbox.wide()-32, 32);
+    scrollFactor=16;
+    reset();
+  }
+
+  /** 
+   * Clears options list, current option selected, and scroll state. This method
+   * <b>MUST</b> be called to correctly replace the current set of options with
+   * a new one (e.g. changing target of sprite animation viz in EiSpriteViewer).
+   */
+  public void reset(){
+    curSelItem = null;
+    options.clear();
+    scrollOff = 0;
+    maxScrollOff = 0;
+    curBaseOff.y=bbox.minY();
   }
 
   public UIDropdown(PApplet iApp, PVector iPos, PVector iDim){
@@ -57,17 +68,14 @@ public class UIDropdown extends UIObject {
     return create(iMgr.app, iPos, iDim).bindManager(iMgr).castTo(UIDropdown.class);
   }
 
-
-
   public UIDropdown bindAction(ISelectAction iAction){
     action = iAction;
     return this;
   }
 
-  public UIDropdown setItemDims(float wide, float tall){
+  private void setItemDims(float wide, float tall){
     ddownItemDim = new PVector(wide,tall);
     curBaseOff = new PVector(bbox.midX()-(ddownItemDim.x/2), bbox.minY());
-    return this;
   }
 
   public UIDropdown addOption(String val, String lbl){
@@ -105,8 +113,7 @@ public class UIDropdown extends UIObject {
 
 
   public UIDropdown sortByLabel(){
-    if(options.size()>0){Collections.sort(options);
-    }
+    if(options.size()>0){Collections.sort(options);}
     return this;
   }
 
@@ -122,6 +129,7 @@ public class UIDropdown extends UIObject {
   }
   
   public void onMousePressed(){
+    if(!bbox.inBounds(app.mouseX, app.mouseY)){return;}
     for(UIDropdownItem ddi : options){
       if(ddi.bbox.minY() < bbox.maxY()){ddi.onMousePressed();}
     }
@@ -141,7 +149,10 @@ public class UIDropdown extends UIObject {
   }
 
 
-
+  /** 
+   * @implSpec will need `super.render()` call if I introduce ANY non-item text i.e. current selection, etc.
+   * @implSpec if you ever realize tooltips for dropdown xor items therein: you MUST call `lateRender`!
+   */
   public void render(){
     renderBG();
     clipAndRenderOptions();
@@ -150,7 +161,7 @@ public class UIDropdown extends UIObject {
 
   private void renderBG(){
     Pgfx.fillnostroke(app,style.fill);
-    Pgfx.rect(app, bbox);
+    renderRect();
   }
 
   private void clipAndRenderOptions(){
@@ -165,6 +176,6 @@ public class UIDropdown extends UIObject {
   private void renderFG(){
     Pgfx.strokenofill(app, style.strk_enabled);
     app.strokeWeight(style.swgt);
-    Pgfx.rect(app, bbox);
+    renderRect();
   }
 }
