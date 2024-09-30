@@ -154,13 +154,13 @@ public class TestGUIManager {
     Do r = Do.RUN; Do s = Do.SKIP;
 
     test_Dropdown_02  (s);
-    test_Dropdown_01  (r);
+    test_Dropdown_01  (s);
     test_Tooltips_01  (s);
     test_Image_01     (s);
     test_misc_01      (s);
     test_Container_01 (s);
     test_Container_02 (s);
-    test_Confirm_01   (s);
+    test_Confirm_01   (r);
     /*=[ DON'T REMOVE THIS, NOR EVEN TOUCH IT ]===============================*/
     Cons.log("Function 'initGui' has completed.");
   }
@@ -182,10 +182,8 @@ public class TestGUIManager {
     exStrArrs.put(TestAssetKey.MONTH_VALS, obj.getJSONArray("ABBR").toStringArray());
     exStrArrs.put(TestAssetKey.MONTH_LBLS, obj.getJSONArray("NAME").toStringArray());
 
-
     UIDropdown sel = UIDropdown.create(uim, box(480, 64, 320, 640))
     .bindAction(new SimpleDropdownAction());
-
 
     int ctrWide = 320;
     int ctrTall = 320-32;
@@ -224,10 +222,6 @@ public class TestGUIManager {
   }
 
 
-
-
-
-
   private void test_Tooltips_01(Do d){
     if(d==Do.SKIP){return;}
 
@@ -237,7 +231,6 @@ public class TestGUIManager {
     int yo = 64;
     int xs = xd+32;
     int ys = yd+128;
-
 
     UIClick.create(uim, new BBox(16, yo, xd, yd), "Test Click Button", AppFont.TEXT, new ConslogAction("HELLO CONSOLE!"))
     .setTitle("I am a UIClick!")
@@ -256,8 +249,7 @@ public class TestGUIManager {
     ;
 
     UIToggle.create(uim, new BBox(xo+=xs, yo, xd, yd), "Toggle Example", AppFont.TEXT, new StubToggleAct())
-    .withOnOffLabels("Toggle [ON]", "Toggle [OFF]")
-    .setTitle("I am a UIToggle!")
+    .withOnOffLabels("Toggle [ON]", "Toggle [OFF]").setTitle("I am a UIToggle!")
     ;
 
     UILabel.create(uim, new BBox(xo+=xs, yo, xd, yd), null, AppFont.TEXT, LabelType.OP, mousePosUpdate)
@@ -265,17 +257,12 @@ public class TestGUIManager {
     ;
 
     UIImage.create(uim, box(xo+=xs, ys, xd,yd), diagImg.get(TestAssetKey.DIMG_128X64))
-    .asΘ(ImageSpecial.STRETCH_TO_FIT).doDebugVizΘ()
-    .setTitle("I am a UIImage!")
+    .asΘ(ImageSpecial.STRETCH_TO_FIT).doDebugVizΘ().setTitle("I am a UIImage!")
     ;
-
 
   }
 
-
-
-  private void test_Image_01(Do d){
-    if(d==Do.SKIP){return;}
+  private void test_Image_01(Do d){if(d==Do.SKIP){return;}
 
     int xd = 128;
     int yd = 128;
@@ -385,8 +372,7 @@ public class TestGUIManager {
 
 
 
-  private void test_misc_01(Do d){
-    if(d==Do.SKIP){return;}
+  private void test_misc_01(Do d){if(d==Do.SKIP){return;}
 
     litebulbAction = new LitebulbAction(app, DataStructUtils.vec2(352, 192));
     
@@ -416,8 +402,7 @@ public class TestGUIManager {
   }
 
 
-  private void test_Container_01(Do d){
-    if(d==Do.SKIP){return;}
+  private void test_Container_01(Do d){if(d==Do.SKIP){return;}
 
     UIContainer.create(uim, new BBox(416, 64, 160, 128)).addChildren(
       UILabel.create(app, new BBox(0, 0, 160, 32), "Toggle BG Image", AppFont.TEXT, LabelType.OP, null)
@@ -428,8 +413,7 @@ public class TestGUIManager {
 
 
 
-  private void test_Container_02(Do d){
-    if(d==Do.SKIP){return;}
+  private void test_Container_02(Do d){if(d==Do.SKIP){return;}
 
     int xOff = 0;
     int yOff = 0; 
@@ -470,8 +454,7 @@ public class TestGUIManager {
    * @implNote can reduce this further via moving ayleid ruins hashmap inits to
    * the test manager constructor (which i may do 'later'); but KISS for now...
    */
-  private void test_Dropdown_01(Do d){
-    if(d==Do.SKIP){return;}
+  private void test_Dropdown_01(Do d){if(d==Do.SKIP){return;}
 
     JSONObject obj;
 
@@ -498,22 +481,9 @@ public class TestGUIManager {
     .bindAction(ayleidRuinsAction);
   }
 
-  private void test_Confirm_01(Do d){
-    if(d==Do.SKIP){return;}
-
+  private void test_Confirm_01(Do d){if(d==Do.SKIP){return;}
     //> keeping these as vars for future 'cancel' and other testing
     ConslogConfirmAction cfirmAct = new ConslogConfirmAction();
-    
-    @SuppressWarnings("unused")
-    UIConfirm cfirmWidget = UIConfirm.create(uim, new BBox(416, 224, 320, 32), cfirmAct)
-    .setButtonLabelsΘ(
-      "Click Here To Conslog Something.",
-      "Sure Ya Wanna Conslog Something?",
-      "You've Just Conslog'd Something!"
-    )
-    .setStyleProp("txt_size", Integer.class, 16)
-    .castTo(UIConfirm.class) 
-    ;
 
     class CancelConfirmAction implements IActionCallback {
       ConslogConfirmAction act;
@@ -521,11 +491,61 @@ public class TestGUIManager {
       public void action(){act.cancel();}
     }
 
-    UIClick.create(uim, new BBox(416, 288, 320, 32),
-      "Click Here To Cancel Confirm Seq.", AppFont.TEXT,
-      new CancelConfirmAction(cfirmAct)
+    class UnDisableAction implements IActionCallback {
+      UIConfirm confirm;
+      public UnDisableAction(UIConfirm in_confirm){confirm=in_confirm;}
+      public void action(){confirm.toggleDisabled();}
+    }
+
+    //=[TEST BASIC BEHAVIOR AND USING OTHER BUTTON TO CANCEL]===================
+    UIContainer.create(uim, new BBox(64, 64, 320, 128)).addChildren(
+      UIConfirm.create(app, new BBox(16, 16, 288, 32), cfirmAct)
+      .setButtonLabelsΘ(
+        "Click To Conslog Confirm State.",
+        "Click Again To Confirm Conslog.",
+        "Now Conslogging Confirm State."
+      )
+      .setStyleProp("txt_size", Integer.class, 16),
+
+      UIClick.create(app, new BBox(16, 80, 288, 32),
+        "Click Here To Cancel Confirm Seq.", AppFont.TEXT,
+        new CancelConfirmAction(cfirmAct)
+      )
+      .setStyleProp("txt_size", Integer.class, 16)
     )
-    .setStyleProp("txt_size", Integer.class, 16)    
+    .setStyleProp("fill", Integer.class, app.color(64,128))
+    .setStyleProp("strk_enabled", Integer.class, app.color(255,255,0))    
+    .setStyleProp("border_radius", Integer.class, 16)
+    ;
+    
+    //=[TEST DISABLE-UNTIL-FIRST-ACTION FUNCTIONALITY]==========================
+    UIConfirm disCfirm;
+
+
+    UIContainer.create(uim, new BBox(448, 64, 320, 128)).addChildren(
+
+      disCfirm = UIConfirm.create(
+        app, new BBox(16, 16, 288, 32), new ConslogConfirmAction()
+      )
+      .setButtonLabelsΘ(
+        "I Am Disabled! You Can't Click Me!",
+        "Looks Like I Have Been Re-Enabled!",
+        "You've Just Conslog'd Something!"
+      )
+      .setStyleProp("txt_size", Integer.class, 16)
+      .setDisabledΘ(true)
+      .castTo(UIConfirm.class),
+
+      UIClick.create(app, new BBox(16, 80, 288, 32),
+        "Click Here To Toggle Confirm Enabled.", AppFont.TEXT,
+        new UnDisableAction(disCfirm)
+      )
+      .setStyleProp("txt_size", Integer.class, 16)
+
+    )
+    .setStyleProp("fill", Integer.class, app.color(64,128))
+    .setStyleProp("strk_enabled", Integer.class, app.color(255,255,0))    
+    .setStyleProp("border_radius", Integer.class, 16)
     ;
   }
 

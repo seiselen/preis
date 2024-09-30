@@ -55,17 +55,20 @@ public class UIToggle extends UIObject {
   public UIToggle bindManager(UIManager iMgr){return (UIToggle)super.bindManager(iMgr);}
 
   public void onMousePressed(){
-    if(mouseOver){
-      toggleCallback.toggleState();
-
-      if(objFont==AppFont.TEXT && labelT!=null && labelF!=null){
-        label = toggleCallback.getState() ? labelT : labelF;
-      }
-
-      if(title!=null){/* STUB FOR FUTURE TOOLTIP HANDLING */}
+    if(disabled || !mouseOver || toggleCallback==null){return;}
+    switch(app.mouseButton){
+      case PApplet.LEFT:  onMouseLeft(); return;
+      case PApplet.RIGHT: return;
     }
   }
-  
+
+  private void onMouseLeft(){
+    toggleCallback.toggleState();
+    if(objFont==AppFont.TEXT && labelT!=null && labelF!=null){
+      label = toggleCallback.getState() ? labelT : labelF;
+    }    
+  }
+
   public void update(){
     super.update();
   }

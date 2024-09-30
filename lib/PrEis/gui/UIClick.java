@@ -58,7 +58,11 @@ public class UIClick extends UIObject {
 
 
   public void onMousePressed(){
-    if(mouseOver&&action!=null){action.action();}
+    if(disabled || !mouseOver || action==null){return;}
+    switch(app.mouseButton){
+      case PApplet.LEFT:  action.action(); return;
+      case PApplet.RIGHT: return;
+    }
   }
   
   public void render(){

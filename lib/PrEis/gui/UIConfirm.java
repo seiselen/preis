@@ -66,7 +66,11 @@ public class UIConfirm extends UIObject {
 
 
   public void onMousePressed(){
-    if(mouseOver && cfirm!=null){cfirm.action();}
+    if(disabled || !mouseOver || cfirm==null){return;}
+    switch(app.mouseButton){
+      case PApplet.LEFT:  cfirm.action(); return;
+      case PApplet.RIGHT: cfirm.cancel(); return;
+    }
   }
 
   public void update(){
@@ -90,18 +94,22 @@ public class UIConfirm extends UIObject {
     switch (cfirm.getState()) {
       case ONWARN:
       case ONDONE: return 
-        isClickedState() ? style.fill_off_clicked :
-        isHoveredState() ? style.fill_off_hovered : style.fill_off;
+        isDisabledState() ? style.fill_off_disabled : 
+        isClickedState()  ? style.fill_off_clicked  :
+        isHoveredState()  ? style.fill_off_hovered  : 
+        style.fill_off;
       case ONINIT: return
-        isClickedState() ? style.fill_on_clicked :
-        isHoveredState() ? style.fill_on_hovered : style.fill_on;
+        isDisabledState() ? style.fill_on_disabled :
+        isClickedState()  ? style.fill_on_clicked  :
+        isHoveredState()  ? style.fill_on_hovered  :
+        style.fill_on;
       default:
         return DefaultStyle.ERR_COL;
     }
   }
   
   private int getStrokeCol(){
-    return style.strk_enabled;
+    return isDisabledState() ? style.strk_disabled : style.strk_enabled;
   }
 
 

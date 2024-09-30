@@ -23,7 +23,12 @@ public class FileSysUtils {
   /** Opcode for if/how to format a full filepath. */
   private enum PathInfo {AS_FPATH, AS_FNAME};
 
-  private final static int DEF_FIND_LEV = 1;
+  /** 
+   * Default directory hops to find a file.
+   * @implNote De-privated to support unplanned priority req in EiSpriteViewer.
+   * IOU overloads to spec max-level.
+   */
+  public static int DEF_FIND_LEV = 1;
 
   public static String pathConcat(String ... sps){
     String ret = "";

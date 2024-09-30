@@ -135,17 +135,20 @@ class DefaultStyle {
   private static UIStyle _ConfirmButton(PApplet p){
     /*-[ COMMON TO BOTH STATES ]----------------------------------------------*/
     UIStyle s = _CommonVals(p);
-    s.txt_size         = 32;
-    s.swgt             = 2;
-    s.strk_enabled     = p.color(255);
+    s.txt_size          = 32;
+    s.swgt              = 2;
+    s.strk_enabled      = p.color(255);
+    s.strk_disabled     = p.color(192);
     /*-[ WRT 'ON INIT' STATE ]------------------------------------------------*/
-    s.fill_on          = p.color(  0,   0,  80);
-    s.fill_on_hovered  = p.color(  0,   0, 114);
-    s.fill_on_clicked  = p.color(  0,   0, 144);
+    s.fill_on           = p.color(  0,   0,  96);
+    s.fill_on_hovered   = p.color(  0,   0, 120);
+    s.fill_on_clicked   = p.color(  0,   0, 168);
+    s.fill_on_disabled  = p.color(  0,   0,  72);
     /*-[ WRT 'ON WARN' STATE ]------------------------------------------------*/
-    s.fill_off         = p.color( 80,   0,   0);
-    s.fill_off_hovered = p.color(114,   0,   0);
-    s.fill_off_clicked = p.color(144,   0,   0);
+    s.fill_off          = p.color( 96,   0,   0);
+    s.fill_off_hovered  = p.color(120,   0,   0);
+    s.fill_off_clicked  = p.color(168,   0,   0);
+    s.fill_off_disabled = p.color( 72,   0,   0);
     return s;
   }
 
