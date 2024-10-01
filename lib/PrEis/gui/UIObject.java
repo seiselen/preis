@@ -1,7 +1,12 @@
 package PrEis.gui;
 import PrEis.utils.BBox;
+import PrEis.utils.Cons;
+import PrEis.utils.Cons.Act;
+import PrEis.utils.Cons.Err;
 import PrEis.utils.Pgfx;
+import PrEis.utils.QueryUtils;
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PVector;
 
 /**
@@ -9,19 +14,14 @@ import processing.core.PVector;
  */
 public abstract class UIObject {
 
+  public static PFont labelFont;
+  public static PFont glyphFont;
+
   /** UIObject Type of this UIObject. */
   protected WidgetType type; 
 
   /** PApplet of the Sketch/Applet. */
   protected PApplet app;
-
-  /** 
-   * @implNote Used for setting fonts. Not a good design pattern but it's either
-   * this else injecting the {@link PApplet} into every {@link UIObject}. Plus:
-   * instances already <i><b>'know'</b></i> {@link UIManager} via the method
-   * {@link #bindManager} <i>(yeah, I know, also not a good design pattern)</i>.
-   */
-  protected UIManager manager;
 
   /** Bounding Box (providing pos, dim, ept, mpt, and lerping thereof) */
   protected BBox bbox;
@@ -58,7 +58,7 @@ public abstract class UIObject {
   protected String title;
 
 
-  /*-[ CONSTRUCTORS ]-----------------------------------------------------------
+  /*-[ CONSTRUCTORS AND SPECIAL INITIALIZERS ]----------------------------------
   +===========================================================================*/
 
   public UIObject(PApplet iPar, BBox iBox, WidgetType iTyp){
@@ -76,12 +76,20 @@ public abstract class UIObject {
   public UIObject(PApplet iPar, PVector iPos, PVector iDim, WidgetType iTyp){
     this(iPar, new BBox(iPos, iDim), iTyp);
   }
+  
+
+  public static void injectFonts(PFont tf, PFont gf){
+    if(tf==null||gf==null){Cons.err_act(Err.NULL_XOR_INVALID, Act.RETURN_NO_ACTION);}
+    else{
+      UIObject.labelFont=tf; 
+      UIObject.glyphFont=gf;
+    }
+  }
+
 
 
   /*-[ STATE GETTERS (INCL. QUERIERS & FORMATTERS ]-----------------------------
   +===========================================================================*/
-
-  public UIManager getManager(){return manager;}
 
   public boolean isMouseOver(){return bbox.inBounds(app.mouseX, app.mouseY);}
   
@@ -94,6 +102,8 @@ public abstract class UIObject {
   public boolean isDisabledState(){return disabled;}
 
   public <T> T castTo(Class<T> type){try {return type.cast(this);} catch(Exception e){return null;}}
+
+  public PVector getPos (){return bbox.pos().copy();}
 
 
   /*-[ STATE SETTERS ]----------------------------------------------------------
@@ -132,17 +142,7 @@ public abstract class UIObject {
     bbox = iBox;
   }
 
-  public void setManager(UIManager iMgr){
-    manager = iMgr;
-  }
-
-  public UIObject setManagerΘ(UIManager iMgr){
-    setManager(iMgr);
-    return this;
-  }
-
   public UIObject bindManager(UIManager iMgr){
-    setManager(iMgr);
     iMgr.bindUiObject(this);
     return this;
   }
@@ -260,7 +260,19 @@ public abstract class UIObject {
   /** Abstract `render` used for common pre-pro; as children define how they render. */
   public void render(){
     //> here because `setFont` RESETS all text style settings, ergo needs to be called first
-    if(objFont!=null){manager.setFont(objFont);}
+    setFont();
+  }
+
+  public void setFont(){
+    if(QueryUtils.nullAll(labelFont,glyphFont)){
+      Cons.err_act(Err.NULL_VALUE, Act.RETURN_NO_ACTION, "one ore more fonts");
+      return;
+    }
+    switch(objFont){
+      case TEXT  : app.textFont(labelFont); return;
+      case GLYPH : app.textFont(glyphFont); return;
+      default    : Cons.err_act(Err.SWITCH_DROP_OUT, Act.RETURN_NULL);
+    }
   }
 
   public void lateRender(){
@@ -328,7 +340,7 @@ public abstract class UIObject {
     if(!mouseOver||title==null){return;}
 
     //> ORDER COUNTS! `setFont` CALL WIPES FONT STATE!
-    manager.setFont(AppFont.TEXT);
+    setFont(AppFont.TEXT);
     app.textSize(style.txt_size_ttip);
 
     int off = style.txt_size_ttip/2;

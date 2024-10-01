@@ -109,7 +109,7 @@ class DefaultStyle {
   private static UIStyle _Dropdown(PApplet p){
     UIStyle s      = _CommonVals(p);
     s.fill         = p.color(32);
-    s.strk_enabled = p.color(0,0,64);
+    s.strk_enabled = p.color(255);
     s.swgt         = 2;
     return s;
   }

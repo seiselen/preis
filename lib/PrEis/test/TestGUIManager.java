@@ -72,7 +72,6 @@ public class TestGUIManager {
     exStrArrs = new HashMap<TestAssetKey,String[]>();
     loadFonts();
     loadImages();
-    uim.injectFonts(textFont, glyphFont);
     initCustomGlyphs();
     initExternTestInputs();
     initGUI();
@@ -83,7 +82,8 @@ public class TestGUIManager {
     try {
       textFont  = app.loadFont(app.getPathOf(TestAssetKey.TEXT_FONT));
       glyphFont = app.loadFont(app.getPathOf(TestAssetKey.GLYPH_FONT));
-      glyphCodes = app.loadJSONObject(app.getPathOf(TestAssetKey.GLYPH_CODES));    
+      glyphCodes = app.loadJSONObject(app.getPathOf(TestAssetKey.GLYPH_CODES));
+      UIObject.injectFonts(textFont, glyphFont);
     } catch (Exception e) {
       System.err.println("Issue fetching one or more Font assets. Check that filepaths are correct.");
       e.printStackTrace();
@@ -153,14 +153,14 @@ public class TestGUIManager {
     mousePosUpdate = new MousePosUpdate(app);
     Do r = Do.RUN; Do s = Do.SKIP;
 
-    test_Dropdown_02  (s);
-    test_Dropdown_01  (s);
+    test_Dropdown_02  (r);
+    test_Dropdown_01  (r);
     test_Tooltips_01  (s);
     test_Image_01     (s);
     test_misc_01      (s);
     test_Container_01 (s);
     test_Container_02 (s);
-    test_Confirm_01   (r);
+    test_Confirm_01   (s);
     /*=[ DON'T REMOVE THIS, NOR EVEN TOUCH IT ]===============================*/
     Cons.log("Function 'initGui' has completed.");
   }
@@ -182,7 +182,7 @@ public class TestGUIManager {
     exStrArrs.put(TestAssetKey.MONTH_VALS, obj.getJSONArray("ABBR").toStringArray());
     exStrArrs.put(TestAssetKey.MONTH_LBLS, obj.getJSONArray("NAME").toStringArray());
 
-    UIDropdown sel = UIDropdown.create(uim, box(480, 64, 320, 640))
+    UIDropdown sel = UIDropdown.create(uim, box(416, 64, 160, 320))
     .bindAction(new SimpleDropdownAction());
 
     int ctrWide = 320;
@@ -220,6 +220,48 @@ public class TestGUIManager {
     .setStyleProp("border_radius", Integer.class, 16)
     ;
   }
+
+  private void test_Dropdown_01(Do d){if(d==Do.SKIP){return;}
+
+    JSONObject obj;
+
+    String fp = FileSysUtils.pathConcat(app.getRootDir(),"tests","inputs","smallSets.json");
+    System.out.println("Filepath For Test Data: '"+fp+"'");
+
+    obj = app.loadJSONObject(fp).getJSONObject("KEY_VAL_LBL").getJSONObject("AYLEID_RUINS_SUBSET");
+    String [] vs = obj.getJSONArray("ABBR").toStringArray();
+    String [] ls = obj.getJSONArray("NAME").toStringArray();
+
+    exStrArrs.put(TestAssetKey.AYLEID_VALS,vs);
+    exStrArrs.put(TestAssetKey.AYLEID_LBLS,ls);
+
+    AyleidDDownAction ayleidRuinsAction = new AyleidDDownAction(vs,ls);
+    AyledidRuinsCallback cb = new AyledidRuinsCallback(ayleidRuinsAction);
+
+
+    UIDropdown uidd;
+
+    UIContainer.create(uim, new BBox(672, 64, 544, 384)).addChildren(
+      UILabel.create(
+        app, new BBox(32, 32, 320, 32), "CURRENT SELECTION", AppFont.TEXT, LabelType.TP, null
+      )
+      .setStyleProp("strk_transp", Integer.class, app.color(255,0)).setStyleProp("txt_size", Integer.class, 32),
+  
+      UILabel.create(app, new BBox(32, 96, 320, 32), null, AppFont.TEXT, LabelType.OP, cb),
+      
+      uidd = UIDropdown.create(app, new BBox(384, 32, 128, 320)).bindAction(ayleidRuinsAction)
+    )
+    .castTo(UIContainer.class)
+    .toggleShowBounds();
+
+    uidd.reset();
+    uidd.addOptions(vs,ls);
+
+  }
+
+
+
+
 
 
   private void test_Tooltips_01(Do d){
@@ -449,37 +491,7 @@ public class TestGUIManager {
     .toggleShowBounds();
   }
 
-  /**
-   * 
-   * @implNote can reduce this further via moving ayleid ruins hashmap inits to
-   * the test manager constructor (which i may do 'later'); but KISS for now...
-   */
-  private void test_Dropdown_01(Do d){if(d==Do.SKIP){return;}
 
-    JSONObject obj;
-
-    String fp = FileSysUtils.pathConcat(app.getRootDir(),"tests","inputs","smallSets.json");
-    System.out.println("Filepath For Test Data: '"+fp+"'");
-
-    obj = app.loadJSONObject(fp).getJSONObject("KEY_VAL_LBL").getJSONObject("AYLEID_RUINS_SUBSET");
-    String [] vs = obj.getJSONArray("ABBR").toStringArray();
-    String [] ls = obj.getJSONArray("NAME").toStringArray();
-
-    exStrArrs.put(TestAssetKey.AYLEID_VALS,vs);
-    exStrArrs.put(TestAssetKey.AYLEID_LBLS,ls);
-
-    AyleidDDownAction ayleidRuinsAction = new AyleidDDownAction(vs,ls);
-    AyledidRuinsCallback cb = new AyledidRuinsCallback(ayleidRuinsAction);
-
-    UILabel.create(
-      uim, new BBox(416, 352, 384, 32), null, AppFont.TEXT, LabelType.OP, cb)
-    .setStyleProp("txt_size", Integer.class, 16);
-    
-    @SuppressWarnings("unused")
-    UIDropdown ddown = UIDropdown.create(uim, new BBox(640, 416, 160, 320))
-    .addOptions(vs,ls)
-    .bindAction(ayleidRuinsAction);
-  }
 
   private void test_Confirm_01(Do d){if(d==Do.SKIP){return;}
     //> keeping these as vars for future 'cancel' and other testing
@@ -641,36 +653,20 @@ class AyleidDDownAction implements ISelectAction {
     Cons.log("Option "+StringUtils.wrapWith('"',selOpt)+" was just selected!");
   }
 
-  public void curSelectionBlurbToConsole(){
-    Cons.log(curSelectionBlurbToString());
-  }
+  public void curSelectionBlurbToConsole(){Cons.log(curSelectionBlurbToString());}
 
   public String curSelectionBlurbToString(){
-    String pfix = "DDown Selection: ";
-    if(curSelVal==null || curSelLbl==null){return pfix+"Nothing Yet?!?";}
-    String ret = pfix+curSelVal+" "+StringUtils.wrapWith('(',curSelLbl);
-    return ret;
+    if(curSelVal==null || curSelLbl==null){return "Nothing Yet?!?";}
+    return curSelVal+" "+StringUtils.wrapWith('(',curSelLbl);
   }
 
 }
 
-
-
 class SimpleDropdownAction implements ISelectAction {
   private String curSelection = "N/A";
-  
-  public void OnSelection(String selOpt){
-    if (selOpt!=null){curSelection=selOpt;}
-    toConsole();
-  }
-
-  public void toConsole(){
-    Cons.log(toString());
-  }
-
-  public String toString(){
-    return "Current Selection = "+StringUtils.wrapWith('[',curSelection,']');
-  }
+  public void OnSelection(String selOpt){if(selOpt!=null){curSelection=selOpt;} toConsole();}
+  public void toConsole(){Cons.log(toString());}
+  public String toString(){return "Current Selection = "+StringUtils.wrapWith('[',curSelection,']');}
 }
 
 class ToggleBGGrid implements IToggleCallback{

@@ -13,14 +13,26 @@ import processing.core.PVector;
 /** Dropdown */
 public class UIDropdown extends UIObject {
 
-  //> @TODO: these should be spec'd by UIStyles
+  /** 
+   * Basically: 'speed' by which `mouseWheel` scrolls through list.
+   */
   private float scrollFactor;
+  /**
+   * Basically: current vertical offset by which {@link UIDropdownItem} list is
+   * translated.
+   */
   private float scrollOff;
+  /** 
+   * Basically: how much space needs to be scrolled through to reach bottom item
+   * of options list. Technically: total vertical space required to fully render 
+   * entire options list; sans vertical space alread provided by dropdown.
+   */
   private float maxScrollOff;
-  private float nScrollOff;
+
+  private PVector curBaseOff;
+
 
   private PVector ddownItemDim;
-  private PVector curBaseOff;
 
   private ArrayList<UIDropdownItem> options;
   private UIDropdownItem curSelItem;
@@ -30,22 +42,11 @@ public class UIDropdown extends UIObject {
   public UIDropdown(PApplet iApp, BBox iBBox){
     super(iApp, iBBox, WidgetType.DD);
     options = new ArrayList<UIDropdownItem>();
-    setItemDims(bbox.wide()-32, 32);
+    //> Keeping it simple for now; this is a bitch ATM to realize.
+    ddownItemDim = new PVector(bbox.wide(), 32);
+    curBaseOff   = new PVector();
     scrollFactor=16;
     reset();
-  }
-
-  /** 
-   * Clears options list, current option selected, and scroll state. This method
-   * <b>MUST</b> be called to correctly replace the current set of options with
-   * a new one (e.g. changing target of sprite animation viz in EiSpriteViewer).
-   */
-  public void reset(){
-    curSelItem = null;
-    options.clear();
-    scrollOff = 0;
-    maxScrollOff = 0;
-    curBaseOff.y=bbox.minY();
   }
 
   public UIDropdown(PApplet iApp, PVector iPos, PVector iDim){
@@ -68,20 +69,40 @@ public class UIDropdown extends UIObject {
     return create(iMgr.app, iPos, iDim).bindManager(iMgr).castTo(UIDropdown.class);
   }
 
+
+  /*=[ STATE (RE)INIT METHODS ]=================================================
+  +===========================================================================*/
+
+  /** 
+   * Clears options list, current option selected, and scroll state. This method
+   * <b>MUST</b> be called to correctly replace the current set of options with
+   * a new one (e.g. changing target of sprite animation viz in EiSpriteViewer).
+   */
+  public void reset(){
+    curSelItem = null;
+    options.clear();
+    resetOffsets();
+  }
+
   public UIDropdown bindAction(ISelectAction iAction){
     action = iAction;
     return this;
   }
 
-  private void setItemDims(float wide, float tall){
-    ddownItemDim = new PVector(wide,tall);
-    curBaseOff = new PVector(bbox.midX()-(ddownItemDim.x/2), bbox.minY());
+  /*=[ OPTION CRUD METHODS ]====================================================
+  +===========================================================================*/
+
+  public void onSelectionMade(UIDropdownItem selItm){
+    if(curSelItem!=null){curSelItem.setSelected(false);}
+    curSelItem = selItm;
+    curSelItem.setSelected(true);
+    if(action!=null){action.OnSelection(selItm.value);}
   }
 
   public UIDropdown addOption(String val, String lbl){
     options.add(
       UIDropdownItem.create(this, app, curBaseOff.copy(), ddownItemDim.copy(), val, (lbl==null?val:lbl))
-      .setManagerΘ(manager).castTo(UIDropdownItem.class)
+      .castTo(UIDropdownItem.class)
     );
     recomputeOffsets();
     return this;
@@ -106,16 +127,37 @@ public class UIDropdown extends UIObject {
     return this;
   }
 
+  public UIDropdown sortByLabel(){
+    if(options.size()>0){Collections.sort(options);}
+    return this;
+  }
+
+
+  /*=[ SCROLL METHODS ]=========================================================
+  +===========================================================================*/
+
+  private void resetOffsets(){
+    scrollOff    = 0;
+    maxScrollOff = 0;
+    curBaseOff.set(bbox.midX()-(ddownItemDim.x/2), bbox.minY());
+    System.err.println(curBaseOff.toString());
+  }
+
   private void recomputeOffsets(){
     curBaseOff.y+=ddownItemDim.y;
     maxScrollOff = (options.size()*ddownItemDim.y)-bbox.dimY();
   }
 
-
-  public UIDropdown sortByLabel(){
-    if(options.size()>0){Collections.sort(options);}
-    return this;
+  private boolean recalcScrollOff(int v){
+    float nScrollOff = scrollOff+(v*scrollFactor);        
+    if(nScrollOff<0||nScrollOff>maxScrollOff){return false;}
+    scrollOff=nScrollOff;
+    return true;
   }
+
+
+  /*=[ UPDATE AND I/O METHODS ]=================================================
+  +===========================================================================*/
 
   public void update(){
     for(UIDropdownItem ddi : options){ddi.update();}
@@ -123,9 +165,7 @@ public class UIDropdown extends UIObject {
  
   public void onMouseWheel(int v){
     if(!bbox.inBounds(app.mouseX, app.mouseY)){return;}   
-    nScrollOff = scrollOff+(v*scrollFactor);        
-    if(nScrollOff<0||nScrollOff>maxScrollOff){return;}
-    scrollOff=nScrollOff;
+    if(!recalcScrollOff(v)){return;}
     for(UIDropdownItem ddi : options){ddi.scrollTransform(v*-scrollFactor);}
   }
   
@@ -137,23 +177,14 @@ public class UIDropdown extends UIObject {
   }
 
 
-  public void onSelectionMade(UIDropdownItem selItm){
-    if(curSelItem!=null){curSelItem.setSelected(false);}
-    curSelItem = selItm;
-    curSelItem.setSelected(true);
-    if(action!=null){action.OnSelection(selItm.value);}
-  }
+  /*=[ RENDER FUNCTIONS ]=======================================================
+  +===========================================================================*/
 
-
-  public void optionsToConsole(){
-    for(UIDropdownItem o : options){o.toConsole();}
-  }
-
-
-  /** 
-   * @implSpec will need `super.render()` call if I introduce ANY non-item text i.e. current selection, etc.
-   * @implSpec if you ever realize tooltips for dropdown xor items therein: you MUST call `lateRender`!
-   */
+  /*----------------------------------------------------------------------------
+  |# Future Implementation Notes:
+  |   > MUST call `super.render()` if widget text realized (e.g. `curSel`); and
+  |   > MUST call `lateRender` if tooltips realized for dropdown and/xor items.
+  +---------------------------------------------------------------------------*/
   public void render(){
     renderBG();
     clipAndRenderOptions();
@@ -161,22 +192,31 @@ public class UIDropdown extends UIObject {
   }
 
   private void renderBG(){
-    Pgfx.fillnostroke(app,style.fill);
+    app.fill(style.fill);
+    app.noStroke(); //> redundant as clipping will hide it, but meh...
     renderRect();
   }
 
   private void clipAndRenderOptions(){
     app.imageMode(PApplet.CORNER);
     Pgfx.clip(app, bbox);
-    for(UIDropdownItem ddi : options){
-      ddi.render();
-    }
+    for(UIDropdownItem ddi : options){ddi.render();}
     app.noClip();
   }
 
   private void renderFG(){
-    Pgfx.strokenofill(app, style.strk_enabled);
+    app.noFill();
+    app.stroke(style.strk_enabled);
     app.strokeWeight(style.swgt);
     renderRect();
   }
+
+
+  /*=[ TO-STRING/CONSOLE FUNCTIONS ]============================================
+  +===========================================================================*/
+
+  public void optionsToConsole(){
+    for(UIDropdownItem o : options){o.toConsole();}
+  }
+
 }

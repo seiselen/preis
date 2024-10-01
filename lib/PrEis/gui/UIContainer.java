@@ -20,7 +20,7 @@ public class UIContainer extends UIObject {
    * `UIObjects` supported containers with containers)
    */
   private static final WidgetType[] VALID_CHILD_WIDGETS = new WidgetType[]{
-    WidgetType.CB, WidgetType.TB, WidgetType.FB, WidgetType.LB
+    WidgetType.CB, WidgetType.TB, WidgetType.FB, WidgetType.LB, WidgetType.DD
   };
   
   private boolean SHOW_BOUNDS = false;
@@ -53,13 +53,9 @@ public class UIContainer extends UIObject {
     return create(mgr.app, pos, dim).bindManager(mgr).castTo(UIContainer.class);
   }
 
-
-
-
   public UIContainer addChild(UIObject c){
     if(isValidChildType(c)){
       c.addTranslate(bbox.pos());
-      c.setManager(manager);
       objects.add(c);
     }
     return this;
@@ -69,8 +65,6 @@ public class UIContainer extends UIObject {
     for(UIObject c : cs){addChild(c);}
     return this;
   }
-
-
 
   public UIContainer toggleShowBounds(){
     SHOW_BOUNDS = !SHOW_BOUNDS;
@@ -92,18 +86,15 @@ public class UIContainer extends UIObject {
     for(UIObject o : objects){o.update();}
   }
   
-
   public void onMouseWheel(int v){
     if(!bbox.inBounds(app.mouseX, app.mouseY)){return;}
     for(UIObject o : objects){o.onMouseWheel(v);}
   }
 
-  
   public void onMousePressed(){
     if(!bbox.inBounds(app.mouseX, app.mouseY)){return;}
     for(UIObject o : objects){o.onMousePressed();}
   }
-
 
   public void render(){
     app.fill(style.fill);
@@ -124,5 +115,4 @@ public class UIContainer extends UIObject {
     app.imageMode(PApplet.CORNER);
     Pgfx.rect(app,bbox);
   }
-
 }

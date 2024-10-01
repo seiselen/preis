@@ -1,6 +1,5 @@
 package PrEis.gui;
 import PrEis.utils.Cons;
-import PrEis.utils.DataStructUtils;
 import PrEis.utils.StringUtils;
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -31,7 +30,7 @@ public class UIDropdownItem extends UIObject implements Comparable<UIDropdownIte
 
     
   public void scrollTransform(float val){
-    addTranslate(DataStructUtils.createVector(0,val));
+    addTranslate(new PVector(0,val));
   }
   
   private int getFillCol(){
@@ -73,6 +72,7 @@ public class UIDropdownItem extends UIObject implements Comparable<UIDropdownIte
 
   public String toString(){
     return StringUtils.wrapWith('{',StringUtils.concatAsCSSV(
+      "pos:"+bbox.pos().toString(),
       "value:"+StringUtils.wrapWith('"', value),
       "label:"+StringUtils.wrapWith('"', label)
     ),'}');
