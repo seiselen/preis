@@ -1,6 +1,5 @@
 package PrEis.test;
 import PrEis.utils.Cons;
-
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 import processing.data.JSONObject;
@@ -10,7 +9,7 @@ public class Testbed extends PApplet {
   public enum TestMode {UTILS, GRIDMGR, PGFXUTL, GUIOBJS, HTMLPARSE};
   public static TestMode curTestMode = TestMode.GUIOBJS;
 
-  private String APP_ROOT_DIR = "";
+  public static String APP_ROOT_DIR = "";
   private static final String TEST_DIRS_SUBPATH = "assets/testDirs.json";
 
   public static TestGridManager  testGridMgr;

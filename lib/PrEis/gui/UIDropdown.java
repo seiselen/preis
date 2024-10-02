@@ -140,7 +140,6 @@ public class UIDropdown extends UIObject {
     scrollOff    = 0;
     maxScrollOff = 0;
     curBaseOff.set(bbox.midX()-(ddownItemDim.x/2), bbox.minY());
-    System.err.println(curBaseOff.toString());
   }
 
   private void recomputeOffsets(){

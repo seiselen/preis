@@ -163,13 +163,13 @@ public abstract class UIObject {
 
   public UIObject withGlyph(String iGlyph){
     setLabel(iGlyph);
-    setFont(AppFont.GLYPH);
+    setFontType(AppFont.GLYPH);
     return this;
   }
 
   public UIObject withLabel(String iLabel){
     if(iLabel != null){setLabel(iLabel);}
-    setFont(AppFont.TEXT);
+    setFontType(AppFont.TEXT);
     return this;
   }
 
@@ -193,7 +193,7 @@ public abstract class UIObject {
   
   public UIObject withValue(String iValue){
     if(iValue != null){setValue(iValue);}
-    setFont(AppFont.TEXT);
+    setFontType(AppFont.TEXT);
     return this;
   }
 
@@ -209,15 +209,6 @@ public abstract class UIObject {
   public UIObject withValueAndLabel(String v, String l){
     return withValue(v).withLabel(l);
   }
-
-
-
-  public void setFont(AppFont iFont){
-    objFont = iFont;
-    if (objFont!=null && objFont==AppFont.GLYPH){
-      setStyleProp("txt_size", Integer.class, DefaultStyle.GLYPH_TEXT_SIZE);
-    }
-  } 
   
   /** 
    * Calls {@link UIStyle#setStyleProp} on {@link #style}.
@@ -260,15 +251,24 @@ public abstract class UIObject {
   /** Abstract `render` used for common pre-pro; as children define how they render. */
   public void render(){
     //> here because `setFont` RESETS all text style settings, ergo needs to be called first
-    setFont();
+    changeFont(objFont);
   }
 
-  public void setFont(){
+
+  public void setFontType(AppFont f){
+    objFont = f;
+    if (objFont!=null && objFont==AppFont.GLYPH){
+      setStyleProp("txt_size", Integer.class, DefaultStyle.GLYPH_TEXT_SIZE);
+    }
+  }
+  
+
+  private void changeFont(AppFont f){
     if(QueryUtils.nullAll(labelFont,glyphFont)){
-      Cons.err_act(Err.NULL_VALUE, Act.RETURN_NO_ACTION, "one ore more fonts");
+      Cons.err_act(Err.NULL_VALUE, Act.RETURN_NO_ACTION, "one or more fonts null");
       return;
     }
-    switch(objFont){
+    switch(f){
       case TEXT  : app.textFont(labelFont); return;
       case GLYPH : app.textFont(glyphFont); return;
       default    : Cons.err_act(Err.SWITCH_DROP_OUT, Act.RETURN_NULL);
@@ -340,7 +340,7 @@ public abstract class UIObject {
     if(!mouseOver||title==null){return;}
 
     //> ORDER COUNTS! `setFont` CALL WIPES FONT STATE!
-    setFont(AppFont.TEXT);
+    changeFont(AppFont.TEXT);
     app.textSize(style.txt_size_ttip);
 
     int off = style.txt_size_ttip/2;
