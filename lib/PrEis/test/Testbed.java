@@ -1,5 +1,6 @@
 package PrEis.test;
 import PrEis.utils.Cons;
+import PrEis.utils.JAResourceUtil;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 import processing.data.JSONObject;
@@ -35,6 +36,8 @@ public class Testbed extends PApplet {
   public void setup(){
     APP_ROOT_DIR = sketchPath();
     loadTestDirsJSON();
+
+    JAResourceUtil.app = this;
 
     switch(curTestMode){
       case UTILS:

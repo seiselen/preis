@@ -10,6 +10,7 @@ import PrEis.gui.IToggleCallback;
 import PrEis.gui.IUpdateCallback;
 import PrEis.gui.LabelType;
 import PrEis.gui.PosOri;
+import PrEis.gui.UIAppBar;
 import PrEis.gui.UIClick;
 import PrEis.gui.UIContainer;
 import PrEis.gui.UIDropdown;
@@ -18,6 +19,7 @@ import PrEis.gui.UILabel;
 import PrEis.gui.UIManager;
 import PrEis.gui.UIObject;
 import PrEis.gui.UIToggle;
+import PrEis.gui.WidgetType;
 import PrEis.gui.UIImage.ImageSpecial;
 import PrEis.gui.UIConfirm;
 import PrEis.utils.BBox;
@@ -153,8 +155,9 @@ public class TestGUIManager {
     mousePosUpdate = new MousePosUpdate(app);
     Do r = Do.RUN; Do s = Do.SKIP;
 
-    test_Dropdown_02  (r);
-    test_Dropdown_01  (r);
+    test_AppBar_01    (r);
+    test_Dropdown_02  (s);
+    test_Dropdown_01  (s);
     test_Tooltips_01  (s);
     test_Image_01     (s);
     test_misc_01      (s);
@@ -164,6 +167,25 @@ public class TestGUIManager {
     /*=[ DON'T REMOVE THIS, NOR EVEN TOUCH IT ]===============================*/
     Cons.log("Function 'initGui' has completed.");
   }
+
+
+  private void test_AppBar_01(Do d){if(d==Do.SKIP){return;}
+
+  String fpath = FileSysUtils.pathConcat(
+    app.getPathOf(TestAssetKey.DIAG_IMG_PFIX),
+    TestAssetKey.PREIS_TBED_LOGO.get()
+  );
+
+  PImage tbedLogoImg = app.loadImage(fpath);
+
+
+    uim.bindUiObject(
+      new UIAppBar(app, WidgetType.NA)
+      .bindAppLogoΘ(tbedLogoImg, null)
+    );
+  }
+
+
 
   /** Performs test encompassing clearing and replacing a dropdown's options. */
   private void test_Dropdown_02(Do d){

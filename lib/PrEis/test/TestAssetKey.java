@@ -9,7 +9,8 @@ public enum TestAssetKey {
   GUI_BG_IMG_LITE,
   GUI_BG_IMG_DARK,
 
-  //-[ DIAGNOSTIC IMAGES ]-----------------------------------------------------#
+  //-[ IMAGES (DIAGNOSTIC AND OTHERWISE) ]-------------------------------------#
+  PREIS_TBED_LOGO("PrEisTestbedLogo.png"),
   DIAG_IMG_PFIX,
   DIMG_32X32("32x32.png"),
   DIMG_32X64("32x64.png"),

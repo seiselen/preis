@@ -19,8 +19,8 @@ public class UIContainer extends UIObject {
    * @implNote I am being rather strict right now (e.g. IIRC the 2015 version of
    * `UIObjects` supported containers with containers)
    */
-  private static final WidgetType[] VALID_CHILD_WIDGETS = new WidgetType[]{
-    WidgetType.CB, WidgetType.TB, WidgetType.FB, WidgetType.LB, WidgetType.DD
+  private static final WidgetType[] INVALID_CHILD_WIDGETS = new WidgetType[]{
+    WidgetType.CO,
   };
   
   private boolean SHOW_BOUNDS = false;
@@ -77,9 +77,11 @@ public class UIContainer extends UIObject {
   }
 
   private boolean isValidChildType(UIObject c){
-    for(WidgetType t : VALID_CHILD_WIDGETS){if(c.type==t){return true;}}
-    Cons.err("Invalid child widget type: "+c.type.toNameAndID());
-    return false;
+    for(WidgetType t : INVALID_CHILD_WIDGETS){if(c.type==t){
+      Cons.err("Invalid child widget type: "+c.type.toNameAndID());
+      return false;
+    }}
+    return true;
   }
 
   public void update(){

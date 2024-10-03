@@ -10,7 +10,8 @@ public enum WidgetType {
   /** <b>Container</b>     */ CO,
   /** <b>Dropdown</b>      */ DD,
   /** <b>DropdownItem</b>  */ DI,
-  /** <b>Image</b>         */ IM;
+  /** <b>Image</b>         */ IM,
+  /** GENERIC WIDGET       */ NA;
 
   public static String typeToName(WidgetType t){
     switch(t){

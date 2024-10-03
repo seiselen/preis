@@ -14,8 +14,9 @@ import processing.core.PVector;
  */
 public abstract class UIObject {
 
-  public static PFont labelFont;
-  public static PFont glyphFont;
+  public static PFont textFont;
+  public static PFont symbFont;
+  public static PFont monoFont;
 
   /** UIObject Type of this UIObject. */
   protected WidgetType type; 
@@ -81,8 +82,8 @@ public abstract class UIObject {
   public static void injectFonts(PFont tf, PFont gf){
     if(tf==null||gf==null){Cons.err_act(Err.NULL_XOR_INVALID, Act.RETURN_NO_ACTION);}
     else{
-      UIObject.labelFont=tf; 
-      UIObject.glyphFont=gf;
+      UIObject.textFont=tf; 
+      UIObject.symbFont=gf;
     }
   }
 
@@ -264,13 +265,14 @@ public abstract class UIObject {
   
 
   private void changeFont(AppFont f){
-    if(QueryUtils.nullAll(labelFont,glyphFont)){
+    if(QueryUtils.nullAll(textFont,symbFont)){
       Cons.err_act(Err.NULL_VALUE, Act.RETURN_NO_ACTION, "one or more fonts null");
       return;
     }
     switch(f){
-      case TEXT  : app.textFont(labelFont); return;
-      case GLYPH : app.textFont(glyphFont); return;
+      case TEXT  : app.textFont(textFont); return;
+      case GLYPH : app.textFont(symbFont); return;
+      case MONO  : app.textFont(monoFont); return;
       default    : Cons.err_act(Err.SWITCH_DROP_OUT, Act.RETURN_NULL);
     }
   }

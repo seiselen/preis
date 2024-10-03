@@ -17,31 +17,42 @@ public class JAResourceUtil {
 
   public static PApplet app;
 
-  public static InputStream getInStreamOfJARAsset(String assetLibPath){
+  public static InputStream getInStreamOfJARAsset(PrEisRes pres){
     InputStream is = null;
-    try {is = Thread.currentThread().getContextClassLoader().getResourceAsStream(assetLibPath);}   
+    String fpath = FileSysUtils.pathConcat(PrEisRes.RES_ROOT.get(),pres.get());
+    try {
+      is = Thread.currentThread().getContextClassLoader().getResourceAsStream(fpath);
+    }   
     catch (Exception e) {e.printStackTrace();}
     return is;
   }
 
-  public static PFont getFontFromJAR(String assetLibPath){
+  public static PFont getFontFromJAR(PrEisRes pres){
     PFont pfnt = null;
-    try {InputStream is = getInStreamOfJARAsset(assetLibPath); pfnt = new PFont(is); is.close();}
+    try {
+      InputStream is = getInStreamOfJARAsset(pres);
+      pfnt = new PFont(is);
+      is.close();
+    }
     catch (IOException e) {e.printStackTrace();}
     return pfnt;
   }
 
   @SuppressWarnings("deprecation")
-  public static PImage getImageFromJAR(String assetLibPath){
+  public static PImage getImageFromJAR(PrEisRes pres){
     PImage pimg = null;
-    try {InputStream is = getInStreamOfJARAsset(assetLibPath); pimg = new PImage((Image)ImageIO.read(is)); is.close();}
+    try {
+      InputStream is = getInStreamOfJARAsset(pres);
+      pimg = new PImage((Image)ImageIO.read(is));
+      is.close();
+    }
     catch (IOException e) {e.printStackTrace();}
     return pimg;
   }
 
-  public static JSONObject getJSONObjectFromJAR(String assetLibPath){
+  public static JSONObject getJSONObjectFromJAR(PrEisRes pres){
     try {
-      InputStream is = getInStreamOfJARAsset(assetLibPath);
+      InputStream is = getInStreamOfJARAsset(pres);
       BufferedReader buffRead = new BufferedReader(new InputStreamReader(is, "UTF-8"));
       StringBuilder respBldr = new StringBuilder();
       String l = "";
