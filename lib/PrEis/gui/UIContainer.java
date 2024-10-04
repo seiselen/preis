@@ -113,6 +113,7 @@ public class UIContainer extends UIObject {
   private void renderBounds(){
     app.noFill();
     app.stroke(DefaultStyle.DBG_COL);
+    app.strokeWeight(style.swgt);
     app.rectMode(PApplet.CORNER);
     app.imageMode(PApplet.CORNER);
     Pgfx.rect(app,bbox);

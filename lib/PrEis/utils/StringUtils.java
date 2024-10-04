@@ -175,4 +175,9 @@ public class StringUtils {
     return (o==null ? "" : s);
   }
 
+
+  public static String strValElse(String targStr, String elseStr){
+    return (targStr==null || targStr.isEmpty()) ? elseStr : targStr;
+  }
+
 }

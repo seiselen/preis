@@ -69,6 +69,7 @@ class DefaultStyle {
     s.strk_enabled  = p.color(255, 255, 255);
     s.strk_disabled = p.color(192, 192, 192);
     s.border_radius = 0;
+    s.text_wrap     = false;
     return s;
   }
 

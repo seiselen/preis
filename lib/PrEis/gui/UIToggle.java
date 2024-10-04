@@ -1,6 +1,7 @@
 package PrEis.gui;
 import PrEis.utils.BBox;
 import PrEis.utils.Cons;
+import PrEis.utils.QueryUtils;
 import PrEis.utils.Cons.Err;
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -48,7 +49,12 @@ public class UIToggle extends UIObject {
   
   public UIToggle withLabel(String iLabel){return (UIToggle)super.withLabel(iLabel);}
 
-  public UIToggle withOnOffLabels(String lblT, String lblF){labelT=lblT; labelF=lblF; return this;}
+  public UIToggle withOnOffLabels(String lblT, String lblF){
+    labelT=lblT;
+    labelF=lblF;
+    setLabel();
+    return this;
+  }
 
   public UIToggle withGlyph(String iGlyph){return (UIToggle)super.withGlyph(iGlyph);}  
 
@@ -64,7 +70,12 @@ public class UIToggle extends UIObject {
 
   private void onMouseLeft(){
     toggleCallback.toggleState();
-    if(objFont==AppFont.TEXT && labelT!=null && labelF!=null){
+    setLabel();  
+  }
+
+
+  private void setLabel(){
+    if(QueryUtils.nullNone(labelT,labelF,toggleCallback)){
       label = toggleCallback.getState() ? labelT : labelF;
     }    
   }

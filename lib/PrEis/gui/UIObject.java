@@ -256,6 +256,8 @@ public abstract class UIObject {
   }
 
 
+  public UIObject setFontTypeΘ(AppFont f){setFontType(f); return this;}
+
   public void setFontType(AppFont f){
     objFont = f;
     if (objFont!=null && objFont==AppFont.GLYPH){
@@ -287,17 +289,20 @@ public abstract class UIObject {
     else{Pgfx.rect(app,bbox);}
   }
 
-  /** 
-   * @TODO Realize this at some point? Perhaps as specd-else-default normalized
-   * percent of widget width per its `BBox`.
-   */
+
   public void renderText(float x1, float y1){
-    //if(style.text_wrap){p.text(label,x1,y1,style.text_wrap.wide(),style.text_wrap.tall());}
-    //else{p.text(label,x1,y1);}
-    app.text(label,x1,y1);
+    if(style.text_wrap){renderTextWrapped(x1, y1);}
+    else{app.text(label,x1,y1);}
   }
 
+  //> not happy with computation expense, but #KISS for now.
+  private void renderTextWrapped(float x1, float y1){
+    app.text(label, x1, y1, bbox.dimX()-(style.txt_offset.x*2), bbox.dimY()-(style.txt_offset.y*2));
+  }
+
+
   public void renderTextViaOri(){
+    app.rectMode(PApplet.CORNER);
     switch(style.txt_anchor){
       case TL:  rTL(); return;
       case TR:  rTR(); return;

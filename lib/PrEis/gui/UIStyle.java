@@ -40,6 +40,8 @@ public class UIStyle {
 
   public float   txt_off_pct;
 
+  public boolean text_wrap;
+
   public int txt_size_ttip;
 
   //> these are buffers; unused after constructor returns
@@ -120,6 +122,7 @@ public class UIStyle {
       if(propField==null){Cons.err("Prop Name '"+propName+"' cannot be found!");}
       else if(propType.getName()==Integer.class.getName()){propField.setInt(this, (Integer)propValue);}
       else if(propType.getName()==Float.class.getName()){propField.setFloat(this, (Float)propValue);}
+      else if(propType.getName()==Boolean.class.getName()){propField.setBoolean(this, (Boolean)propValue);}      
       else if(propType.getName()==PVector.class.getName()){propField.set(this, (PVector)propValue);}
       else if(propType.getName()==PosOri.class.getName()){propField.set(this, (PosOri)propValue);}
     }

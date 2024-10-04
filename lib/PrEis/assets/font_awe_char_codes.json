@@ -21,5 +21,10 @@
   "cursor1"    : 57612,
   "cursor2"    : 57408,
 
+  "toggOn1"    : 57654,
+  "toggOff1"   : 57723,
+  "toggOn2"    : 57364,
+  "toggOff2"   : 57378,
+
   "gAppExit"   : 57655
 }

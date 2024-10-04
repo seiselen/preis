@@ -31,10 +31,8 @@ public class FormatUtils{
     return new int[]{(int)(c >> 16 & 0xFF),(int)(c >> 8 & 0xFF),(int)(c & 0xFF), (int)(c >> 24 & 0xFF)};
   }
 
-  /** @move MOVE THIS TO STRING UTILS? */
-  public static String strValElseNone(String s){
-    return s==null ? "NONE" : s;
-  }
+
+
 
   /**
    * @implNote This is used for the util (currently within `EiSpriteViewer` app)
