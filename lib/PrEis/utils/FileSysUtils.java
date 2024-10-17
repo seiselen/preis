@@ -99,18 +99,31 @@ public class FileSysUtils {
     return dirList.toArray();
   }
 
+  public static Path[] pathsOf(String dir){
+    return _filePathsOfDir(dir);
+  }
+
+  public static Path[] pathsOfType(String dir, ExtType ... exts){
+    return _filePathsOfDir(dir, exts);
+  }
+
+
+  /** @implSpec RENAME AS `pathStrsOf` */
   public static String[] filePathsOfDir(String dir){
     return _filePathStrs(_filePathsOfDir(dir), PathInfo.AS_FPATH);
   }
 
+    /** @implSpec RENAME AS `nameStrsOf` */
   public static String[] fileNamesOfDir(String dir){
     return _filePathStrs(_filePathsOfDir(dir), PathInfo.AS_FNAME);
   }
 
+  /** @implSpec RENAME AS `pathStrsOf` */
   public static String[] filePathsOfDir(String dir, ExtType ... exts){
     return _filePathStrs(_filePathsOfDir(dir, exts), PathInfo.AS_FPATH);
   }
 
+  /** @implSpec RENAME AS `nameStrsOf` */
   public static String[] fileNamesOfDir(String dir, ExtType ... exts){
     return _filePathStrs(_filePathsOfDir(dir, exts), PathInfo.AS_FNAME);
   }

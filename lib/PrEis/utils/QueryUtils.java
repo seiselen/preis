@@ -1,5 +1,12 @@
 package PrEis.utils;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import processing.core.PApplet;
+import processing.data.IntDict;
+
 /**
  * @implNote <code>nullish</code> is expected to be realized for specific object
  * types when/as needed; i.e. there is NO generalized (i.e. <code>object</code> 
@@ -40,4 +47,54 @@ public class QueryUtils {
     for(String s : arr){if(str.equals(s)){return true;}}
     return false;
   }
+
+
+  public static String epochSecondToString(){
+    return ""+Instant.now().getEpochSecond();
+  }
+
+  public static String dateTimeToString(){
+    return StringUtils.concatStrings(
+      PApplet.nf(PApplet.month(),2)+"/",
+      PApplet.nf(PApplet.day(),2)+"/",
+      PApplet.year()+".",
+      PApplet.nf(PApplet.hour(),2)+":",
+      PApplet.nf(PApplet.minute())+":",
+      PApplet.nf(PApplet.second())+""
+    );
+  }
+
+
+public static String[] diffDirFilenames(String path1, String path2){
+  return _diffDirFilenames(FileSysUtils.fileNamesOfDir(path1), FileSysUtils.fileNamesOfDir(path2));
+}
+
+public static String[] diffDirFilenames(String path1, String path2, ExtType fType){
+  return _diffDirFilenames(FileSysUtils.fileNamesOfDir(path1, fType), FileSysUtils.fileNamesOfDir(path2, fType));
+}
+
+private static String[] _diffDirFilenames(String[] p1Files, String[] p2Files){
+  ArrayList<String> sList = new ArrayList<String>();
+  IntDict imgNameFreqsBothDirs = new IntDict();
+    
+  for(String fn : p1Files){imgNameFreqsBothDirs.increment(fn);}
+  for(String fn : p2Files){imgNameFreqsBothDirs.increment(fn);}
+  
+  sList.add(EiStrings.EQUAL_CHAR_72X);
+  sList.add("Filenames within BOTH directories...");
+  sList.add(EiStrings.DASH_CHAR_72X);
+  sList.addAll(Arrays.asList(DataStructUtils.filterIntDictByFreq(imgNameFreqsBothDirs, '=', 2)));
+  sList.add(EiStrings.EQUAL_CHAR_72X);
+  
+  sList.add("\n"+EiStrings.EQUAL_CHAR_72X);
+  sList.add("Filenames within ONE directory...");
+  sList.add(EiStrings.DASH_CHAR_72X);  
+  sList.addAll(Arrays.asList(DataStructUtils.filterIntDictByFreq(imgNameFreqsBothDirs, '=', 1)));
+  sList.add(EiStrings.EQUAL_CHAR_72X);
+
+  return FormatUtils.arrFromList(String.class, sList);
+}
+
+
+
 }

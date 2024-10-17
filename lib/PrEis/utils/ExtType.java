@@ -10,8 +10,7 @@ public enum ExtType {
   TXT(".txt"),
   WAD(".wad"),
   WAV(".wav"),
-  ZIP(".zip")
-  ;
+  ZIP(".zip");
 
   private String val;
 

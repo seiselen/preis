@@ -10,7 +10,6 @@ public enum PrEisRes {
   EIS_LOGO("eis_logo.png"),
   TXT_FONT("tit_web_bold_32.vlw"),
   MON_FONT("ibm_plx_mono_32.vlw"),
-  EIS_CTAG("Eiselen Laboratories"),
   
   STUB;
   

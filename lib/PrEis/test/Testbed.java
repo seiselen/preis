@@ -8,7 +8,7 @@ import processing.data.JSONObject;
 public class Testbed extends PApplet {
 
   public enum TestMode {UTILS, GRIDMGR, PGFXUTL, GUIOBJS, HTMLPARSE};
-  public static TestMode curTestMode = TestMode.GUIOBJS;
+  public static TestMode curTestMode = TestMode.UTILS;
 
   public static String APP_ROOT_DIR = "";
   private static final String TEST_DIRS_SUBPATH = "assets/testDirs.json";
@@ -27,13 +27,14 @@ public class Testbed extends PApplet {
 
   public void settings(){
     switch(curTestMode){
-      case GRIDMGR: size(640,320); return;
+      case GRIDMGR: size(1280,768); return;
       case GUIOBJS: size(1280,768); return;
       default: return;
     }
   }
   
   public void setup(){
+    JAResourceUtil.app = this;
     APP_ROOT_DIR = sketchPath();
     loadTestDirsJSON();
 
@@ -79,7 +80,6 @@ public class Testbed extends PApplet {
     if(key=='q'||key=='Q'||keyCode==PApplet.ESC){
       exit(); return;
     }
-
     switch(curTestMode){
       case GRIDMGR: testGridMgr.onKeyPressed(); return;
       case GUIOBJS: testUIObjs.onKeyPressed(); return;

@@ -3,6 +3,7 @@ package PrEis.test;
 public enum TestAssetKey {
   TEXT_FONT,
   GLYPH_FONT,
+  MONO_FONT,
   GLYPH_CODES,
   TEST_OUT_DIR,
   TEST_IN_DIR,

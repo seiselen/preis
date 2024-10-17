@@ -53,6 +53,7 @@ public class StringUtils {
    */
   public static String wrapWith(char bfix, String str){
     switch(bfix){
+      case '[' : case ']'  : return '['+str+']';    
       case '(' : case ')'  : return '('+str+')';
       case '{' : case '}'  : return '{'+str+'}';
       case '<' : case '>'  : return '<'+str+'>';

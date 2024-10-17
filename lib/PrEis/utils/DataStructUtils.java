@@ -74,10 +74,6 @@ public class DataStructUtils {
   }
 
 
-
-
-
-
   private static PVector conserrAndRetZVec(){
     Cons.err_act(Cons.Err.NULL_XOR_INVALID, Cons.Act.RETURN_ZERO_VEC);
     return createVector();

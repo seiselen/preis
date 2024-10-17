@@ -111,6 +111,23 @@ public class FormatUtils{
   }
 
 
+  /** 
+   * Returns input <code>String[]</code> s.t. {@link Integer#valueOf(String)} is
+   * called upon each element. <b>NOTE:</b> NO data validation handling! */
+  public static int[] strArrToIntArr(String[] a){
+    int[] r = new int[a.length]; for(int i=0; i<a.length; i++){r[i]=Integer.valueOf(a[i]);} return r;
+  }
+
+  /** 
+   * Returns input <code>String[]</code> s.t. {@link Float#valueOf(String)} is
+   * called upon each element. <b>NOTE:</b> NO data validation handling! */
+   public static float[] strArrToFloatArr(String[] a){
+    float[] r = new float[a.length]; for(int i=0; i<a.length; i++){r[i]=Float.valueOf(a[i]);} return r;
+  }
+
+
+
+
   @SuppressWarnings("unchecked")
   public static <T> T[] arr1FromObj(T obj){
     final T[] ret = (T[]) Array.newInstance(obj.getClass(), 1);

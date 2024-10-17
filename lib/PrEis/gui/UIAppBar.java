@@ -3,6 +3,7 @@ package PrEis.gui;
 import PrEis.gui.UIImage.ImageSpecial;
 import PrEis.utils.BBox;
 import PrEis.utils.Cons;
+import PrEis.utils.EiStrings;
 import PrEis.utils.JAResourceUtil;
 import PrEis.utils.PrEisRes;
 import PrEis.utils.Cons.Act;
@@ -12,18 +13,12 @@ import processing.core.PVector;
 
 /** Encompasses Header <b>AND</b> Footer of standard <code>PrEis</code> app. */
 public class UIAppBar extends UIObject {
-  private final String XBTN_INIT = "EXIT APP";
-  private final String XBTN_WARN = "EXIT ?!?";
-  private final String XBTN_DONE = "EXITING!";
 
   UIContainer tBar, bBar;
   
-  public UIAppBar(
-    PApplet iPar,
-    WidgetType iTyp
-    ) {
+  public UIAppBar(PApplet iPar, WidgetType iTyp) {
     super(iPar, new BBox(iPar.width, iPar.height), iTyp);
-    label = PrEisRes.EIS_CTAG.get();
+    label = EiStrings.CTAG_EISTECHS;
     initComponents();
   }
 
@@ -42,8 +37,8 @@ public class UIAppBar extends UIObject {
   public void initComponents(){
     tBar = UIContainer.create(app, new BBox(0, 0, app.width, 64)).addChildren(
       UIConfirm.create(app, new BBox(app.width-160,0,160,64), new AppQuitAction(app))
-      .setButtonLabelsΘ(XBTN_INIT, XBTN_WARN, XBTN_DONE)
-      .setTitle("Click Twice To Exit App")
+      .setButtonLabelsΘ(EiStrings.EXIT_BTN_INIT, EiStrings.EXIT_BTN_WARN, EiStrings.EXIT_BTN_DONE)
+      .setTitle(EiStrings.EXIT_BTN_LABL)
     )
     .setStyleProp("fill", Integer.class, app.color(32,96,224))
     .setStyleProp("strk_enabled", Integer.class, app.color(255))
