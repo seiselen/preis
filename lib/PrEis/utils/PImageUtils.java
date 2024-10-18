@@ -6,6 +6,7 @@ import java.util.HashMap;
 import PrEis.utils.Cons.Err;
 import processing.core.PApplet;
 import processing.core.PImage;
+import processing.core.PVector;
 import processing.data.IntDict;
 import processing.data.StringList;
 
@@ -69,14 +70,36 @@ public class PImageUtils {
   +===========================================================================*/
 
   
-  /** #TODO */
-  public PImage[] splitSpritesheet(PImage img, SpritesheetPlan plan){
-    /*### STUB ###*/
-    return null;
+  public static Pair<String, PImage> splitSpritesheet(SpritesheetPlan plan){
+
+    if(plan.type != SpritesheetPlan.SheetType.GRID){return null;}
+    if(plan.order != SpritesheetPlan.SheetOrder.COL){return null;}
+
+    SpritesheetGridPlan gridPlan = (SpritesheetGridPlan)plan;
+
+    PImage sheetImg = app.loadImage(gridPlan.getPath());
+
+    PVector off = gridPlan.getOffset();
+    PVector dim = gridPlan.getDims();
+    String[][] names = gridPlan.getData();
+
+    int row = 8;
+    int col = 1;
+
+    String name = names[col][row];
+
+    System.out.println(name);
+
+    int xPos = (int)(off.x+(col*dim.x));
+    int yPos = (int)(off.y+(row*dim.y));
+
+    return new Pair<String,PImage>(name, sheetImg.get(xPos, yPos, (int)dim.x, (int)dim.y));
+
+
   };
-  
+
   /** #TODO */
-  public PImage[] saveSplitSprites(PImage[] splitSprites, SpritesheetPlan plan, Path outPath){
+  public static PImage[] saveSplitSprites(PImage[] splitSprites, SpritesheetPlan plan, Path outPath){
     /*### STUB ###*/
     return null;
   };

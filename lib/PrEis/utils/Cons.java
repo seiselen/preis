@@ -43,8 +43,7 @@ public class Cons {
   public static void err_act(Err e, Act a, String s){Cons.err(e,s); Cons.act(a,s);}
 
   public static void err_act(Err e, String es, Act a, String as){Cons.err(e,es); Cons.act(a,as);}
-
-
+  public static void err_act(String e, Act a){Cons.err(e); Cons.act(a);}
 
 
 
