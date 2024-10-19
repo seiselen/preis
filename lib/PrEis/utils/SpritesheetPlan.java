@@ -41,8 +41,9 @@ public abstract class SpritesheetPlan {
 
 
 
-  //> @TODO HOIST THESE SOMEPLACE MORE APPROPRIATE?
-  private static String KW_PATH = "PATH";
+  //> @TODO HOIST THESE SOMEPLACE MORE APPROPRIATE? <= YES! Do it as enum a-la `PrEisRes` soon.
+  private static String KW_SRC  = "SRC_FP";
+  private static String KW_DST  = "DST_DP";  
   private static String KW_OFF  = "OFFSET";
   private static String KW_ORDR = "ORDER"; 
   private static String KW_DIMS = "DIMS";
@@ -51,16 +52,21 @@ public abstract class SpritesheetPlan {
 
   protected SheetType  type;
   protected SheetOrder order;
-  protected String     path;
 
-  public SpritesheetPlan(SheetType inType, SheetOrder inOrder, String inPath){
+  /** <b>Source Filepath</b> i.e. of spritesheet image. */
+  protected String srcFP;
+  /** <b>Destination Directory Path</b> i.e. where sprites are saved. */
+  protected String dstDP;
+
+  public SpritesheetPlan(SheetType inType, SheetOrder inOrder, String inSrcFP, String inDstDP){
     type  = inType;
     order = inOrder;
-    path  = inPath;
+    srcFP  = inSrcFP;
+    dstDP = inDstDP;
   }
 
 
-  public String getPath(){return path;}
+  public String getSrcFP(){return srcFP;}
   public SheetType getType(){return type;}
   public SheetOrder getOrder(){return order;}
 
@@ -79,10 +85,14 @@ public abstract class SpritesheetPlan {
 
   private static SpritesheetPlan grid_withJSON(JSONObject jObj){
     
-    String path = null;
-    try {path = jObj.getString(KW_PATH);} catch (Exception e){}
-    if(path==null){Cons.err_act("Unable to find or assign sheet image filepath!", Act.RETURN_NULL); return null;}
-    
+    String srcFP = null;
+    try {srcFP = jObj.getString(KW_SRC);} catch (Exception e){}
+    if(srcFP==null){Cons.err_act("Unable to find or assign sheet image filepath!", Act.RETURN_NULL); return null;}
+
+    String dstDP = null;
+    try {dstDP = jObj.getString(KW_DST);} catch (Exception e){}
+    if(dstDP==null){Cons.err_act("Unable to find or assign destination dirpath!", Act.RETURN_NULL); return null;}
+
     SheetOrder ordr = null;
     try {
       ordr = SheetOrder.withString(jObj.getString(KW_ORDR));
@@ -123,9 +133,14 @@ public abstract class SpritesheetPlan {
       Cons.err_act("Unable to find or assign data rows/cols!", Act.RETURN_NULL);
       return null;
     }
-    return new SpritesheetGridPlan(path, ordr, off, dims, data);
+    return new SpritesheetGridPlan(srcFP, dstDP, ordr, off, dims, data);
   }
 
+
+  public String[] toStringArray(){
+    /*### STUB ###*/
+    return null; 
+  }
 
   public void toConsole(){
     /*### STUB ###*/
@@ -139,8 +154,8 @@ class SpritesheetGridPlan extends SpritesheetPlan {
   private PVector    dims;
   private String[][] data;
 
-  public SpritesheetGridPlan(String inPath, SheetOrder inOrdr, PVector inOff, PVector inDims, String[][] inData){
-    super(SheetType.GRID, inOrdr, inPath);
+  public SpritesheetGridPlan(String inSrcFP, String inDstDP, SheetOrder inOrdr, PVector inOff, PVector inDims, String[][] inData){
+    super(SheetType.GRID, inOrdr, inSrcFP, inDstDP);
     offset = inOff;
     dims   = inDims;
     data   = inData;
@@ -156,7 +171,9 @@ class SpritesheetGridPlan extends SpritesheetPlan {
     for(String s : toStr){System.out.println(s);}
   }
 
-  public String[] toStringArray(){
+  public String[] toStringArray(){return toStringArray(true);}
+
+  public String[] toStringArray(boolean inclData){
     //> Thx Processing for realizing this struct!
     StringList retList = new StringList();
 
@@ -164,9 +181,9 @@ class SpritesheetGridPlan extends SpritesheetPlan {
     retList.append("Order -------> "+order.toString());
     retList.append("Base Offset -> "+offset.toString());
     retList.append("Common Dims -> "+dims.toString());
-    retList.append("Sheet FP ----> "+path.toString());
+    retList.append("Sheet FP ----> "+srcFP.toString());
     retList.append("Data A/F ----> ");
-    retList.append(dataToString());
+    if(inclData){retList.append(dataToString());}
 
     return retList.toArray();
   }

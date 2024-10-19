@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import PrEis.utils.Cons.Act;
 import processing.core.PApplet;
 import processing.data.JSONObject;
 import processing.data.StringList;
@@ -154,8 +155,16 @@ public class FileSysUtils {
   }
 
 
-  public static JSONObject loadJSONObjNullFail (PApplet app, String fPath){
-    return fPath==null ? null : app.loadJSONObject(fPath);
+  public static JSONObject loadJSONObjNullFail(PApplet app, String pathStr){
+    //> Parmless call uses 'false' because initial/legacy use is 'harmless and quiet pass' i.e. NO conserr!
+    return loadJSONObjNullFail(app,pathStr,false);
+  }
+
+  public static JSONObject loadJSONObjNullFail(PApplet app, String pathStr, boolean errLog){
+    if(!new File(pathStr).exists()){if(errLog){Cons.err_act("Can't find filepath: '"+pathStr+"'", Act.RETURN_NULL);} return null;}
+    JSONObject jObj = app.loadJSONObject(pathStr);
+    if(jObj==null){if(errLog){Cons.err_act("Can't load JSONObject of filepath: '"+pathStr+"'", Act.RETURN_NULL);} return null;}
+    return jObj;
   }
 
 }

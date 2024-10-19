@@ -1,11 +1,13 @@
 package PrEis.test;
 import java.io.File;
+import java.util.ArrayList;
 
 import PrEis.utils.Cons;
 import PrEis.utils.FileSysUtils;
 import PrEis.utils.PImageUtils;
 import PrEis.utils.Pair;
 import PrEis.utils.SpritesheetPlan;
+import PrEis.utils.SpritesheetUtils;
 import processing.core.PImage;
 import processing.data.JSONObject;
 
@@ -27,20 +29,9 @@ public class TestUtilsManager {
 
   private void onSnippetTesting(){
 
-    String pathStr = FileSysUtils.pathConcat(app.getRootDir(),"tests","inputs","example_spritesheet_plan.json");
-    File f = new File(pathStr);
-    if(!f.exists()){System.out.println("Can't find it!"); return;}
-    JSONObject o = app.loadJSONObject(pathStr);
-    if(o==null){System.out.println("Can't load it!"); return;}
-
-    SpritesheetPlan plan = SpritesheetPlan.withJSON(o);
-    plan.toConsole();
-
-    Pair<String,PImage> test = PImageUtils.splitSpritesheet(plan);
-
-    test.b.save(FileSysUtils.pathConcat(app.getRootDir(),"tests","outputs",test.a+".png"));
-
-
+    String planFP = FileSysUtils.pathConcat(app.getRootDir(),"tests","inputs","example_spritesheet_plan.json");
+    SpritesheetUtils.splitAndSaveSprites(app, planFP);
+    
   }
 
   private void onUtilsTesting(){

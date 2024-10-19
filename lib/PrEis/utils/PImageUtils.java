@@ -6,7 +6,6 @@ import java.util.HashMap;
 import PrEis.utils.Cons.Err;
 import processing.core.PApplet;
 import processing.core.PImage;
-import processing.core.PVector;
 import processing.data.IntDict;
 import processing.data.StringList;
 
@@ -32,10 +31,13 @@ public class PImageUtils {
        System.err.println(e);
        return null;
     }
- }
+  }
 
-
-
+  /** @implNote <b>WARNING:</b> No (file) data validation! */
+  public static void savePImages(PApplet app, ArrayList<Pair<String,PImage>> imgs, String outDir){
+    Cons.log("Saving to output directory: '"+outDir+"'"); //> KEEP THIS LOG JIC USER NEEDS DIR
+    for(Pair<String,PImage> pair : imgs){pair.b.save(FileSysUtils.pathConcat(outDir,pair.a+".png"));}
+  }
 
   /** Renders input {@link PImage} at canvas center */
   public void displayAtCanvasCenter(PApplet app, PImage img){
@@ -64,45 +66,6 @@ public class PImageUtils {
     app.loadImage(fullNameI).save(fullNameO);
     if(CONSLOG_BAKE_STATS){Cons.log("successfully loaded ("+fullNameI+") and saved as ("+fullNameO+")");}
   }
-
-  /*============================================================================
-  |> SPRITESHEET SPLIT-&-CELL UTILS
-  +===========================================================================*/
-
-  
-  public static Pair<String, PImage> splitSpritesheet(SpritesheetPlan plan){
-
-    if(plan.type != SpritesheetPlan.SheetType.GRID){return null;}
-    if(plan.order != SpritesheetPlan.SheetOrder.COL){return null;}
-
-    SpritesheetGridPlan gridPlan = (SpritesheetGridPlan)plan;
-
-    PImage sheetImg = app.loadImage(gridPlan.getPath());
-
-    PVector off = gridPlan.getOffset();
-    PVector dim = gridPlan.getDims();
-    String[][] names = gridPlan.getData();
-
-    int row = 8;
-    int col = 1;
-
-    String name = names[col][row];
-
-    System.out.println(name);
-
-    int xPos = (int)(off.x+(col*dim.x));
-    int yPos = (int)(off.y+(row*dim.y));
-
-    return new Pair<String,PImage>(name, sheetImg.get(xPos, yPos, (int)dim.x, (int)dim.y));
-
-
-  };
-
-  /** #TODO */
-  public static PImage[] saveSplitSprites(PImage[] splitSprites, SpritesheetPlan plan, Path outPath){
-    /*### STUB ###*/
-    return null;
-  };
 
 
 

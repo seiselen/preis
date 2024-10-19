@@ -13,6 +13,7 @@ public class Cons {
     MISSING_SUFFIX   {public String toString(){return "Input Lacks Required Suffix";}},
     SWITCH_DROP_OUT  {public String toString(){return "Unexpected Drop From Switch Statement";}},
     ARR_LEN_MISMATCH {public String toString(){return "Length of two or more arrays mismatch";}},
+    NOT_YET_REALIZED {public String toString(){return "Not Yet Realized/Implemented";}},
   }
 
   public enum Act {

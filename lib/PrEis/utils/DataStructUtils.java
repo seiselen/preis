@@ -66,6 +66,10 @@ public class DataStructUtils {
     return (vs.length==2) ? createVector(vs[0],vs[1]) : createVector(vs[0],vs[1],vs[2]);
   }
 
+  public static int[]   int2WithVec2  (PVector v){return new int[]{(int)v.x, (int)v.y};}
+  public static int[]   int3WithVec3  (PVector v){return new int[]{(int)v.x, (int)v.y, (int)v.z};}
+  public static float[] float2WithVec2(PVector v){return new float[]{v.x, v.y};}
+  public static float[] float3WithVec3(PVector v){return new float[]{v.x, v.y, v.z};}
 
 
   @SuppressWarnings("unchecked")
