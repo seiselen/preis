@@ -42,13 +42,13 @@ public abstract class SpritesheetPlan {
 
 
   //> @TODO HOIST THESE SOMEPLACE MORE APPROPRIATE? <= YES! Do it as enum a-la `PrEisRes` soon.
-  private static String KW_SRC  = "SRC_FP";
-  private static String KW_DST  = "DST_DP";  
-  private static String KW_OFF  = "OFFSET";
-  private static String KW_ORDR = "ORDER"; 
-  private static String KW_DIMS = "DIMS";
-  private static String KW_DATA = "DATA";  
-  private static String KW_TYPE = "TYPE";    
+  public static String KW_SRC  = "SRC_FP";
+  public static String KW_DST  = "DST_DP";  
+  public static String KW_OFF  = "OFFSET";
+  public static String KW_ORDR = "ORDER"; 
+  public static String KW_DIMS = "DIMS";
+  public static String KW_DATA = "DATA";  
+  public static String KW_TYPE = "TYPE";    
 
   protected SheetType  type;
   protected SheetOrder order;

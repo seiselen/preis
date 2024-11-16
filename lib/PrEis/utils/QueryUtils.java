@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import PrEis.utils.Cons.Act;
 import processing.core.PApplet;
 import processing.data.IntDict;
 
@@ -65,36 +66,69 @@ public class QueryUtils {
   }
 
 
-public static String[] diffDirFilenames(String path1, String path2){
-  return _diffDirFilenames(FileSysUtils.fileNamesOfDir(path1), FileSysUtils.fileNamesOfDir(path2));
-}
+  public static String[] diffDirFilenames(String path1, String path2){
+    return _diffDirFilenames(FileSysUtils.fileNamesOfDir(path1), FileSysUtils.fileNamesOfDir(path2));
+  }
 
-public static String[] diffDirFilenames(String path1, String path2, ExtType fType){
-  return _diffDirFilenames(FileSysUtils.fileNamesOfDir(path1, fType), FileSysUtils.fileNamesOfDir(path2, fType));
-}
+  public static String[] diffDirFilenames(String path1, String path2, ExtType fType){
+    return _diffDirFilenames(FileSysUtils.fileNamesOfDir(path1, fType), FileSysUtils.fileNamesOfDir(path2, fType));
+  }
 
-private static String[] _diffDirFilenames(String[] p1Files, String[] p2Files){
-  ArrayList<String> sList = new ArrayList<String>();
-  IntDict imgNameFreqsBothDirs = new IntDict();
+  private static String[] _diffDirFilenames(String[] p1Files, String[] p2Files){
+    ArrayList<String> sList = new ArrayList<String>();
+    IntDict imgNameFreqsBothDirs = new IntDict();
+      
+    for(String fn : p1Files){imgNameFreqsBothDirs.increment(fn);}
+    for(String fn : p2Files){imgNameFreqsBothDirs.increment(fn);}
     
-  for(String fn : p1Files){imgNameFreqsBothDirs.increment(fn);}
-  for(String fn : p2Files){imgNameFreqsBothDirs.increment(fn);}
-  
-  sList.add(EiStrings.EQUAL_CHAR_72X);
-  sList.add("Filenames within BOTH directories...");
-  sList.add(EiStrings.DASH_CHAR_72X);
-  sList.addAll(Arrays.asList(DataStructUtils.filterIntDictByFreq(imgNameFreqsBothDirs, '=', 2)));
-  sList.add(EiStrings.EQUAL_CHAR_72X);
-  
-  sList.add("\n"+EiStrings.EQUAL_CHAR_72X);
-  sList.add("Filenames within ONE directory...");
-  sList.add(EiStrings.DASH_CHAR_72X);  
-  sList.addAll(Arrays.asList(DataStructUtils.filterIntDictByFreq(imgNameFreqsBothDirs, '=', 1)));
-  sList.add(EiStrings.EQUAL_CHAR_72X);
+    sList.add(EiStrings.EQUAL_CHAR_72X);
+    sList.add("Filenames within BOTH directories...");
+    sList.add(EiStrings.DASH_CHAR_72X);
+    sList.addAll(Arrays.asList(DataStructUtils.filterIntDictByFreq(imgNameFreqsBothDirs, '=', 2)));
+    sList.add(EiStrings.EQUAL_CHAR_72X);
+    
+    sList.add("\n"+EiStrings.EQUAL_CHAR_72X);
+    sList.add("Filenames within ONE directory...");
+    sList.add(EiStrings.DASH_CHAR_72X);  
+    sList.addAll(Arrays.asList(DataStructUtils.filterIntDictByFreq(imgNameFreqsBothDirs, '=', 1)));
+    sList.add(EiStrings.EQUAL_CHAR_72X);
 
-  return FormatUtils.arrFromList(String.class, sList);
-}
+    return FormatUtils.arrFromList(String.class, sList);
+  }
 
 
+  //> Default i.e. parmless bool is 'Express' verz i.e. return on 1st mismatch
+  public static boolean compareTxtFiles(PApplet app, String pFP, String qFP){
+    return compareTxtFiles(app, pFP, qFP, false);
+  }
+
+  public static boolean compareTxtFiles(PApplet app, String pFP, String qFP, boolean retFirstDiff){
+    String[] pLinStrs;
+    String[] qLinStrs;
+
+    try {pLinStrs = app.loadStrings(pFP);} 
+    catch (Exception e){Cons.err_act("Issue loading filepath: '"+pFP+"'", Act.RETURN_FALSY); return false;}
+    try {qLinStrs = app.loadStrings(qFP);} 
+    catch (Exception e){Cons.err_act("Issue loading filepath: '"+qFP+"'", Act.RETURN_FALSY); return false;}
+
+    if(pLinStrs==null||qLinStrs==null){Cons.err_act("One or both arrays are null", Act.RETURN_FALSY); return false;}
+    if(pLinStrs.length!=qLinStrs.length){Cons.err_act("Line lengths differ", Act.RETURN_FALSY); return false;}
+
+    boolean doMatch = true;
+    for(int i=0; i<pLinStrs.length; i++){
+      if(!pLinStrs[i].equals(qLinStrs[i])){
+        Cons.log(
+          "Line ["+(i+1)+"] Mismatch:",
+          "  > p: "+StringUtils.wrapWith('\'', pLinStrs[i]),
+          "  > q: "+StringUtils.wrapWith('\'', qLinStrs[i])
+        );
+        doMatch = false;
+        if(retFirstDiff){return false;}
+      }
+    }
+
+    if(doMatch){Cons.log("File Lines Match!");}
+    return doMatch;
+  }
 
 }

@@ -5,6 +5,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import PrEis.utils.Cons.Act;
 import processing.core.PApplet;
 import processing.core.PVector;
 import processing.data.JSONArray;
@@ -20,6 +22,15 @@ public class ZScriptUtils {
 
   /** Distinguish states of frames of `{-1,0}` tic length via special preceding `"#LOOP"` handle? */
   public static boolean HANDLE_NON_POS_TIC_LENS = false;
+
+
+  /** EXPECTED filename of sprite name map JSON. */
+  public static final String FN_SPR_NAM_MAP = "sprite_name_map.json";
+  /** EXPECTED filename of sprite offset map JSON. */
+  public static final String FN_SPR_OFF_MAP = "sprite_offset_map.json";
+  /** EXPECTED filename of sprite sheet (plan) map JSON. */
+  public static final String FN_SPR_SHT_MAP = "sprite_sheet_map.json"; 
+
 
   /** Filepath is a match IFF it includes the <code>String[5]</code> sprite name. */
   public static boolean evalFName(Path q, String n5){
@@ -182,11 +193,58 @@ public class ZScriptUtils {
   }
 
 
-  /** #TODO */
-  public String generateVSpriteTEXTURES(SpritesheetPlan plan){
-    /*### STUB ###*/
-    return null;
+
+  public static String[] generateVSpriteTEXTURES(PApplet app, String spriteInfoFP){
+
+    JSONObject namesMapJSON  = FileSysUtils.loadJSONObjNullFail(app, FileSysUtils.pathConcat(spriteInfoFP,FN_SPR_NAM_MAP), true);
+    JSONObject offsetMapJSON = FileSysUtils.loadJSONObjNullFail(app, FileSysUtils.pathConcat(spriteInfoFP,FN_SPR_OFF_MAP), true);
+    JSONObject sheetMapJSON  = FileSysUtils.loadJSONObjNullFail(app, FileSysUtils.pathConcat(spriteInfoFP,FN_SPR_SHT_MAP), true);
+    if(namesMapJSON==null||offsetMapJSON==null||sheetMapJSON==null){return null;}
+
+    //> IOU HANDLING FOR {STRIP/UNIQUE SPRITESHEET [PLAN] TYPES}
+    int[] comDim = null;
+    try {comDim = sheetMapJSON.getJSONArray(SpritesheetPlan.KW_DIMS).toIntArray();} catch (Exception e){}
+    if(comDim==null){Cons.err_act("Unable to find or assign sheet map sprite dims", Act.RETURN_NULL); return null;}
+    //System.out.println(StringUtils.wrapParens(StringUtils.concatAsCSSV(commonDims)));
+
+    String[][] namesMap = null;
+    try {
+      JSONArray dataArr = namesMapJSON.getJSONArray("SPRITE_DATA");
+      String[][] dataArr2 = new String[dataArr.size()][];
+      for(int i=0; i<dataArr.size(); i++){dataArr2[i] = dataArr.getJSONArray(i).toStringArray();}
+      namesMap = dataArr2;
+    } catch (Exception e){}
+    if(namesMap==null){
+      Cons.err_act("Unable to find or assign sprite name map String[][] data", Act.RETURN_NULL);
+      return null;
+    }
+
+
+    HashMap<String,int[]> offsMap = new HashMap<String,int[]>();
+    String [] offKeys = DataStructUtils.keyArrayOfJSONObj(offsetMapJSON);
+    for(String k : offKeys){
+      try {offsMap.put(k, offsetMapJSON.getJSONArray(k).toIntArray());} 
+      catch (Exception e) {Cons.err("Error assigning offset vals for sprite '"+k+"'");}
+    }
+
+    ArrayList<String> retList = new ArrayList<String>();
+    int BFN = 0;
+    int VFN = 1;
+    int SFN = 2;
+    int[] spOff;
+    int[] spOffDef = new int[]{0,0};
+    for(String[] s : namesMap){
+      spOff = offsMap.get(s[SFN]+"0");
+      if(spOff==null){Cons.err("Cannot find offset for sprite '"+s[SFN]+"' - using [0,0]"); spOff=spOffDef;}
+      retList.add("Sprite \""+s[VFN]+"0\", "+comDim[0]+", "+comDim[1]+" {");
+      retList.add("  Offset "+spOff[0]+", "+spOff[1]+"");
+      retList.add("  Patch \""+s[BFN]+"\", 0, 0");
+      retList.add("}");
+      retList.add(" ");
+    }
+
+    return FormatUtils.arrFromList(String.class, retList);
   }
 
-  
+
 }

@@ -61,7 +61,7 @@ public class UIStyle {
       case CB: loadClickButtonStyles(); return;
       case TB: loadToggleButtonStyles(); return;
       case LB: loadLabelStyles(); return;
-      default: Cons.warn_UIStyleConstructor(); return;
+      default: warn_UIStyleConstructor(); return;
     }
 
   }
@@ -129,6 +129,13 @@ public class UIStyle {
     catch(Exception e){
       Cons.err("Failed to set style of prop '"+propName+"'. Err string to follow...", e.toString());
     }
+  }
+
+
+  //=[TOSTRINGS/TOCONSOLES]=====================================================
+
+  public static void warn_UIStyleConstructor(){
+    Cons.log("UIStyle Constuctor Warning: entered catch-all for unsupported object types - might want to check your input?");
   }
 
 }

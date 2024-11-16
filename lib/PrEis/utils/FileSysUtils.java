@@ -167,4 +167,12 @@ public class FileSysUtils {
     return jObj;
   }
 
+
+  public static String getStringFromJSONFile(PApplet app, String key, String pathStr){
+    JSONObject obj = loadJSONObjNullFail(app, pathStr);
+    if(obj==null){return null;}
+    try {return obj.getString(key);}
+    catch (Exception e) {return null;}
+  }
+  
 }

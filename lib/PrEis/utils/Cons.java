@@ -21,7 +21,8 @@ public class Cons {
     RETURN_ZERO_VEC  {public String toString(){return "Returning Zeroed PVector";}},
     RETURN_DEF_VALUE {public String toString(){return "Returning Default Value";}},
     ADDING_REQ_SUFX  {public String toString(){return "Adding Required Suffix";}},
-    RETURN_NULL      {public String toString(){return "Returning `null`";}},    
+    RETURN_NULL      {public String toString(){return "Returning `null`";}},
+    RETURN_FALSY     {public String toString(){return "Returning `false`";}},
   }
   
   public static void log(String l){System.out.println(l);}
@@ -59,12 +60,4 @@ public class Cons {
     warn_invalidEnumStrID(enumID, inStr, null);
   }
 
-
-
-  public static void warn_UIStyleConstructor(){
-    log("UIStyle Constuctor Warning: entered catch-all for unsupported object types - might want to check your input?");
-  }
-
-
 }
-

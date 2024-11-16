@@ -1,18 +1,8 @@
 package PrEis.test;
-import java.io.File;
-import java.util.ArrayList;
-
 import PrEis.utils.Cons;
-import PrEis.utils.FileSysUtils;
 import PrEis.utils.PImageUtils;
-import PrEis.utils.Pair;
-import PrEis.utils.SpritesheetPlan;
-import PrEis.utils.SpritesheetUtils;
-import processing.core.PImage;
-import processing.data.JSONObject;
 
 public class TestUtilsManager {
-
   Testbed app;
 
   private final boolean snippetTest = true;
@@ -28,10 +18,7 @@ public class TestUtilsManager {
   }
 
   private void onSnippetTesting(){
-
-    String planFP = FileSysUtils.pathConcat(app.getRootDir(),"tests","inputs","example_spritesheet_plan.json");
-    SpritesheetUtils.splitAndSaveSprites(app, planFP);
-    
+    /* THIS IS USED FOR 'ON-THE-GO' I.E. QAD I.E. EXPRESS TESTING OR UTIL RUNS. */
   }
 
   private void onUtilsTesting(){
