@@ -15,12 +15,24 @@ import processing.core.PVector;
 public class UIAppBar extends UIObject {
 
   UIContainer tBar, bBar;
-  
+
+  private int     appBar_fill;
+  private int     appBar_strk;
+  private int     appBar_bord;
+  private int     bbar_lbl_strk;
+  private int     bbar_lbl_fill;
+  private PosOri  bbar_fps_anch;
+  private PVector bbar_fps_xOff;
+
   public UIAppBar(PApplet iPar, WidgetType iTyp) {
     super(iPar, new BBox(iPar.width, iPar.height), iTyp);
     label = EiStrings.CTAG_EISTECHS;
+    initStyles();
     initComponents();
   }
+
+  public static UIAppBar create(PApplet app){return new UIAppBar(app, WidgetType.NA);}
+  public static UIAppBar create(UIManager mgr){return create(mgr.app).bindManager(mgr).castTo(UIAppBar.class);}
 
   public UIAppBar bindAppLogoΘ(PImage logoImg, PVector logoDim){bindAppLogo(logoImg, logoDim); return this;}
   public void bindAppLogo(PImage logoImg, PVector logoDim){
@@ -34,14 +46,27 @@ public class UIAppBar extends UIObject {
   public UIAppBar setCTAGΘ(String newCTag){setCTAG(newCTag); return this;}
   public void setCTAG(String newCTag){if(newCTag!=null && !newCTag.isEmpty()){label=newCTag;}}
 
+
+  private void initStyles(){
+    appBar_fill   = app.color(32,96,224);
+    appBar_strk   = app.color(255);
+    appBar_bord   = 0;
+    bbar_lbl_strk = app.color(255,0);
+    bbar_lbl_fill = app.color(255,0);
+    bbar_fps_anch = PosOri.LFT;
+    bbar_fps_xOff = new PVector(8,0);
+  }
+
+
   public void initComponents(){
     tBar = UIContainer.create(app, new BBox(0, 0, app.width, 64)).addChildren(
       UIConfirm.create(app, new BBox(app.width-160,0,160,64), new AppQuitAction(app))
       .setButtonLabelsΘ(EiStrings.EXIT_BTN_INIT, EiStrings.EXIT_BTN_WARN, EiStrings.EXIT_BTN_DONE)
       .setTitle(EiStrings.EXIT_BTN_LABL)
     )
-    .setStyleProp("fill", Integer.class, app.color(32,96,224))
-    .setStyleProp("strk_enabled", Integer.class, app.color(255))
+    .setStyleProp("border_radius", Integer.class, appBar_bord)
+    .setStyleProp("fill", Integer.class, appBar_fill)
+    .setStyleProp("strk_enabled", Integer.class, appBar_strk)
     .castTo(UIContainer.class)
     ;
 
@@ -49,25 +74,19 @@ public class UIAppBar extends UIObject {
       UIImage.create(app, new BBox(app.width-256, 1, 32, 32), JAResourceUtil.getImageFromJAR(PrEisRes.EIS_LOGO))
       .asΘ(ImageSpecial.SCALE_TO_FIT),
 
-      UILabel.create(
-        app, new BBox(app.width-224, 0, 224, 32),
-        label, AppFont.TEXT, LabelType.TP, null
-      )
-      .setStyleProp("strk_transp", Integer.class, app.color(255,0))
-      .setStyleProp("fill_transp", Integer.class, app.color(255,0)),
+      UILabel.create(app, new BBox(app.width-224, 0, 224, 32), label, AppFont.TEXT, LabelType.TP, null)
+      .setStyleProp("strk_transp", Integer.class, bbar_lbl_strk)
+      .setStyleProp("fill_transp", Integer.class, bbar_lbl_fill),
 
-      UILabel.create(
-        app, new BBox(0, 0, 224, 32),
-        null, AppFont.TEXT, LabelType.TP, new FPSAppBarUpdate(app)
-      )
-      .setStyleProp("txt_anchor", PosOri.class, PosOri.LFT)
-      .setStyleProp("txt_offset", PVector.class, new PVector(8,0))      
-      .setStyleProp("strk_transp", Integer.class, app.color(255,0))
-      .setStyleProp("fill_transp", Integer.class, app.color(255,0))
+      UILabel.create(app, new BBox(0, 0, 224, 32), null, AppFont.TEXT, LabelType.TP, new FPSAppBarUpdate(app))
+      .setStyleProp("strk_transp", Integer.class, bbar_lbl_strk)
+      .setStyleProp("fill_transp", Integer.class, bbar_lbl_fill)
+      .setStyleProp("txt_anchor", PosOri.class, bbar_fps_anch)
+      .setStyleProp("txt_offset", PVector.class, bbar_fps_xOff)      
     )
-    .setStyleProp("border_radius", Integer.class, 0)
-    .setStyleProp("fill", Integer.class, app.color(32,96,224))
-    .setStyleProp("strk_enabled", Integer.class, app.color(255))
+    .setStyleProp("border_radius", Integer.class, appBar_bord)
+    .setStyleProp("fill", Integer.class, appBar_fill)
+    .setStyleProp("strk_enabled", Integer.class, appBar_strk)
     .castTo(UIContainer.class)
     ;
   }

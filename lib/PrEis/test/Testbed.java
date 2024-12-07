@@ -37,9 +37,6 @@ public class Testbed extends PApplet {
     JAResourceUtil.app = this;
     APP_ROOT_DIR = sketchPath();
     loadTestDirsJSON();
-
-    JAResourceUtil.app = this;
-
     switch(curTestMode){
       case UTILS:
         testUtils = new TestUtilsManager(this).testUtils();
